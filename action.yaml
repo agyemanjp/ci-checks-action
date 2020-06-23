@@ -1,0 +1,17 @@
+name: "Customizable CI Checks With Annotations"
+# description: "Run CI checks with custom scripts reporting to a JSON file and annotate them on Gthub."
+# description: "Report results of your ci check scripts as Github checks (with file annotations)"
+description: "Create Github checks (with file annotations) from JSON file outputs of custom ci scripts"
+inputs:
+  repo-token:
+    description: "Token used to authenticate with the Github API."
+    required: true
+  checks:
+    description: "Paths for JSON file for each check, separated by semi-colons"
+    required: true
+runs:
+  using: "node12"
+  main: "dist/index.js"
+branding:
+  icon: "check-circle"
+  color: "green"
