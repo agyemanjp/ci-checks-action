@@ -1,81 +1,47 @@
-# name: Default
+name: Default
 
-# on:
-#   push:
-#   #   branches: [ dev ]
-#   pull_request:
-#   # branches: [ dev ]
+on:
+  push:
+  #   branches: [ dev ]
+  pull_request:
+  # branches: [ dev ]
 
-# jobs:
-#   checks:
-#     runs-on: ubuntu-latest
+jobs:
+  checks:
+    runs-on: ubuntu-latest
 
-#     strategy:
-#       matrix:
-#         node-version: [12.x]
+    strategy:
+      matrix:
+        node-version: [12.x]
 
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v2
-#         with: 
-#           persist-credentials: false
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with: 
+          persist-credentials: false
 
-#       - name: Setup Node.js ${{ matrix.node-version }}
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: ${{ matrix.node-version }}
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
         
-#       - name: Install
-#         run: npm ci --no-audit --prefer-offline 
+      - name: Install
+        run: npm ci --no-audit --prefer-offline 
 
-#       - name: Run Checks Locally
-#         run: npm run lint
-#         continue-on-error: true
+      - name: Run Checks Scripts
+        run: |
+          npm run lint
+          npm run test
+        continue-on-error: true
         
-#       - name: Annotate Checks
-#         uses: ./.github/actions/my-action
-#         with:
-#           ghToken: ${{ secrets.GITHUB_TOKEN }}
-#           eslintFiles: "node-app"
-#           eslintConfig: ".eslintrc.js"
-#           eslintExt: "ts, tsx"
+      - name: Annotate Checks
+        uses: ./
+        with:
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
+          checks: "lint:.lint.json|test:.test.json"
+          
+      # - name: Build
+      #   run: npm run build:js --if-present
 
-#       - name: Lint Code Base
-#         uses: docker://github/super-linter:v2.1.1
-#         env:
-#           VALIDATE_ALL_CODEBASE: false
-#           ACTIONS_RUNNER_DEBUG: true
-#           VALIDATE_ANSIBLE: false
-
-#       # - name: Annotate Lint
-#       #   uses: ataylorme/eslint-annotate-action@1.0.4
-#       #   with:
-#       #     repo-token: "${{ secrets.GITHUB_TOKEN }}"
-#       #     report-json: "eslint_report.json"
-#       # - name: Upload ESLint report
-#       #   uses: actions/upload-artifact@v1
-#       #   with:
-#       #     name: eslint_report.json
-#       #     path: eslint_report.json
-
-#       - name: Build
-#         run: npm run build:js --if-present
-
-#       # - name: Test
-#       #   run: npm run test
-
-      
-#       # - uses: mdecoleman/pr-branch-name@1.0.0
-#       #   id: vars
-#       #   with:
-#       #     repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-#       # - name: Echo Branches
-#       #   run: |
-#       #     echo "Current Branch: ${{ steps.vars.outputs.branch }}"
-#       #     echo "PR Head Branch: ${{github.head_ref}}"  
-#       #     echo "PR Base Branch: ${{github.base_ref}}"  
-#       #     echo "PR Number: ${{ github.event.number }}""
-
-
-     
+      # - name: Test
+      #   run: npm run test

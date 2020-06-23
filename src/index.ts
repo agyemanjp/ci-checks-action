@@ -1,9 +1,7 @@
-
-// import { CLIEngine } from 'eslint'
+/* eslint-disable fp/no-loops */
+import * as assert from 'assert'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-
-// import * as https from "https"
 import * as path from "path"
 import * as fs from 'fs'
 
@@ -98,13 +96,13 @@ interface CheckResult {
 
 
 //#region Functions
-function getInput(key: string, required: boolean = false) {
+function getInput(key: string, required = false) {
 	return core.getInput(key, { required })
 }
 function* chunkArray<T>(arr: T[], chunkSize: number): Iterable<T[]> {
-	let index = 0;
+	let index = 0
 	while (index < arr.length) {
-		yield (arr.slice(index, index + 50))
+		yield (arr.slice(index, index + chunkSize))
 		index += 50
 	}
 }
@@ -330,3 +328,12 @@ async function runAction() {
 //      */
 // 	[parameter: string]: unknown;
 // };
+
+
+describe('Index', function () {
+	describe('#chunkArray()', function () {
+		it('should return empty array when given empty array', function () {
+			assert.deepEqual([...chunkArray([], 50)], [])
+		})
+	})
+})
