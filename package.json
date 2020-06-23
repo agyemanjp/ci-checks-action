@@ -5,8 +5,8 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
-		"lint": "eslint --ext ts,tsx --output-file ./outputs/lint.json --format json --cache src/*",
-		"test": "tsc && mocha dist/*.js --reporter json >> ./outputs/test.json"
+		"lint": "eslint --ext ts,tsx --output-file ./output/lint.json --format json --cache src/*",
+		"test": "tsc && mocha dist/*.js --reporter json >> ./output/test.json"
 	},
 	"author": "",
 	"license": "ISC",
