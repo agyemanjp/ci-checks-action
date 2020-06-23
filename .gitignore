@@ -1,4 +1,5 @@
 node_modules/
+outputs/
 *.tsbuildinfo
 .eslintcache
 .node_repl_history
