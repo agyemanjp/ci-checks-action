@@ -112,12 +112,12 @@ async function runAction() {
 	const githubToken = getInput('ghToken', true)
 	const pullRequest = github.context.payload.pull_request;
 	const sha = GITHUB_SHA ?? (pullRequest ? pullRequest.head.sha : github.context.sha)
-	const { context } = github
+	// const { context } = github
 
-	const autoFix = getInput("auto_fix") === "true"
-	const gitName = getInput("git_name", true)
-	const gitEmail = getInput("git_email", true)
-	const commitMessage = getInput("commit_message", true)
+	// const autoFix = getInput("auto_fix") === "true"
+	// const gitName = getInput("git_name", true)
+	// const gitEmail = getInput("git_email", true)
+	// const commitMessage = getInput("commit_message", true)
 
 	//const options: Options = { repoName, repoOwner, repoPath: GITHUB_WORKSPACE!, sha: GITHUB_SHA! }
 	//new EslintRunner(githubToken, options).run()

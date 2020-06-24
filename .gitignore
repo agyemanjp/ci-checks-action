@@ -3,3 +3,4 @@ output/
 *.tsbuildinfo
 .eslintcache
 .node_repl_history
+.DS_Store
