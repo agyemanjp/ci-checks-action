@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
-		"build": "rm -rf dist && tsc",
-		"lint": "eslint --ext ts,tsx --output-file ./output/lint.json --format json --cache src/*",
-		"test": "MOCHA=true mocha dist/*.js --reporter json >> ./output/test.json"
+		"build": "rm -rf dist output && tsc",
+		"lint": "mkdir -p ./output && eslint --ext ts,tsx --output-file ./output/lint.json --format json --cache src/*",
+		"test": "mkdir -p ./output && MOCHA=true mocha dist/*.js --reporter json >| ./output/test.json"
 	},
 	"author": "",
 	"license": "ISC",
@@ -28,4 +28,3 @@
 		"@actions/github": "^3.0.0"
 	}
 }
-

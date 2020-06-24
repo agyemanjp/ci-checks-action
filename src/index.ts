@@ -4,7 +4,7 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as path from "path"
 import * as fs from 'fs'
-
+import { describe } from "mocha"
 
 //#region Types
 type ArgsType<F extends (...x: any[]) => any> = F extends (...x: infer A) => any ? A : never
@@ -287,7 +287,9 @@ process.on("unhandledRejection", (err: any) => {
 	throw new Error(`Exiting due to unhandled promise rejection`)
 })
 
+
 if (process.env.MOCHA) {
+
 	describe('Index', function () {
 		describe('#chunkArray()', function () {
 			it('should return empty array when given empty array', function () {

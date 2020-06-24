@@ -15,6 +15,7 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const path = require("path");
 const fs = require("fs");
+const mocha_1 = require("mocha");
 //#endregion
 //#region Functions
 function getInput(key, required = false) {
@@ -28,10 +29,6 @@ function* chunkArray(arr, chunkSize) {
     }
 }
 //#endregion
-process.on("unhandledRejection", (err) => {
-    console.error(err, "error");
-    throw new Error(`Exiting due to unhandled promise rejection`);
-});
 /** Main function, does not support forks */
 function runAction() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -182,49 +179,16 @@ function runAction() {
         });
     });
 }
-// interface RequestParameters = {
-//     /**
-//      * Base URL to be used when a relative URL is passed, such as `/orgs/:org`.
-//      * If `baseUrl` is `https://enterprise.acme-inc.com/api/v3`, then the request
-//      * will be sent to `https://enterprise.acme-inc.com/api/v3/orgs/:org`.
-//      */
-// 	baseUrl ?: Url;
-//     /**
-//      * HTTP headers. Use lowercase keys.
-//      */
-// 	headers ?: RequestHeaders;
-//     /**
-//      * Media type options, see {@link https://developer.github.com/v3/media/|GitHub Developer Guide}
-//      */
-// 	mediaType ?: {
-//         /**
-//          * `json` by default. Can be `raw`, `text`, `html`, `full`, `diff`, `patch`, `sha`, `base64`. Depending on endpoint
-//          */
-// 		format?: string;
-//         /**
-//          * Custom media type names of {@link https://developer.github.com/v3/media/|API Previews} without the `-preview` suffix.
-//          * Example for single preview: `['squirrel-girl']`.
-//          * Example for multiple previews: `['squirrel-girl', 'mister-fantastic']`.
-//          */
-// 		previews?: string[];
-// 	};
-//     /**
-//      * Pass custom meta information for the request. The `request` object will be returned as is.
-//      */
-// 	request ?: RequestRequestOptions;
-//     /**
-//      * Any additional parameter will be passed as follows
-//      * 1. URL parameter if `':parameter'` or `{parameter}` is part of `url`
-//      * 2. Query parameter if `method` is `'GET'` or `'HEAD'`
-//      * 3. Request body if `parameter` is `'data'`
-//      * 4. JSON in the request body in the form of `body[parameter]` unless `parameter` key is `'data'`
-//      */
-// 	[parameter: string]: unknown;
-// };
-describe('Index', function () {
-    describe('#chunkArray()', function () {
-        it('should return empty array when given empty array', function () {
-            assert.deepEqual([...chunkArray([], 50)], []);
+process.on("unhandledRejection", (err) => {
+    console.error(err, "error");
+    throw new Error(`Exiting due to unhandled promise rejection`);
+});
+if (process.env.MOCHA) {
+    mocha_1.describe('Index', function () {
+        mocha_1.describe('#chunkArray()', function () {
+            it('should return empty array when given empty array', function () {
+                assert.deepEqual([...chunkArray([], 50)], []);
+            });
         });
     });
-});
+}
