@@ -130,42 +130,43 @@ function runAction() {
                 checkInfoBatches.forEach((batch) => __awaiter(this, void 0, void 0, function* () {
                     core.info(`Creating github check batch for ${JSON.stringify(batch)}`);
                     let r = yield githubClient.checks.create(Object.assign({}, batch));
-                    /*
-                        async function createCheck(sha: string, lintResult: Record<string, Result[]>, summary: string) {
-                            try {
-                                //const url = `https://api.github.com/repos/${repoName}/check-runs`
-                                const url = `https://api.github.com/repos/${owner}/${repoName}/check-runs`
+                    let x = yield githubClient.request(Object.assign({ method: 'POST', url: '/repos/:owner/:repo/check-runs', 
+                        //const url = `https://api.github.com/repos/${owner}/${repoName}/check-runs`
+                        headers: { accept: 'application/vnd.github.antiope-preview+json' } }, batch));
+                    core.info(`HHTP response code for check creation: ${x.status}`);
+                    /*async function createCheck(sha: string, lintResult: Record<string, Result[]>, summary: string) {
+                        try {
+                            //const url = `https://api.github.com/repos/${repoName}/check-runs`
+                            const url = `https://api.github.com/repos/${owner}/${repoName}/check-runs`
     
-                                const headers = {
-                                    "Content-Type": "application/json",
-                                    Accept: "application/vnd.github.antiope-preview+json", //required to access Checks API during preview period
-                                    Authorization: `Bearer ${githubToken}`,
-                                    "User-Agent": `eslint-annotate_action`,
-                                }
-    
-                                const body = {
-                                    name: "ESlint",
-                                    head_sha: sha,
-                                    conclusion: lintResult.isSuccess ? "success" : "failure",
-                                    started_at: new Date(),
-                                    //completed_at: completed ? new Date() : undefined,
-                                    //status: completed ? 'completed' : 'in_progress',
-                                    output: {
-                                        //title: capitalizeFirstLetter(summary),
-                                        //summary: `${linterName} found ${summary}`,
-                                        chunk
-                                    }
-                                }
-    
-                                //(`Creating GitHub check with ${annotations.length} annotations for ${linterName}…`)
-                                await request(url, { method: "POST", headers, body })
-                                //log(`${linterName} check created successfully`)
+                            const headers = {
+                                "Content-Type": "application/json",
+                                Accept: "application/vnd.github.antiope-preview+json", //required to access Checks API during preview period
+                                Authorization: `Bearer ${githubToken}`,
+                                "User-Agent": `eslint-annotate_action`,
                             }
-                            catch (err) {
-                                log(err, "error")
-                                throw new Error(`Error trying to create GitHub check for ${linterName}: ${err.message}`);
+    
+                            const body = {
+                                name: "ESlint",
+                                head_sha: sha,
+                                conclusion: lintResult.isSuccess ? "success" : "failure",
+                                started_at: new Date(),
+                                //completed_at: completed ? new Date() : undefined,
+                                //status: completed ? 'completed' : 'in_progress',
+                                output: {
+                                    //title: capitalizeFirstLetter(summary),
+                                    //summary: `${linterName} found ${summary}`,
+                                    chunk
+                                }
                             }
+    
+                            //await request(url, { method: "POST", headers, body })
                         }
+                        catch (err) {
+                            log(err, "error")
+                            throw new Error(`Error trying to create GitHub check for ${linterName}: ${err.message}`);
+                        }
+                    }
                     */
                 }));
             }
