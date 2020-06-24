@@ -228,7 +228,7 @@ async function runAction() {
 		const checkInfoBatches = buildCheckInfo(check.name, parsedOutput)
 		try {
 			checkInfoBatches.forEach(async batch => {
-				//let x: ArgsType<typeof githubClient.checks.create>;// = batch
+				core.info(`Creating github check batch for ${batch.name}`)
 				await githubClient.checks.create({ ...batch })
 
 				/*
