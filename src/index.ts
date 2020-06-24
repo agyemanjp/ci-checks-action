@@ -4,7 +4,6 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as path from "path"
 import * as fs from 'fs'
-import { describe } from "mocha"
 
 //#region Types
 type ArgsType<F extends (...x: any[]) => any> = F extends (...x: infer A) => any ? A : never
@@ -94,7 +93,6 @@ interface CheckResult {
 
 //#endregion
 
-
 //#region Functions
 function getInput(key: string, required = false) {
 	return core.getInput(key, { required })
@@ -108,8 +106,6 @@ function* chunkArray<T>(arr: T[], chunkSize: number): Iterable<T[]> {
 }
 //#endregion
 
-
-/** Main function, does not support forks */
 async function runAction() {
 	const { GITHUB_REPOSITORY, GITHUB_WORKSPACE, GITHUB_SHA, GITHUB_EVENT_PATH, SOURCE_ROOT } = process.env
 	const [repoOwner, repoName] = GITHUB_REPOSITORY!.split('/')
@@ -281,11 +277,11 @@ async function runAction() {
 	})
 }
 
-
 process.on("unhandledRejection", (err: any) => {
 	console.error(err, "error")
 	throw new Error(`Exiting due to unhandled promise rejection`)
 })
+runAction()
 
 
 if (process.env.MOCHA) {
