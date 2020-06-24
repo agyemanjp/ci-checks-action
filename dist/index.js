@@ -15,7 +15,6 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const path = require("path");
 const fs = require("fs");
-const mocha_1 = require("mocha");
 //#endregion
 //#region Functions
 function getInput(key, required = false) {
@@ -29,19 +28,17 @@ function* chunkArray(arr, chunkSize) {
     }
 }
 //#endregion
-/** Main function, does not support forks */
 function runAction() {
     return __awaiter(this, void 0, void 0, function* () {
         const { GITHUB_REPOSITORY, GITHUB_WORKSPACE, GITHUB_SHA, GITHUB_EVENT_PATH, SOURCE_ROOT } = process.env;
-        const [repoOwner, repoName] = GITHUB_REPOSITORY.split('/');
         const githubToken = getInput('ghToken', true);
         const pullRequest = github.context.payload.pull_request;
         const sha = GITHUB_SHA !== null && GITHUB_SHA !== void 0 ? GITHUB_SHA : (pullRequest ? pullRequest.head.sha : github.context.sha);
-        const { context } = github;
-        const autoFix = getInput("auto_fix") === "true";
-        const gitName = getInput("git_name", true);
-        const gitEmail = getInput("git_email", true);
-        const commitMessage = getInput("commit_message", true);
+        // const { context } = github
+        // const autoFix = getInput("auto_fix") === "true"
+        // const gitName = getInput("git_name", true)
+        // const gitEmail = getInput("git_email", true)
+        // const commitMessage = getInput("commit_message", true)
         //const options: Options = { repoName, repoOwner, repoPath: GITHUB_WORKSPACE!, sha: GITHUB_SHA! }
         //new EslintRunner(githubToken, options).run()
         function getChecksToReport() {
@@ -184,11 +181,14 @@ process.on("unhandledRejection", (err) => {
     throw new Error(`Exiting due to unhandled promise rejection`);
 });
 if (process.env.MOCHA) {
-    mocha_1.describe('Index', function () {
-        mocha_1.describe('#chunkArray()', function () {
+    describe('Index', function () {
+        describe('#chunkArray()', function () {
             it('should return empty array when given empty array', function () {
                 assert.deepEqual([...chunkArray([], 50)], []);
             });
         });
     });
+}
+else {
+    runAction();
 }

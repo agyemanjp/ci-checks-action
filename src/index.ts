@@ -108,7 +108,6 @@ function* chunkArray<T>(arr: T[], chunkSize: number): Iterable<T[]> {
 
 async function runAction() {
 	const { GITHUB_REPOSITORY, GITHUB_WORKSPACE, GITHUB_SHA, GITHUB_EVENT_PATH, SOURCE_ROOT } = process.env
-	const [repoOwner, repoName] = GITHUB_REPOSITORY!.split('/')
 	const githubToken = getInput('ghToken', true)
 	const pullRequest = github.context.payload.pull_request;
 	const sha = GITHUB_SHA ?? (pullRequest ? pullRequest.head.sha : github.context.sha)
@@ -281,7 +280,6 @@ process.on("unhandledRejection", (err: any) => {
 	console.error(err, "error")
 	throw new Error(`Exiting due to unhandled promise rejection`)
 })
-runAction()
 
 
 if (process.env.MOCHA) {
@@ -294,3 +292,7 @@ if (process.env.MOCHA) {
 		})
 	})
 }
+else {
+	runAction()
+}
+
