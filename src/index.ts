@@ -329,11 +329,12 @@ async function runAction() {
 // 	[parameter: string]: unknown;
 // };
 
-
-describe('Index', function () {
-	describe('#chunkArray()', function () {
-		it('should return empty array when given empty array', function () {
-			assert.deepEqual([...chunkArray([], 50)], [])
+if (process.env.MOCHA) {
+	describe('Index', function () {
+		describe('#chunkArray()', function () {
+			it('should return empty array when given empty array', function () {
+				assert.deepEqual([...chunkArray([], 50)], [])
+			})
 		})
 	})
-})
+}
