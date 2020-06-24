@@ -222,15 +222,13 @@ async function runAction() {
 		}
 		const file = fs.readFileSync(check.outputFileName, 'utf8')
 		const parsedOutput = parseOutput(file/*, check.type*/)
-		if (parsedOutput.errorCount > 0) {
-			core.setFailed(`${check.name} check failed.`)
-		}
+		if (parsedOutput.errorCount > 0) { core.setFailed(`${check.name} check failed.`) }
 		const checkInfoBatches = buildCheckInfo(check.name, parsedOutput)
+
 		try {
 			checkInfoBatches.forEach(async batch => {
-				core.info(`Creating github check batch for ${batch.name}`)
-				await githubClient.checks.create({ ...batch })
-
+				core.info(`Creating github check batch for ${JSON.stringify(batch)}`)
+				let r = await githubClient.checks.create({ ...batch })
 				/*
 					async function createCheck(sha: string, lintResult: Record<string, Result[]>, summary: string) {
 						try {

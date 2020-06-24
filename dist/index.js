@@ -129,8 +129,8 @@ function runAction() {
             const checkInfoBatches = buildCheckInfo(check.name, parsedOutput);
             try {
                 checkInfoBatches.forEach((batch) => __awaiter(this, void 0, void 0, function* () {
-                    core.info(`Creating github check batch for ${batch.name}`);
-                    yield githubClient.checks.create(Object.assign({}, batch));
+                    core.info(`Creating github check batch for ${JSON.stringify(batch)}`);
+                    let r = yield githubClient.checks.create(Object.assign({}, batch));
                     /*
                         async function createCheck(sha: string, lintResult: Record<string, Result[]>, summary: string) {
                             try {
