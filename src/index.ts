@@ -1,12 +1,9 @@
-
-// import { CLIEngine } from 'eslint'
+/* eslint-disable fp/no-loops */
+import * as assert from 'assert'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-
-// import * as https from "https"
 import * as path from "path"
 import * as fs from 'fs'
-
 
 //#region Types
 type ArgsType<F extends (...x: any[]) => any> = F extends (...x: infer A) => any ? A : never
@@ -96,43 +93,31 @@ interface CheckResult {
 
 //#endregion
 
-
 //#region Functions
-function getInput(key: string, required: boolean = false) {
+function getInput(key: string, required = false) {
 	return core.getInput(key, { required })
 }
 function* chunkArray<T>(arr: T[], chunkSize: number): Iterable<T[]> {
-	let index = 0;
+	let index = 0
 	while (index < arr.length) {
-		yield (arr.slice(index, index + 50))
+		yield (arr.slice(index, index + chunkSize))
 		index += 50
 	}
 }
 //#endregion
 
-
-process.on("unhandledRejection", (err: any) => {
-	console.error(err, "error")
-	throw new Error(`Exiting due to unhandled promise rejection`)
-})
-
-
-/** Main function, does not support forks */
 async function runAction() {
 	const { GITHUB_REPOSITORY, GITHUB_WORKSPACE, GITHUB_SHA, GITHUB_EVENT_PATH, SOURCE_ROOT } = process.env
-	const [repoOwner, repoName] = GITHUB_REPOSITORY!.split('/')
 	const githubToken = getInput('ghToken', true)
 	const pullRequest = github.context.payload.pull_request;
 	const sha = GITHUB_SHA ?? (pullRequest ? pullRequest.head.sha : github.context.sha)
-	const { context } = github
-
-	const autoFix = getInput("auto_fix") === "true"
-	const gitName = getInput("git_name", true)
-	const gitEmail = getInput("git_email", true)
-	const commitMessage = getInput("commit_message", true)
-
-	//const options: Options = { repoName, repoOwner, repoPath: GITHUB_WORKSPACE!, sha: GITHUB_SHA! }
-	//new EslintRunner(githubToken, options).run()
+	// const { context } = github
+	// const autoFix = getInput("auto_fix") === "true"
+	// const gitName = getInput("git_name", true)
+	// const gitEmail = getInput("git_email", true)
+	// const commitMessage = getInput("commit_message", true)
+	// const options: Options = { repoName, repoOwner, repoPath: GITHUB_WORKSPACE!, sha: GITHUB_SHA! }
+	// new EslintRunner(githubToken, options).run()
 
 
 	function getChecksToReport() {
@@ -149,8 +134,6 @@ async function runAction() {
 		let results = JSON.parse(output) as CheckResult[]
 		let info = results.reduce<{ errorCount: number, warningCount: number, annotations: GitHubAnnotation[] }>(
 			(prev, current, index, arr) => {
-				core.info(`Analyzing ${current.filePath}`)
-
 				return {
 					errorCount: prev.errorCount + current.errorCount,
 					warningCount: prev.warningCount + current.warningCount,
@@ -230,56 +213,61 @@ async function runAction() {
 	getChecksToReport().forEach(check => {
 		const outputFilePath = path.resolve(check.outputFileName)
 		if (!fs.existsSync(outputFilePath)) {
-			core.setFailed(`Output file "${check.outputFileName}" for the ${check.name} check not be resolved.`)
+			core.warning(`Output file "${check.outputFileName}" for the ${check.name} check not be resolved.`)
 			return
 		}
 		const file = fs.readFileSync(check.outputFileName, 'utf8')
 		const parsedOutput = parseOutput(file/*, check.type*/)
-		if (parsedOutput.errorCount > 0) {
-			core.setFailed(`${check.name} check failed.`)
-		}
+		if (parsedOutput.errorCount > 0) { core.warning(`${check.name} check failed.`) }
 		const checkInfoBatches = buildCheckInfo(check.name, parsedOutput)
+
 		try {
 			checkInfoBatches.forEach(async batch => {
-				//let x: ArgsType<typeof githubClient.checks.create>;// = batch
-				await githubClient.checks.create({ ...batch })
+				core.info(`Creating github check batch for ${JSON.stringify(batch)}`)
+				let r = await githubClient.checks.create({ ...batch })
+				let x = await githubClient.request({
+					method: 'POST',
+					url: '/repos/:owner/:repo/check-runs',
+					//const url = `https://api.github.com/repos/${owner}/${repoName}/check-runs`
 
-				/*
-					async function createCheck(sha: string, lintResult: Record<string, Result[]>, summary: string) {
-						try {
-							//const url = `https://api.github.com/repos/${repoName}/check-runs`
-							const url = `https://api.github.com/repos/${owner}/${repoName}/check-runs`
+					headers: { accept: 'application/vnd.github.antiope-preview+json' },
+					...batch
+				})
+				core.info(`HHTP response code for check creation: ${x.status}`)
 
-							const headers = {
-								"Content-Type": "application/json",
-								Accept: "application/vnd.github.antiope-preview+json", //required to access Checks API during preview period
-								Authorization: `Bearer ${githubToken}`,
-								"User-Agent": `eslint-annotate_action`,
-							}
+				/*async function createCheck(sha: string, lintResult: Record<string, Result[]>, summary: string) {
+					try {
+						//const url = `https://api.github.com/repos/${repoName}/check-runs`
+						const url = `https://api.github.com/repos/${owner}/${repoName}/check-runs`
 
-							const body = {
-								name: "ESlint",
-								head_sha: sha,
-								conclusion: lintResult.isSuccess ? "success" : "failure",
-								started_at: new Date(),
-								//completed_at: completed ? new Date() : undefined,
-								//status: completed ? 'completed' : 'in_progress',
-								output: {
-									//title: capitalizeFirstLetter(summary),
-									//summary: `${linterName} found ${summary}`,
-									chunk
-								}
-							}
-
-							//(`Creating GitHub check with ${annotations.length} annotations for ${linterName}…`)
-							await request(url, { method: "POST", headers, body })
-							//log(`${linterName} check created successfully`)
+						const headers = {
+							"Content-Type": "application/json",
+							Accept: "application/vnd.github.antiope-preview+json", //required to access Checks API during preview period
+							Authorization: `Bearer ${githubToken}`,
+							"User-Agent": `eslint-annotate_action`,
 						}
-						catch (err) {
-							log(err, "error")
-							throw new Error(`Error trying to create GitHub check for ${linterName}: ${err.message}`);
+
+						const body = {
+							name: "ESlint",
+							head_sha: sha,
+							conclusion: lintResult.isSuccess ? "success" : "failure",
+							started_at: new Date(),
+							//completed_at: completed ? new Date() : undefined,
+							//status: completed ? 'completed' : 'in_progress',
+							output: {
+								//title: capitalizeFirstLetter(summary),
+								//summary: `${linterName} found ${summary}`,
+								chunk
+							}
 						}
+
+						//await request(url, { method: "POST", headers, body })
 					}
+					catch (err) {
+						log(err, "error")
+						throw new Error(`Error trying to create GitHub check for ${linterName}: ${err.message}`);
+					}
+				}
 				*/
 			})
 		}
@@ -289,44 +277,23 @@ async function runAction() {
 	})
 }
 
+process.on("unhandledRejection", (err: any) => {
+	console.error(err, "error")
+	throw new Error(`Exiting due to unhandled promise rejection`)
+})
 
 
-// interface RequestParameters = {
-//     /**
-//      * Base URL to be used when a relative URL is passed, such as `/orgs/:org`.
-//      * If `baseUrl` is `https://enterprise.acme-inc.com/api/v3`, then the request
-//      * will be sent to `https://enterprise.acme-inc.com/api/v3/orgs/:org`.
-//      */
-// 	baseUrl ?: Url;
-//     /**
-//      * HTTP headers. Use lowercase keys.
-//      */
-// 	headers ?: RequestHeaders;
-//     /**
-//      * Media type options, see {@link https://developer.github.com/v3/media/|GitHub Developer Guide}
-//      */
-// 	mediaType ?: {
-//         /**
-//          * `json` by default. Can be `raw`, `text`, `html`, `full`, `diff`, `patch`, `sha`, `base64`. Depending on endpoint
-//          */
-// 		format?: string;
-//         /**
-//          * Custom media type names of {@link https://developer.github.com/v3/media/|API Previews} without the `-preview` suffix.
-//          * Example for single preview: `['squirrel-girl']`.
-//          * Example for multiple previews: `['squirrel-girl', 'mister-fantastic']`.
-//          */
-// 		previews?: string[];
-// 	};
-//     /**
-//      * Pass custom meta information for the request. The `request` object will be returned as is.
-//      */
-// 	request ?: RequestRequestOptions;
-//     /**
-//      * Any additional parameter will be passed as follows
-//      * 1. URL parameter if `':parameter'` or `{parameter}` is part of `url`
-//      * 2. Query parameter if `method` is `'GET'` or `'HEAD'`
-//      * 3. Request body if `parameter` is `'data'`
-//      * 4. JSON in the request body in the form of `body[parameter]` unless `parameter` key is `'data'`
-//      */
-// 	[parameter: string]: unknown;
-// };
+if (process.env.MOCHA) {
+
+	describe('Index', function () {
+		describe('#chunkArray()', function () {
+			it('should return empty array when given empty array', function () {
+				assert.deepEqual([...chunkArray([], 50)], [])
+			})
+		})
+	})
+}
+else {
+	runAction()
+}
+
