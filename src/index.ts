@@ -112,14 +112,12 @@ async function runAction() {
 	const pullRequest = github.context.payload.pull_request;
 	const sha = GITHUB_SHA ?? (pullRequest ? pullRequest.head.sha : github.context.sha)
 	// const { context } = github
-
 	// const autoFix = getInput("auto_fix") === "true"
 	// const gitName = getInput("git_name", true)
 	// const gitEmail = getInput("git_email", true)
 	// const commitMessage = getInput("commit_message", true)
-
-	//const options: Options = { repoName, repoOwner, repoPath: GITHUB_WORKSPACE!, sha: GITHUB_SHA! }
-	//new EslintRunner(githubToken, options).run()
+	// const options: Options = { repoName, repoOwner, repoPath: GITHUB_WORKSPACE!, sha: GITHUB_SHA! }
+	// new EslintRunner(githubToken, options).run()
 
 
 	function getChecksToReport() {
@@ -136,8 +134,6 @@ async function runAction() {
 		let results = JSON.parse(output) as CheckResult[]
 		let info = results.reduce<{ errorCount: number, warningCount: number, annotations: GitHubAnnotation[] }>(
 			(prev, current, index, arr) => {
-				core.info(`Analyzing ${current.filePath}`)
-
 				return {
 					errorCount: prev.errorCount + current.errorCount,
 					warningCount: prev.warningCount + current.warningCount,
@@ -217,12 +213,12 @@ async function runAction() {
 	getChecksToReport().forEach(check => {
 		const outputFilePath = path.resolve(check.outputFileName)
 		if (!fs.existsSync(outputFilePath)) {
-			core.setFailed(`Output file "${check.outputFileName}" for the ${check.name} check not be resolved.`)
+			core.warning(`Output file "${check.outputFileName}" for the ${check.name} check not be resolved.`)
 			return
 		}
 		const file = fs.readFileSync(check.outputFileName, 'utf8')
 		const parsedOutput = parseOutput(file/*, check.type*/)
-		if (parsedOutput.errorCount > 0) { core.setFailed(`${check.name} check failed.`) }
+		if (parsedOutput.errorCount > 0) { core.warning(`${check.name} check failed.`) }
 		const checkInfoBatches = buildCheckInfo(check.name, parsedOutput)
 
 		try {
