@@ -1,63 +1,21 @@
+/* eslint-disable fp/no-mutation */
+/* eslint-disable fp/no-let */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable camelcase */
 /* eslint-disable fp/no-loops */
-import * as assert from 'assert'
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-namespace */
+
+import * as assert from "assert"
+import * as fs from "fs"
+import * as path from "path"
+
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import * as path from "path"
-import * as fs from 'fs'
+import Octokit from '@octokit/rest'
 
-//#region Types
-type ArgsType<F extends (...x: any[]) => any> = F extends (...x: infer A) => any ? A : never
-interface ChecksCreateEndpoint {
-	owner: string;
-	repo: string;
-    /** The name of the check. For example, "code-coverage".
-     */
-	name: string;
-    /** The SHA of the commit.
-     */
-	head_sha: string;
-    /** The URL of the integrator's site that has the full details of the check. If the integrator does not provide this, then the homepage of the GitHub app is used.
-     */
-	details_url?: string;
-    /** A reference for the run on the integrator's system.
-     */
-	external_id?: string;
-    /** The current status. Can be one of `queued`, `in_progress`, or `completed`.
-     */
-	status?: "queued" | "in_progress" | "completed";
-    /** The time that the check run began. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`.
-     */
-	started_at?: string;
-    /** **Required if you provide `completed_at` or a `status` of `completed`**. The final conclusion of the check. Can be one of `success`, `failure`, `neutral`, `cancelled`, `skipped`, `timed_out`, or `action_required`. When the conclusion is `action_required`, additional details should be provided on the site specified by `details_url`.
-     * **Note:** Providing `conclusion` will automatically set the `status` parameter to `completed`. Only GitHub can change a check run conclusion to `stale`.
-     */
-	conclusion?: "success" | "failure" | "neutral" | "cancelled" | "skipped" | "timed_out" | "action_required";
-    /** The time the check completed. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`.
-     */
-	completed_at?: string;
-    /** Check runs can accept a variety of data in the `output` object, including a `title` and `summary` and can optionally provide descriptive details about the run. See the [`output` object](https://developer.github.com/v3/checks/runs/#output-object) description.
-     */
-	output?: {
-		title: string;
-		summary: string;
-		text?: string;
-		annotations?: GitHubAnnotation[];
-		images?: Array<{
-			alt: string;
-			image_url: string;
-			caption?: string;
-		}>;
-	};
-    /** Displays a button on GitHub that can be clicked to alert your app to do additional tasks. For example, a code linting app can display a button that automatically fixes detected errors. The button created in this object is displayed after the check run completes. When a user clicks the button, GitHub sends the [`check_run.requested_action` webhook](https://developer.github.com/webhooks/event-payloads/#check_run) to your app. Each action includes a `label`, `identifier` and `description`. A maximum of three actions are accepted. See the [`actions` object](https://developer.github.com/v3/checks/runs/#actions-object) description. To learn more about check runs and requested actions, see "[Check runs and requested actions](https://developer.github.com/v3/checks/runs/#check-runs-and-requested-actions)." To learn more about check runs and requested actions, see "[Check runs and requested actions](https://developer.github.com/v3/checks/runs/#check-runs-and-requested-actions)."
-     */
-	actions?: Array<{
-		label: string;
-		description: string;
-		identifier: string;
-	}>;
-}
-type GitHubAnnotationLevel = 'notice' | 'warning' | 'failure';
-type CheckConclusion = "success" | "failure" | "neutral" | "cancelled" | "skipped" | "timed_out" | "action_required"
+
+type GitHubAnnotationLevel = 'notice' | 'warning' | 'failure'
 interface GitHubAnnotation {
 	path: string;
 	annotation_level: GitHubAnnotationLevel;
@@ -69,7 +27,7 @@ interface GitHubAnnotation {
 	raw_details?: string;
 	title?: string;
 }
-interface CheckResult {
+interface LocalCheckResult {
 	filePath: string,
 	messages: Array<{
 		"ruleId": string,
@@ -88,196 +46,236 @@ interface CheckResult {
 	"fixableErrorCount": number,
 	"fixableWarningCount": number,
 	"source": string,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	"usedDeprecatedRules": any[]
 }
+namespace GithubCheckInfo {
+	interface Output {
+		title: string,
+		summary: string,
+		text?: string,
+		annotations?: GitHubAnnotation[]
+	}
 
-//#endregion
+	type Conclusion = "success" | "failure" | "neutral" | "cancelled" | "timed_out" | "action_required" | undefined
 
-//#region Functions
+	export interface CreateBase {
+		name: string,
+		owner: string,
+		repo: string,
+		head_sha: string,
+		started_at: string, // time stamp
+	}
+	export interface UpdateBase {
+		check_run_id: number,
+		owner: string,
+		repo: string
+	}
+
+	export interface CompletedCreate extends CreateBase {
+		status: 'completed'
+		completed_at: string,
+		conclusion: Conclusion,
+		output: Output
+	}
+
+	export interface InProgressCreate extends CreateBase {
+		status: "in_progress";
+		output?: Output;
+	}
+	export interface InProgressUpdate extends UpdateBase {
+		status: "in_progress"
+		output?: Output
+	}
+	export interface CompletionUpdate extends UpdateBase {
+		status: 'completed'
+		completed_at: string,
+		conclusion: Conclusion,
+		output: Output
+	}
+
+	export type Update = CompletionUpdate | InProgressUpdate
+	export type Create = CompletedCreate | InProgressCreate
+	export type Any = Create | Update
+}
+
+function* take<T>(iterable: Iterable<T>, n: number): Iterable<T> {
+	if (typeof n !== "number") throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`)
+	if (n < 0) throw new Error(`Invalid value ${n} for argument "n"\nMust be zero or positive number`)
+
+	if (n > 0) {
+		for (const element of iterable) {
+			yield element
+			if (--n <= 0) break
+		}
+	}
+}
+function* skip<T>(iterable: Iterable<T>, n: number): Iterable<T> {
+	if (typeof n !== "number") throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`)
+	if (n < 0) throw new Error(`Invalid value ${n} for argument "n"\nMust be zero or positive number`)
+
+	for (const element of iterable) {
+		if (n === 0)
+			yield element
+		else
+			n--
+	}
+}
+function* chunk<T>(arr: Iterable<T>, chunkSize: number): Iterable<T[]> {
+	const batch = [...take(arr, chunkSize)]
+	if (batch.length) {
+		yield batch
+		yield* chunk(skip(arr, chunkSize), chunkSize)
+	}
+}
+
+async function postCheckAsync(info: GithubCheckInfo.Any, ghClient: Octokit) {
+	const { data: { id: checkId } } = 'check_run_id' in info
+		? await ghClient.checks.update(info)
+		: await ghClient.checks.create(info)
+	return checkId
+}
 function getInput(key: string, required = false) {
 	return core.getInput(key, { required })
 }
-function* chunkArray<T>(arr: T[], chunkSize: number): Iterable<T[]> {
-	let index = 0
-	while (index < arr.length) {
-		yield (arr.slice(index, index + chunkSize))
-		index += 50
-	}
+function getChecksToReport() {
+	const checksInput = core.getInput('checks', { required: true })
+	return checksInput
+		.split("|")
+		.map(check => {
+			const [name, outputFileName] = check.split(":")
+			return { name, outputFileName }
+		})
 }
-//#endregion
+function parse(output: string) {
+	const results = JSON.parse(output) as LocalCheckResult[]
+	const info = results.reduce<{ errorCount: number, warningCount: number, annotations: GitHubAnnotation[] }>(
+		(prev, current, index, arr) => {
+			return {
+				errorCount: prev.errorCount + current.errorCount,
+				warningCount: prev.warningCount + current.warningCount,
+				annotations: [...prev.annotations, ...current.messages.map(msg => {
+					// Pull out information about the error/warning message
+					const { line, endLine, column, endColumn, severity, ruleId, message } = msg
+					const filePathTrimmed = current.filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, '')
 
-async function runAction() {
-	const { GITHUB_REPOSITORY, GITHUB_WORKSPACE, GITHUB_SHA, GITHUB_EVENT_PATH, SOURCE_ROOT } = process.env
-	const githubToken = getInput('ghToken', true)
-	const pullRequest = github.context.payload.pull_request;
-	const sha = GITHUB_SHA ?? (pullRequest ? pullRequest.head.sha : github.context.sha)
-	// const { context } = github
-	// const autoFix = getInput("auto_fix") === "true"
-	// const gitName = getInput("git_name", true)
-	// const gitEmail = getInput("git_email", true)
-	// const commitMessage = getInput("commit_message", true)
-	// const options: Options = { repoName, repoOwner, repoPath: GITHUB_WORKSPACE!, sha: GITHUB_SHA! }
-	// new EslintRunner(githubToken, options).run()
+					// Create GitHub annotation for error/warning (https://developer.github.com/v3/checks/runs/#annotations-object)
+					return {
+						path: filePathTrimmed,
+						start_line: line,
+						end_line: endLine ? endLine : line,
+						start_column: line === endLine ? column : undefined,
+						end_column: line === endLine ? endColumn : undefined,
+						annotation_level: ['notice', 'warning', 'failure'][severity] as GitHubAnnotationLevel,
+						message: `[${ruleId}] ${message}`
+					} as GitHubAnnotation
 
-
-	function getChecksToReport() {
-		const checksInput = core.getInput('checks', { required: true })
-		return checksInput
-			.split("|")
-			.map(check => {
-				let [name, outputFileName] = check.split(":")
-				return { name, outputFileName }
-			})
-	}
-
-	function parseOutput(output: string) {
-		let results = JSON.parse(output) as CheckResult[]
-		let info = results.reduce<{ errorCount: number, warningCount: number, annotations: GitHubAnnotation[] }>(
-			(prev, current, index, arr) => {
-				return {
-					errorCount: prev.errorCount + current.errorCount,
-					warningCount: prev.warningCount + current.warningCount,
-					annotations: [...prev.annotations, ...current.messages.map(msg => {
-						// Pull out information about the error/warning message
-						const { line, endLine, column, endColumn, severity, ruleId, message } = msg
-						const filePathTrimmed = current.filePath.replace(`${GITHUB_WORKSPACE}/`, '')
-
-						// Create GitHub annotation for error/warning (https://developer.github.com/v3/checks/runs/#annotations-object)
-						return {
-							path: filePathTrimmed,
-							start_line: line,
-							end_line: endLine ? endLine : line,
-							start_column: line === endLine ? column : undefined,
-							end_column: line === endLine ? endColumn : undefined,
-							annotation_level: ['notice', 'warning', 'failure'][severity] as GitHubAnnotationLevel,
-							message: `[${ruleId}] ${message}`
-						} as GitHubAnnotation
-
-						// User-friendly markdown message text for the error/warning
-						/*const link = `https://github.com/${OWNER}/${REPO}/blob/${SHA}/${filePathTrimmed}#L${line}:L${endLine}`
-						let messageText = '### [`' + filePathTrimmed + '` line `' + line + '`](' + link + ')\n';
-						messageText += '- Start Line: `' + line + '`\n';
-						messageText += '- End Line: `' + endLine + '`\n';
-						messageText += '- Message: ' + message + '\n';
-						messageText += '  - From: [`' + ruleId + '`]\n';
-		
-						// Add the markdown text to the appropriate placeholder
-						if (isWarning) {
-							warningText += messageText
-						} 
-						else {
-							errorText += messageText
-						}
-						*/
-					})]
-				}
-			},
-
-			{
-				errorCount: 0,
-				warningCount: 0,
-				annotations: [] as GitHubAnnotation[],
-				// errorText: '',
-				// warningText: '',
-				// markdownText: ''
-			} as const
-		)
-
-		return {
-			...info,
-			success: info.errorCount === 0,
-			summary: `${info.errorCount} error(s) and ${info.warningCount} warning(s) reported`
-		}
-	}
-
-	function buildCheckInfo(checkName: string, parsedResults: ReturnType<typeof parseOutput>): ChecksCreateEndpoint[] {
-		return [...chunkArray(parsedResults.annotations, 50)].map(batch => ({
-			owner: github.context.repo.owner,
-			repo: github.context.repo.repo,
-			started_at: new Date().toISOString(),
-			head_sha: sha,
-			completed_at: new Date().toISOString(),
-			status: 'completed',
-			name: checkName,
-			conclusion: parsedResults.success ? 'success' : 'failure',
-			output: {
-				title: checkName,
-				summary: parsedResults.summary,
-				//text: parsedCheckResults.markdown,
-				annotations: batch
+					// User-friendly markdown message text for the error/warning
+					/*const link = `https://github.com/${OWNER}/${REPO}/blob/${SHA}/${filePathTrimmed}#L${line}:L${endLine}`
+					let messageText = '### [`' + filePathTrimmed + '` line `' + line + '`](' + link + ')\n';
+					messageText += '- Start Line: `' + line + '`\n';
+					messageText += '- End Line: `' + endLine + '`\n';
+					messageText += '- Message: ' + message + '\n';
+					messageText += '  - From: [`' + ruleId + '`]\n';
+	
+					// Add the markdown text to the appropriate placeholder
+					if (isWarning) {
+						warningText += messageText
+					} 
+					else {
+						errorText += messageText
+					}
+					*/
+				})]
 			}
-		}))
+		},
+
+		{
+			errorCount: 0,
+			warningCount: 0,
+			annotations: [] as GitHubAnnotation[],
+			// errorText: '',
+			// warningText: '',
+			// markdownText: ''
+		} as const
+	)
+	return {
+		...info,
+		success: info.errorCount === 0,
+		summary: `${info.errorCount} error(s) and ${info.warningCount} warning(s) reported`
 	}
-
-	const githubClient = github.getOctokit(githubToken)
-	getChecksToReport().forEach(check => {
-		const outputFilePath = path.resolve(check.outputFileName)
-		if (!fs.existsSync(outputFilePath)) {
-			core.warning(`Output file "${check.outputFileName}" for the ${check.name} check not be resolved.`)
-			return
-		}
-		const file = fs.readFileSync(check.outputFileName, 'utf8')
-		const parsedOutput = parseOutput(file/*, check.type*/)
-		if (parsedOutput.errorCount > 0) { core.warning(`${check.name} check failed.`) }
-		const checkInfoBatches = buildCheckInfo(check.name, parsedOutput)
-
-		try {
-			checkInfoBatches.forEach(async batch => {
-				core.info(`Creating github check batch for ${JSON.stringify(batch)}`)
-				let r = await githubClient.checks.create({ ...batch })
-				let x = await githubClient.request({
-					method: 'POST',
-					url: '/repos/:owner/:repo/check-runs',
-					//const url = `https://api.github.com/repos/${owner}/${repoName}/check-runs`
-
-					headers: { accept: 'application/vnd.github.antiope-preview+json' },
-					...batch
-				})
-				core.info(`HHTP response code for check creation: ${x.status}`)
-
-				/*async function createCheck(sha: string, lintResult: Record<string, Result[]>, summary: string) {
-					try {
-						//const url = `https://api.github.com/repos/${repoName}/check-runs`
-						const url = `https://api.github.com/repos/${owner}/${repoName}/check-runs`
-
-						const headers = {
-							"Content-Type": "application/json",
-							Accept: "application/vnd.github.antiope-preview+json", //required to access Checks API during preview period
-							Authorization: `Bearer ${githubToken}`,
-							"User-Agent": `eslint-annotate_action`,
-						}
-
-						const body = {
-							name: "ESlint",
-							head_sha: sha,
-							conclusion: lintResult.isSuccess ? "success" : "failure",
-							started_at: new Date(),
-							//completed_at: completed ? new Date() : undefined,
-							//status: completed ? 'completed' : 'in_progress',
-							output: {
-								//title: capitalizeFirstLetter(summary),
-								//summary: `${linterName} found ${summary}`,
-								chunk
-							}
-						}
-
-						//await request(url, { method: "POST", headers, body })
-					}
-					catch (err) {
-						log(err, "error")
-						throw new Error(`Error trying to create GitHub check for ${linterName}: ${err.message}`);
-					}
-				}
-				*/
-			})
-		}
-		catch (err) {
-			core.setFailed(`Error creating annotations for ${check.name} on Github\n${err.message}`)
-		}
-	})
 }
 
-process.on("unhandledRejection", (err: any) => {
+async function run(): Promise<void> {
+	const pullRequest = github.context.payload.pull_request
+	const head_sha = pullRequest ? pullRequest.head.sha : github.context.sha
+	const owner = github.context.repo.owner
+	const repo = github.context.repo.repo
+	const githubToken = getInput('ghToken', true)
+	const githubClient = new github.GitHub(githubToken) as unknown as Octokit
+	const BATCH_SIZE = 50
+
+	function getBaseInfo(opts: { checkId: number }): { check_run_id: number, owner: string, repo: string }
+	function getBaseInfo(opts: { name: string }): { name: string, owner: string, repo: string, started_at: string, head_sha: string }
+	function getBaseInfo(opts: { checkId: number } | { name: string }) {
+		return 'checkId' in opts
+			? { check_run_id: opts.checkId, owner, repo }
+			: { name: opts.name, owner, repo, started_at: new Date().toISOString(), head_sha }
+	}
+	try {
+		for (const check of getChecksToReport()) {
+			const outputFilePath = path.resolve(check.outputFileName)
+			if (!fs.existsSync(outputFilePath)) {
+				core.warning(`Output file "${check.outputFileName}" for the ${check.name} check not found.`)
+				continue
+			}
+			const file = fs.readFileSync(check.outputFileName, 'utf8')
+			const parsedOutput = parse(file/*, check.type*/)
+			const conclusion = parsedOutput.success ? 'success' : 'failure'
+			if (!parsedOutput.success) {
+				core.setFailed(`${check.name} check reported ${parsedOutput.errorCount} errors.`)
+			}
+
+			if (pullRequest) {
+				core.info("This is a PR...")
+
+				const checkId = await postCheckAsync({ ...getBaseInfo(check), status: 'in_progress' }, githubClient)
+				const batches = [...chunk(parsedOutput.annotations, BATCH_SIZE)]
+				const batchNum = batches.length; let batchIndex = 1
+				for (const batch of take(batches, batchNum - 1)) {
+					const batchMessage = `Processing annotations batch ${batchIndex++} of ${check.name} check`
+					core.info(batchMessage)
+					await postCheckAsync({
+						...getBaseInfo({ checkId }), status: 'in_progress',
+						output: { title: check.name, summary: batchMessage, annotations: batch }
+					}, githubClient)
+				}
+				core.info(`Processing last batch of ${check.name} check`)
+				await postCheckAsync({
+					...getBaseInfo({ checkId }), status: 'completed', conclusion, completed_at: new Date().toISOString(),
+					output: { title: check.name, summary: parsedOutput.summary, annotations: batches[batchNum - 1] }
+				}, githubClient)
+			}
+			else { // push
+				core.info("This is a push...")
+				await postCheckAsync({
+					...getBaseInfo({ name: check.name }),
+					status: 'completed',
+					completed_at: new Date().toISOString(),
+					conclusion,
+					output: { title: check.name, summary: parsedOutput.summary,/* text: parsedOutput.markdown */ }
+				}, githubClient)
+			}
+		}
+	}
+	catch (err) {
+		core.setFailed(err.message ? err.message : 'Error creating checks')
+	}
+}
+
+run()
+
+process.on("unhandledRejection", (err) => {
 	console.error(err, "error")
 	throw new Error(`Exiting due to unhandled promise rejection`)
 })
@@ -288,12 +286,18 @@ if (process.env.MOCHA) {
 	describe('Index', function () {
 		describe('#chunkArray()', function () {
 			it('should return empty array when given empty array', function () {
-				assert.deepEqual([...chunkArray([], 50)], [])
+				assert.deepEqual([...chunk([], 50)], [])
 			})
 		})
 	})
 }
 else {
-	runAction()
+	run()
 }
 
+// npm install --save @actions/core@1.2.0 @actions/github@1.1.0 @octokit/graphql@2.0.1 @octokit/rest@16.15.0
+// npm install --save-dev typescript@3.7.2
+
+// @octokit/endpoint@5.5.1 @octokit/rest@16.35.0 @octokit/request@5.3.1 @octokit/types@2.0.1 @octokit/graphql@2.1.3
+
+// npm install --save @actions/core@latest @actions/github@latest

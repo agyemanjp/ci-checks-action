@@ -1,8 +1,8 @@
-# Customizable CI Checks With Annotations
+# Create Github checks from CI script output files
 
 ## Description
 
-Create Github checks (with annotations) from custom ci scripts output (JSON) files. The annotations include a summary of errors and warnings, including links to the line numbers of the violations. Work on both pull requests (only on changed files) and pushes.
+Create Github checks (with annotations for pull request diffs) from custom ci scripts output (JSON) files. The annotations include a summary of errors and warnings, including links to the line numbers of the violations. Work on both pull requests (only on changed files) and pushes.
 
 
 ## Rationale
@@ -44,9 +44,9 @@ jobs:
         continue-on-error: true
 
       - name: Annotate Checks
-        uses: prmph/ci-checks-action@1.0.0
+        uses: prmph/ci-checks-action@1.0.2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-		  # Paths for JSON file for each check, separate by semicolons (e.g. "lint:eslint.json; test:test_report.json")
-          checks: "lint:eslint_report.json; test:mocha_test_report.json"
+		  # JSON output file for each check, separated by semicolons
+          checks: "lint(lint.json); test(test.json)"
 ```

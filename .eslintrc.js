@@ -62,7 +62,7 @@ module.exports = {
 		/* code style */
 		"semi": ["error", "never"],
 		"brace-style": ["error", "stroustrup"],
-		//"camelcase": ["error", { "properties": "always", "ignoreImports": true }],
+		"camelcase": ["error", { "properties": "always", "ignoreImports": true }],
 		"block-spacing": ["error", "always"],
 		//"indent": ["warn", "tab"]
 	}
