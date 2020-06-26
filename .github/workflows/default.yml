@@ -41,5 +41,5 @@ jobs:
         uses: ./
         with:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
-          checks: "lint:lint.json)|test:test.json"
+          checks: "lint:output/lint.json|test:output/test.json"
 
