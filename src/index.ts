@@ -276,16 +276,12 @@ async function run(): Promise<void> {
 	}
 }
 
-run()
-
 process.on("unhandledRejection", (err) => {
 	console.error(err, "error")
 	throw new Error(`Exiting due to unhandled promise rejection`)
 })
 
-
 if (process.env.MOCHA) {
-
 	describe('Index', function () {
 		describe('#chunkArray()', function () {
 			it('should return empty array when given empty array', function () {
