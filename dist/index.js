@@ -82,6 +82,9 @@ function getChecksToReport() {
 }
 function parse(output) {
     const results = JSON.parse(output);
+    if (!Array.isArray(results)) {
+        throw new Error(`Error parsing check script output`);
+    }
     const info = results.reduce((prev, current, index, arr) => {
         return {
             errorCount: prev.errorCount + current.errorCount,
@@ -142,36 +145,43 @@ function run() {
         try {
             //const checks = getChecksToReport()
             for (const check of getChecksToReport()) {
-                if (check && check.name && check.outputFileName) {
-                    const outputFilePath = path.resolve(check.outputFileName);
-                    if (!fs.existsSync(outputFilePath)) {
-                        core.warning(`Output file "${check.outputFileName}" for the ${check.name} check not found.`);
-                        continue;
-                    }
-                    const file = fs.readFileSync(check.outputFileName, 'utf8');
-                    const parsedOutput = parse(file /*, check.type*/);
-                    const conclusion = parsedOutput.success ? 'success' : 'failure';
-                    if (!parsedOutput.success) {
-                        core.setFailed(`${check.name} check reported ${parsedOutput.errorCount} errors.`);
-                    }
-                    if (pullRequest) {
-                        core.info("This is a PR...");
-                        const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }), githubClient);
-                        const batches = [...chunk(parsedOutput.annotations, BATCH_SIZE)];
-                        const batchNum = batches.length;
-                        let batchIndex = 1;
-                        for (const batch of take(batches, batchNum - 1)) {
-                            const batchMessage = `Processing annotations batch ${batchIndex++} of ${check.name} check`;
-                            core.info(batchMessage);
-                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title: check.name, summary: batchMessage, annotations: batch } }), githubClient);
+                try {
+                    if (check && check.name && check.outputFileName) {
+                        const outputFilePath = path.resolve(check.outputFileName);
+                        if (!fs.existsSync(outputFilePath)) {
+                            core.warning(`Output file "${check.outputFileName}" for the ${check.name} check not found.`);
+                            continue;
                         }
-                        core.info(`Processing last batch of ${check.name} check`);
-                        yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title: check.name, summary: parsedOutput.summary, annotations: batches[batchNum - 1] } }), githubClient);
+                        const file = fs.readFileSync(check.outputFileName, 'utf8');
+                        const parsedOutput = parse(file /*, check.type*/);
+                        const conclusion = parsedOutput.success ? 'success' : 'failure';
+                        if (!parsedOutput.success) {
+                            core.setFailed(`${check.name} check reported ${parsedOutput.errorCount} errors.`);
+                        }
+                        if (pullRequest) {
+                            core.info("This is a PR...");
+                            const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }), githubClient);
+                            const batches = [...chunk(parsedOutput.annotations, BATCH_SIZE)];
+                            const batchNum = batches.length;
+                            let batchIndex = 1;
+                            for (const batch of take(batches, batchNum - 1)) {
+                                const batchMessage = `Processing annotations batch ${batchIndex++} of ${check.name} check`;
+                                core.info(batchMessage);
+                                yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title: check.name, summary: batchMessage, annotations: batch } }), githubClient);
+                            }
+                            core.info(`Processing last batch of ${check.name} check`);
+                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title: check.name, summary: parsedOutput.summary, annotations: batches[batchNum - 1] } }), githubClient);
+                        }
+                        else { // push
+                            core.info("This is a push...");
+                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ name: check.name })), { status: 'completed', completed_at: new Date().toISOString(), conclusion, output: { title: check.name, summary: parsedOutput.summary, } }), githubClient);
+                        }
                     }
-                    else { // push
-                        core.info("This is a push...");
-                        yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ name: check.name })), { status: 'completed', completed_at: new Date().toISOString(), conclusion, output: { title: check.name, summary: parsedOutput.summary, } }), githubClient);
-                    }
+                }
+                catch (e) {
+                    const msg = 'message' in e ? e.message : String(e);
+                    core.error(`Error processing requested check ${check.name}\n${msg}\n`);
+                    //core.setFailed('Error creating checks')
                 }
             }
         }
