@@ -37,7 +37,7 @@ module.exports = function (runner) {
         addResult(test, `"${test.fullTitle()}" failed\nExpected:${err.expected}\nActual:${err.actual}`, "failure");
     });
     runner.on('end', function () {
-        console.log(JSON.stringify(results));
+        console.log(JSON.stringify(results, null, 2));
     });
 };
 //console.log('pass: %s', test.fullTitle())

@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const stdlib_1 = require("./stdlib");
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports = function (results, data) {
-    const chekResult = {
+    const checkResult = {
         name: undefined,
         description: "ES Lint results",
         summary: undefined,
@@ -35,6 +35,6 @@ module.exports = function (results, data) {
                 }];
         })).asObject()
     };
-    return JSON.stringify(chekResult, null, 2);
+    return JSON.stringify(checkResult, null, 2);
 };
 //# sourceMappingURL=eslint-formatter.js.map

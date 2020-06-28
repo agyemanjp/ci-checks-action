@@ -71,9 +71,9 @@ function parse(generalCheckJSON: string, checkName?: string) {
 			return fileResult.details.map(detail => ({
 				path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
 				message: detail.message,
-				start_line: detail.startLine,
-				end_line: detail.endLine,
+				start_line: detail.startLine ?? 0,
 				start_column: detail.startColumn,
+				end_line: detail.endLine ?? 0,
 				end_column: detail.endColumn,
 				annotation_level: detail.category as GitHubAnnotation.Level
 			} as GitHubAnnotation))

@@ -7,7 +7,7 @@ import { map, Dictionary, sum } from "./stdlib"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports = function (results: ESLint.LintResult[], data?: ESLint.LintResultData) {
-	const chekResult: CheckGeneralSchema = {
+	const checkResult: CheckGeneralSchema = {
 		name: undefined,
 		description: "ES Lint results",
 		summary: undefined,
@@ -38,5 +38,5 @@ module.exports = function (results: ESLint.LintResult[], data?: ESLint.LintResul
 			}]
 		})).asObject()
 	}
-	return JSON.stringify(chekResult, null, 2)
+	return JSON.stringify(checkResult, null, 2)
 }

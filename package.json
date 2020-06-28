@@ -3,6 +3,16 @@
 	"version": "1.0.2",
 	"description": "",
 	"main": "dist/index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/prmph/ci-checks-action.git"
+	},
+	"keywords": [],
+	"author": "James Prempeh <jprempeh@danfortsystems.com>",
+	"bugs": {
+		"url": "https://github.com/prmph/ci-checks-action/issues"
+	},
+	"homepage": "https://github.com/prmph/ci-checks-action#readme",
 	"scripts": {
 		"schema": "json2ts ./src/types/check-general.schema.json ./src/types/check-general.ts",
 		"clean": "rm -rf dist ./output ./src/types/check-general.ts ",
@@ -11,8 +21,6 @@
 		"test": "mkdir -p ./output && MOCHA=true mocha dist/*.js --reporter dist/mocha-reporter.js >| ./output/test.json",
 		"ci": "npm run build && npm run lint && npm run test"
 	},
-	"author": "",
-	"license": "ISC",
 	"devDependencies": {
 		"@hutsoninc/flatten-dir-cli": "^1.0.2",
 		"@types/eslint": "^7.2.0",

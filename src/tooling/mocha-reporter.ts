@@ -49,7 +49,7 @@ module.exports = function (this: unknown, runner: mocha.Runner) {
 	})
 
 	runner.on('end', function () {
-		console.log(JSON.stringify(results))
+		console.log(JSON.stringify(results, null, 2))
 	})
 }
 

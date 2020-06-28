@@ -80,15 +80,18 @@ function parse(generalCheckJSON, checkName) {
         annotations: stdlib_1.flatten(Object.entries(byFile).map(kv => {
             const filePath = kv[0];
             const fileResult = kv[1];
-            return fileResult.details.map(detail => ({
-                path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
-                message: detail.message,
-                start_line: detail.startLine,
-                end_line: detail.endLine,
-                start_column: detail.startColumn,
-                end_column: detail.endColumn,
-                annotation_level: detail.category
-            }));
+            return fileResult.details.map(detail => {
+                var _a, _b;
+                return ({
+                    path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
+                    message: detail.message,
+                    start_line: (_a = detail.startLine, (_a !== null && _a !== void 0 ? _a : 0)),
+                    start_column: detail.startColumn,
+                    end_line: (_b = detail.endLine, (_b !== null && _b !== void 0 ? _b : 0)),
+                    end_column: detail.endColumn,
+                    annotation_level: detail.category
+                });
+            });
         })),
     };
 }
