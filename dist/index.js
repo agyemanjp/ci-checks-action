@@ -1,8 +1,8 @@
 "use strict";
+/* eslint-disable camelcase */
 /* eslint-disable fp/no-mutation */
 /* eslint-disable fp/no-let */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable camelcase */
 /* eslint-disable fp/no-loops */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -22,52 +22,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const assert = __importStar(require("assert"));
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
+const ajv_1 = __importDefault(require("ajv"));
 const core = __importStar(require("@actions/core"));
 const github = __importStar(require("@actions/github"));
-function* take(iterable, n) {
-    if (typeof n !== "number")
-        throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`);
-    if (n < 0)
-        throw new Error(`Invalid value ${n} for argument "n"\nMust be zero or positive number`);
-    if (n > 0) {
-        for (const element of iterable) {
-            yield element;
-            if (--n <= 0)
-                break;
-        }
-    }
-}
-function* skip(iterable, n) {
-    if (typeof n !== "number")
-        throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`);
-    if (n < 0)
-        throw new Error(`Invalid value ${n} for argument "n"\nMust be zero or positive number`);
-    for (const element of iterable) {
-        if (n === 0)
-            yield element;
-        else
-            n--;
-    }
-}
-function* chunk(arr, chunkSize) {
-    const batch = [...take(arr, chunkSize)];
-    if (batch.length) {
-        yield batch;
-        yield* chunk(skip(arr, chunkSize), chunkSize);
-    }
-}
-function postCheckAsync(info, ghClient) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { data: { id: checkId } } = 'check_run_id' in info
-            ? yield ghClient.checks.update(info)
-            : yield ghClient.checks.create(info);
-        return checkId;
-    });
-}
+const generalCheckSchema = __importStar(require("./check-general.schema.json"));
+const stdlib_1 = require("./stdlib");
 function getInput(key, required = false) {
     return core.getInput(key, { required });
 }
@@ -80,53 +46,51 @@ function getChecksToReport() {
         return { name, outputFileName };
     });
 }
-function parse(output) {
-    const results = JSON.parse(output);
-    if (!Array.isArray(results)) {
+function parse(generalCheckJSON, checkName) {
+    var _a;
+    const toValidate = JSON.parse(generalCheckJSON);
+    const valid = new ajv_1.default().validate(generalCheckSchema, toValidate);
+    if (valid === false) {
         throw new Error(`Error parsing check script output`);
     }
-    const info = results.reduce((prev, current, index, arr) => {
-        return {
-            errorCount: prev.errorCount + current.errorCount,
-            warningCount: prev.warningCount + current.warningCount,
-            annotations: [...prev.annotations, ...current.messages.map(msg => {
-                    // Pull out information about the error/warning message
-                    const { line, endLine, column, endColumn, severity, ruleId, message } = msg;
-                    const filePathTrimmed = current.filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, '');
-                    // Create GitHub annotation for error/warning (https://developer.github.com/v3/checks/runs/#annotations-object)
-                    return {
-                        path: filePathTrimmed,
-                        start_line: line,
-                        end_line: endLine ? endLine : line,
-                        start_column: line === endLine ? column : undefined,
-                        end_column: line === endLine ? endColumn : undefined,
-                        annotation_level: ['notice', 'warning', 'failure'][severity],
-                        message: `[${ruleId}] ${message}`
-                    };
-                    // User-friendly markdown message text for the error/warning
-                    /*const link = `https://github.com/${OWNER}/${REPO}/blob/${SHA}/${filePathTrimmed}#L${line}:L${endLine}`
-                    let messageText = '### [`' + filePathTrimmed + '` line `' + line + '`](' + link + ')\n';
-                    messageText += '- Start Line: `' + line + '`\n';
-                    messageText += '- End Line: `' + endLine + '`\n';
-                    messageText += '- Message: ' + message + '\n';
-                    messageText += '  - From: [`' + ruleId + '`]\n';
-    
-                    // Add the markdown text to the appropriate placeholder
-                    if (isWarning) {
-                        warningText += messageText
-                    }
-                    else {
-                        errorText += messageText
-                    }
-                    */
-                })]
-        };
-    }, {
-        errorCount: 0,
-        warningCount: 0,
-        annotations: [],
-    });
-    return Object.assign(Object.assign({}, info), { success: info.errorCount === 0, summary: `${info.errorCount} error(s) and ${info.warningCount} warning(s) reported` });
+    const result = toValidate;
+    // User-friendly markdown message text for the error/warning
+    /*const link = `https://github.com/${OWNER}/${REPO}/blob/${SHA}/${filePathTrimmed}#L${line}:L${endLine}`
+        let messageText = '### [`' + filePathTrimmed + '` line `' + line + '`](' + link + ')\n';
+        messageText += '- Start Line: `' + line + '`\n';
+        messageText += '- End Line: `' + endLine + '`\n';
+        messageText += '- Message: ' + message + '\n';
+        messageText += '  - From: [`' + ruleId + '`]\n';
+
+        // Add the markdown text to the appropriate placeholder
+        if (isWarning) {
+            warningText += messageText
+        }
+        else {
+            errorText += messageText
+        }
+    */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { byFile, summary, name, description, counts } = result;
+    return {
+        title: (_a = (checkName !== null && checkName !== void 0 ? checkName : name), (_a !== null && _a !== void 0 ? _a : "")),
+        summary: (summary !== null && summary !== void 0 ? summary : `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`),
+        conclusion: counts.failure > 0 ? 'failure' : 'success',
+        text: "",
+        annotations: stdlib_1.flatten(Object.entries(byFile).map(kv => {
+            const filePath = kv[0];
+            const fileResult = kv[1];
+            return fileResult.details.map(detail => ({
+                path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
+                message: detail.message,
+                start_line: detail.startLine,
+                end_line: detail.endLine,
+                start_column: detail.startColumn,
+                end_column: detail.endColumn,
+                annotation_level: detail.category
+            }));
+        })),
+    };
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -142,6 +106,14 @@ function run() {
                 ? { check_run_id: opts.checkId, owner, repo }
                 : { name: opts.name, owner, repo, started_at: new Date().toISOString(), head_sha };
         }
+        function postCheckAsync(info) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const { data: { id: checkId } } = 'check_run_id' in info
+                    ? yield githubClient.checks.update(info)
+                    : yield githubClient.checks.create(info);
+                return checkId;
+            });
+        }
         try {
             //const checks = getChecksToReport()
             for (const check of getChecksToReport()) {
@@ -149,38 +121,37 @@ function run() {
                     if (check && check.name && check.outputFileName) {
                         const outputFilePath = path.resolve(check.outputFileName);
                         if (!fs.existsSync(outputFilePath)) {
-                            core.warning(`Output file "${check.outputFileName}" for the ${check.name} check not found.`);
+                            core.warning(`Output file "${check.outputFileName}" for the "${check.name}" check not found.`);
                             continue;
                         }
                         const file = fs.readFileSync(check.outputFileName, 'utf8');
-                        const parsedOutput = parse(file /*, check.type*/);
-                        const conclusion = parsedOutput.success ? 'success' : 'failure';
-                        if (!parsedOutput.success) {
-                            core.setFailed(`${check.name} check reported ${parsedOutput.errorCount} errors.`);
+                        const { title, summary, conclusion, text, annotations } = parse(file, check.name);
+                        if (conclusion !== "success") {
+                            core.setFailed(`"${title}" check reported failures.`);
                         }
                         if (pullRequest) {
                             core.info("This is a PR...");
-                            const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }), githubClient);
-                            const batches = [...chunk(parsedOutput.annotations, BATCH_SIZE)];
-                            const batchNum = batches.length;
+                            const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
+                            const annotationBatches = [...stdlib_1.chunk(annotations, BATCH_SIZE)];
+                            const batchNum = annotationBatches.length;
                             let batchIndex = 1;
-                            for (const batch of take(batches, batchNum - 1)) {
-                                const batchMessage = `Processing annotations batch ${batchIndex++} of ${check.name} check`;
+                            for (const annotationBatch of stdlib_1.take(annotationBatches, batchNum - 1)) {
+                                const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`;
                                 core.info(batchMessage);
-                                yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title: check.name, summary: batchMessage, annotations: batch } }), githubClient);
+                                yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title, summary: batchMessage, annotations: annotationBatch } }));
                             }
-                            core.info(`Processing last batch of ${check.name} check`);
-                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title: check.name, summary: parsedOutput.summary, annotations: batches[batchNum - 1] } }), githubClient);
+                            core.info(`Processing last batch of "${title}" check`);
+                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: stdlib_1.last(annotationBatches) } }));
                         }
                         else { // push
                             core.info("This is a push...");
-                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ name: check.name })), { status: 'completed', completed_at: new Date().toISOString(), conclusion, output: { title: check.name, summary: parsedOutput.summary, } }), githubClient);
+                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ name: check.name })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text } }));
                         }
                     }
                 }
                 catch (e) {
                     const msg = 'message' in e ? e.message : String(e);
-                    core.error(`Error processing requested check ${check.name}\n${msg}\n`);
+                    core.error(`Error processing requested check "${check.name}"\n\t${msg}\n`);
                     //core.setFailed('Error creating checks')
                 }
             }
@@ -198,7 +169,7 @@ if (process.env.MOCHA) {
     describe('Index', function () {
         describe('#chunkArray()', function () {
             it('should return empty array when given empty array', function () {
-                assert.deepEqual([...chunk([], 50)], []);
+                assert.deepEqual([...stdlib_1.chunk([], 50)], [1]);
             });
         });
     });

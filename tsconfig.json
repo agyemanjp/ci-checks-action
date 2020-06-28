@@ -3,10 +3,16 @@
 		"target": "es6",
 		"module": "commonjs",
 		"outDir": "./dist",
-		"rootDir": "./src",
+		"rootDirs": [
+			"./src",
+			"./src/types",
+			"./src/tooling"
+		],
 		"strict": true,
 		"noImplicitAny": false,
 		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"keyofStringsOnly": true,
 		"declaration": true,
 		"sourceMap": true
 	},

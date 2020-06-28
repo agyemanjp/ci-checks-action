@@ -36,11 +36,12 @@ jobs:
       - name: Install Dependencies
         run: npm ci
         
-      - name: Run Checks
+      - name: Run Lint Check
         run: npm run lint
+        continue-on-error: true
+        
+      - name: Run Test Check
         run: npm run test
-        run: npm run benchmark
-        # Continue to the next step even if this fails
         continue-on-error: true
 
       - name: Annotate Checks
@@ -48,5 +49,5 @@ jobs:
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
 		  # JSON output file for each check, separated by semicolons
-          checks: "lint(lint.json); test(test.json)"
+          checks: "lint:output/lint.json|test:output/test.json"
 ```

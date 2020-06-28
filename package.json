@@ -4,28 +4,38 @@
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
-		"build": "rm -rf dist output && tsc",
-		"lint": "mkdir -p ./output && eslint --ext ts,tsx --output-file ./output/lint.json --format json --cache src/*",
-		"test": "mkdir -p ./output && MOCHA=true mocha dist/*.js --reporter json >| ./output/test.json"
+		"schema": "json2ts ./src/types/check-general.schema.json ./src/types/check-general.ts",
+		"clean": "rm -rf dist ./output ./src/types/check-general.ts ",
+		"build": "npm run clean && npm run schema && tsc && flatten dist && cp ./src/types/check-general.schema.json dist",
+		"lint": "mkdir -p ./output && eslint --ext ts,tsx --output-file ./output/lint.json --format dist/eslint-formatter.js --cache src/*",
+		"test": "mkdir -p ./output && MOCHA=true mocha dist/*.js --reporter dist/mocha-reporter.js >| ./output/test.json",
+		"ci": "npm run build && npm run lint && npm run test"
 	},
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"@types/eslint": "7.2.0",
+		"@hutsoninc/flatten-dir-cli": "^1.0.2",
+		"@types/eslint": "^7.2.0",
 		"@types/mocha": "7.0.2",
 		"@types/node": "14.0.13",
 		"@types/shelljs": "0.8.8",
+		"@types/source-map-support": "^0.5.1",
 		"@typescript-eslint/eslint-plugin": "3.4.0",
 		"@typescript-eslint/parser": "3.4.0",
-		"eslint": "7.3.1",
+		"eslint": "^7.3.1",
 		"eslint-plugin-fp": "2.3.0",
+		"json-schema-to-typescript": "^9.1.0",
 		"mocha": "8.0.1",
+		"source-map-support": "^0.5.19",
+		"ts-node": "^8.10.2",
 		"typescript": "3.7.2"
 	},
 	"dependencies": {
 		"@actions/core": "1.2.0",
 		"@actions/github": "1.1.0",
 		"@octokit/graphql": "2.0.1",
-		"@octokit/rest": "16.15.0"
+		"@octokit/rest": "16.15.0",
+		"ts-transform-json-schema": "^2.0.3",
+		"z-schema": "^4.2.3"
 	}
 }

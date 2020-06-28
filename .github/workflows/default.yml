@@ -31,10 +31,12 @@ jobs:
       - name: Build
         run: npm run build --if-present
 
-      - name: Run Checks Scripts
-        run: |
-          npm run lint
-          npm run test
+      - name: Run Lint Check
+        run: npm run lint
+        continue-on-error: true
+        
+      - name: Run Test Check
+        run: npm run test
         continue-on-error: true
         
       - name: Annotate Checks
