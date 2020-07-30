@@ -32,7 +32,7 @@ function getChecksToReport() {
 		})
 }
 function parse(generalCheckJSON: string, checkName?: string) {
-	console.log(`Parsing check JSON: "${generalCheckJSON}"`)
+	// console.log(`Parsing check JSON: "${generalCheckJSON}"`)
 
 	const toValidate = JSON.parse(generalCheckJSON)
 	const valid = new Ajv().validate(generalCheckSchema, toValidate)
@@ -72,7 +72,7 @@ function parse(generalCheckJSON: string, checkName?: string) {
 
 			const fileResult = kv[1]
 			return fileResult.details.map(detail => {
-				console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
+				// console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
 
 				return {
 					path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),

@@ -6763,8 +6763,8 @@ function getChecksToReport() {
     });
 }
 function parse(generalCheckJSON, checkName) {
+    // console.log(`Parsing check JSON: "${generalCheckJSON}"`)
     var _a;
-    console.log(`Parsing check JSON: "${generalCheckJSON}"`);
     const toValidate = JSON.parse(generalCheckJSON);
     const valid = new ajv_1.default().validate(generalCheckSchema, toValidate);
     if (valid === false) {
@@ -6800,8 +6800,8 @@ function parse(generalCheckJSON, checkName) {
             //console.log(`Processing ${checkName} check file "${filePath}"`)
             const fileResult = kv[1];
             return fileResult.details.map(detail => {
+                // console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
                 var _a, _b;
-                console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`);
                 return {
                     path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
                     title: detail.title,
