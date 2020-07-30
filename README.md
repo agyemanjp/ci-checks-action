@@ -50,7 +50,7 @@ jobs:
       - name: Annotate Checks
         uses: agyemanjp/ci-checks-action@1.0.1
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          ghToken: "${{ secrets.GITHUB_TOKEN }}"
 		  # JSON output file for each check, separated by semicolons
           checks: "lint:.lint-report.json|test:.test-report.json"
 ```
