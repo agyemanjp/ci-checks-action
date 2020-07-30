@@ -427,13 +427,17 @@ function getLastPage (octokit, link, headers) {
 /* eslint-disable brace-style */
 Object.defineProperty(exports, "__esModule", { value: true });
 function* flatten(nestedIterable) {
-    console.log(`\nInput to flatten: ${JSON.stringify(nestedIterable)}`);
+    //console.log(`\nInput to flatten: ${JSON.stringify(nestedIterable)}`)
     for (const element of nestedIterable) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (hasValue(element) && typeof element[Symbol.iterator] === 'function')
+        if (typeof element !== "string" && typeof element[Symbol.iterator] === 'function') {
+            //console.log(`flatten: element <${JSON.stringify(element)}> is iterable; flattening it *`)
             yield* flatten(element);
-        else
+        }
+        else {
+            //console.log(`flatten: element <${JSON.stringify(element)}> is not iterable; yielding it *`)
             yield element;
+        }
     }
 }
 exports.flatten = flatten;
@@ -511,18 +515,21 @@ function* chunk(arr, chunkSize) {
 }
 exports.chunk = chunk;
 function hasValue(value) {
-    if (typeof value === "undefined")
-        return false;
-    if (value === undefined)
-        return false;
-    if (value === null)
-        return false;
-    const str = String(value);
-    if (str.trim().length === 0)
-        return false;
-    if (/^\s*$/.test(str))
-        return false;
-    //if(str.replace(/\s/g,"") == "") return false
+    switch (typeof value) {
+        case "function":
+        case "boolean":
+        case "bigint":
+        case "object":
+        case "symbol":
+            return (value !== null);
+        case "undefined":
+            return false;
+        case "number":
+            return (value !== null && !isNaN(value) && !Number.isNaN(value) && value !== Number.NaN);
+        case "string":
+            return value !== undefined && value !== null && value.trim().length > 0 && !/^\s*$/.test(value);
+        //if(str.replace(/\s/g,"") == "") return false
+    }
     return true;
 }
 exports.hasValue = hasValue;

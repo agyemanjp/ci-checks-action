@@ -9,14 +9,18 @@ type UnwrapIterable3<T> = T extends Iterable<infer X> ? UnwrapIterable2<X> : T
 export type UnwrapNestedIterable<T> = T extends Iterable<infer X> ? UnwrapIterable3<X> : T
 
 export function* flatten<X>(nestedIterable: Iterable<X>): Iterable<UnwrapNestedIterable<X>> {
-	console.log(`\nInput to flatten: ${JSON.stringify(nestedIterable)}`)
+	//console.log(`\nInput to flatten: ${JSON.stringify(nestedIterable)}`)
 
 	for (const element of nestedIterable) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		if (hasValue(element) && typeof (element as any)[Symbol.iterator] === 'function')
+		if (typeof element !== "string" && typeof (element as any)[Symbol.iterator] === 'function') {
+			//console.log(`flatten: element <${JSON.stringify(element)}> is iterable; flattening it *`)
 			yield* flatten(element as unknown as Iterable<X>)
-		else
+		}
+		else {
+			//console.log(`flatten: element <${JSON.stringify(element)}> is not iterable; yielding it *`)
 			yield element as UnwrapNestedIterable<X>
+		}
 	}
 
 }
@@ -96,14 +100,22 @@ export function* chunk<T>(arr: Iterable<T>, chunkSize: number): Iterable<T[]> {
 	}
 }
 
-export function hasValue(value: unknown): boolean {
-	if (typeof value === "undefined") return false
-	if (value === undefined) return false
-	if (value === null) return false
+export function hasValue(value?: unknown): boolean {
+	switch (typeof value) {
+		case "function":
+		case "boolean":
+		case "bigint":
+		case "object":
+		case "symbol":
+			return (value !== null)
+		case "undefined":
+			return false
+		case "number":
+			return (value !== null && !isNaN(value) && !Number.isNaN(value) && value !== Number.NaN)
+		case "string":
+			return value !== undefined && value !== null && value.trim().length > 0 && !/^\s*$/.test(value)
+		//if(str.replace(/\s/g,"") == "") return false
+	}
 
-	const str = String(value) as string
-	if (str.trim().length === 0) return false
-	if (/^\s*$/.test(str)) return false
-	//if(str.replace(/\s/g,"") == "") return false
 	return true
 }

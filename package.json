@@ -32,7 +32,7 @@
 		"lint": "eslint --ext ts --output-file .lint-report.json --format json-standard --cache src/*",
 		"build": "npm run schema && tsc && flatten dist && cp src/check-general.schema.json dist && rm -rf dist/*.test.js.map dist/*.test.d.ts",
 		"postbuild": "ncc build dist/index.js",
-		"test": "mocha ./dist/*.test.js --reporter mocha-reporter-json-standard >| .test-report.json",
+		"test": "mocha ./dist/*.test.js ",
 		"ci": "npm run clean && npm run lint && npm run build && npm run test"
 	},
 	"devDependencies": {
