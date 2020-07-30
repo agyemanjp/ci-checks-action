@@ -1,13 +1,13 @@
-# Create Github checks from CI script output files
+# Create Github checks from script output files
 
 ## Description
 
-Create Github checks (with annotations for pull request diffs) from custom ci scripts output (JSON) files. The annotations include a summary of errors and warnings, including links to the line numbers of the violations. Work on both pull requests (only on changed files) and pushes.
+Create Github checks (with annotations for pull request diffs) from the output (in a standard JSON format) of custom code check scripts. The annotations include a summary of errors and warnings, including links to the line numbers of any errors or warnings. It works on both pull requests (only on changed files) and pushes.
 
 
 ## Rationale
 
-This actions allows for more flexibility in implementing ci checks. Instead on bundling the actual ci checks, it allows you to use any ci script, as long as it output its results to a local JSON file in the proper format.
+This action allows for more flexibility in implementing code checks. Instead on bundling specific checks, it allows you to use any custom script, as long as it outputs its results to a local JSON file in the proper format.
 
 ## Usage Example
 
@@ -36,7 +36,10 @@ jobs:
       - name: Install Dependencies
         run: npm ci
         
-      - name: Run Lint Check
+      - name: Build
+		run: npm run build --if-present
+		
+	- name: Run Lint Check
         run: npm run lint
         continue-on-error: true
         
@@ -45,9 +48,9 @@ jobs:
         continue-on-error: true
 
       - name: Annotate Checks
-        uses: prmph/ci-checks-action@1.0.2
+        uses: agyemanjp/ci-checks-action@1.0.1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
 		  # JSON output file for each check, separated by semicolons
-          checks: "lint:output/lint.json|test:output/test.json"
+          checks: "lint:.lint-report.json|test:.test-report.json"
 ```

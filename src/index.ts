@@ -6,20 +6,18 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import * as assert from "assert"
 import * as fs from "fs"
 import * as path from "path"
 
 import Ajv from 'ajv'
+import Octokit from '@octokit/rest'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import Octokit from '@octokit/rest'
 
+import { flatten, take, last, chunk } from "./utility"
 import { GithubCheckInfo, GitHubAnnotation } from "./check-github"
 import { CheckGeneralSchema } from "./check-general"
 import * as generalCheckSchema from "./check-general.schema.json"
-import { take, chunk, flatten, last } from "./stdlib"
-
 
 function getInput(key: string, required = false) {
 	return core.getInput(key, { required })
@@ -178,22 +176,7 @@ process.on("unhandledRejection", (err) => {
 	throw new Error(`Exiting due to unhandled promise rejection`)
 })
 
-if (process.env.MOCHA) {
-	describe('Index', function () {
-		describe('#chunkArray()', function () {
-			it('should return empty array when given empty array', function () {
-				assert.deepEqual([...chunk([], 50)], [1])
-			})
-		})
-	})
-}
-else {
-	run()
-}
 
-// npm install --save @actions/core@1.2.0 @actions/github@1.1.0 @octokit/graphql@2.0.1 @octokit/rest@16.15.0
-// npm install --save-dev typescript@3.7.2
+run()
 
-// @octokit/endpoint@5.5.1 @octokit/rest@16.35.0 @octokit/request@5.3.1 @octokit/types@2.0.1 @octokit/graphql@2.1.3
 
-// npm install --save @actions/core@latest @actions/github@latest

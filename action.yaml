@@ -1,6 +1,5 @@
-name: "Create Github checks from CI script output files"
-description: "Create Github checks (with annotations for PRs) from JSON file outputs of custom ci scripts"
-# description: "Report results of your ci check scripts as Github checks (with file annotations)"
+name: "Create Github checks from code check script output files"
+description: "Create Github checks (with annotations for PRs) from JSON file outputs of custom code check scripts"
 inputs:
   repo-token:
     description: "Token used to interact with the Github API."
