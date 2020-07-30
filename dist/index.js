@@ -6752,6 +6752,7 @@ function getChecksToReport() {
 }
 function parse(generalCheckJSON, checkName) {
     var _a;
+    console.log(`Parsing check JSON: "${generalCheckJSON}"`);
     const toValidate = JSON.parse(generalCheckJSON);
     const valid = new ajv_1.default().validate(generalCheckSchema, toValidate);
     if (valid === false) {
@@ -6787,8 +6788,8 @@ function parse(generalCheckJSON, checkName) {
             //console.log(`Processing ${checkName} check file "${filePath}"`)
             const fileResult = kv[1];
             return fileResult.details.map(detail => {
-                //console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
                 var _a, _b;
+                console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`);
                 return {
                     path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
                     message: detail.message,
@@ -6845,7 +6846,7 @@ function run() {
                             const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
                             const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
                             const numBatches = annotationBatches.length;
-                            console.log(`${check.name} check: numBatches=${numBatches}`);
+                            console.log(`${check.name} check: number of batches = ${numBatches}`);
                             let batchIndex = 1;
                             for (const annotationBatch of utility_1.take(annotationBatches, numBatches - 1)) {
                                 const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`;
