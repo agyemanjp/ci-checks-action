@@ -87,7 +87,7 @@ async function run(): Promise<void> {
 	const head_sha = pullRequest ? pullRequest.head.sha : github.context.sha
 	const owner = github.context.repo.owner
 	const repo = github.context.repo.repo
-	const githubToken = getInput('repo-token', true)
+	const githubToken = getInput('ghToken', true)
 	const githubClient = new github.GitHub(githubToken) as unknown as Octokit
 	const BATCH_SIZE = 50
 

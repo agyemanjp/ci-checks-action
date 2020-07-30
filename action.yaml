@@ -1,7 +1,7 @@
 name: "Create Github checks from code check script output files"
 description: "Create Github checks (with annotations for PRs) from JSON file outputs of custom code check scripts"
 inputs:
-  repo-token:
+  ghToken:
     description: "Token used to interact with the Github API."
     required: true
   checks:
