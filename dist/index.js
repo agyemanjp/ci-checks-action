@@ -6849,17 +6849,18 @@ function run() {
                             continue;
                         }
                         const file = fs.readFileSync(check.outputFileName, 'utf8');
-                        const { title, summary, conclusion, text, annotations } = parse(file, check.name);
-                        console.log(`${title} check annotations length: ${[...annotations].length}`);
+                        const { title, summary, conclusion, text, annotations: annotationsIter } = parse(file, check.name);
+                        const annotations = [...annotationsIter];
+                        console.log(`${title} check annotations length: ${annotations.length}`);
                         if (conclusion !== "success") {
                             core.setFailed(`"${title}" check reported failures.`);
                         }
                         if (pullRequest) {
                             core.info("This is a PR...");
                             const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
-                            console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`);
+                            //console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
                             const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
-                            console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`);
+                            //console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
                             const numBatches = annotationBatches.length;
                             console.log(`${check.name} check: number of batches = ${numBatches}`);
                             let batchIndex = 1;

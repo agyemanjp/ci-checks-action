@@ -128,8 +128,9 @@ async function run(): Promise<void> {
 					}
 
 					const file = fs.readFileSync(check.outputFileName, 'utf8')
-					const { title, summary, conclusion, text, annotations } = parse(file, check.name)
-					console.log(`${title} check annotations length: ${[...annotations].length}`)
+					const { title, summary, conclusion, text, annotations: annotationsIter } = parse(file, check.name)
+					const annotations = [...annotationsIter]
+					console.log(`${title} check annotations length: ${annotations.length}`)
 
 					if (conclusion !== "success") {
 						core.setFailed(`"${title}" check reported failures.`)
@@ -140,9 +141,9 @@ async function run(): Promise<void> {
 
 						const checkId = await postCheckAsync({ ...getBaseInfo(check), status: 'in_progress' })
 
-						console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
+						//console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
 						const annotationBatches = [...chunk(annotations, BATCH_SIZE)]
-						console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
+						//console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
 
 						const numBatches = annotationBatches.length
 						console.log(`${check.name} check: number of batches = ${numBatches}`)
