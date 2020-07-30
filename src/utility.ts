@@ -22,7 +22,7 @@ export function* flatten<X>(nestedIterable: Iterable<X>): Iterable<UnwrapNestedI
 export function* take<T>(iterable: Iterable<T>, n: number): Iterable<T> {
 	if (typeof n !== "number") throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`)
 	if (n < 0) {
-		console.warn(`Invalid value ${n} for argument "n"\nMust be zero or positive number`)
+		console.warn(`Warning: Negative value ${n} passed to argument <n> of take()`)
 		return
 	}
 
@@ -35,9 +35,10 @@ export function* take<T>(iterable: Iterable<T>, n: number): Iterable<T> {
 }
 
 export function* skip<T>(iterable: Iterable<T>, n: number): Iterable<T> {
-	if (typeof n !== "number") throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`)
+	if (typeof n !== "number")
+		throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`)
 	if (n < 0) {
-		console.warn(`Invalid value ${n} for argument "n"\nMust be zero or positive number`)
+		console.warn(`Warning: Negative value ${n} passed to argument <n> of skip()`)
 		return
 	}
 

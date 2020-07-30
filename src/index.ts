@@ -126,6 +126,8 @@ async function run(): Promise<void> {
 
 					const file = fs.readFileSync(check.outputFileName, 'utf8')
 					const { title, summary, conclusion, text, annotations } = parse(file, check.name)
+					console.log(`${title} check annotations length: ${[...annotations].length}`)
+
 					if (conclusion !== "success") {
 						core.setFailed(`"${title}" check reported failures.`)
 					}

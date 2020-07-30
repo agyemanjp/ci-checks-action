@@ -440,7 +440,7 @@ function* take(iterable, n) {
     if (typeof n !== "number")
         throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`);
     if (n < 0) {
-        console.warn(`Invalid value ${n} for argument "n"\nMust be zero or positive number`);
+        console.warn(`Warning: Negative value ${n} passed to argument <n> of take()`);
         return;
     }
     if (n > 0) {
@@ -456,7 +456,7 @@ function* skip(iterable, n) {
     if (typeof n !== "number")
         throw new Error(`Invalid type ${typeof n} for argument "n"\nMust be number`);
     if (n < 0) {
-        console.warn(`Invalid value ${n} for argument "n"\nMust be zero or positive number`);
+        console.warn(`Warning: Negative value ${n} passed to argument <n> of skip()`);
         return;
     }
     for (const element of iterable) {
@@ -6836,6 +6836,7 @@ function run() {
                         }
                         const file = fs.readFileSync(check.outputFileName, 'utf8');
                         const { title, summary, conclusion, text, annotations } = parse(file, check.name);
+                        console.log(`${title} check annotations length: ${[...annotations].length}`);
                         if (conclusion !== "success") {
                             core.setFailed(`"${title}" check reported failures.`);
                         }
