@@ -22,34 +22,38 @@ jobs:
   checks:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [12.x]
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
         with: 
           persist-credentials: false
 
-      - name: Setup Node.js 12.x
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
-      
-      - name: Install Dependencies
-        run: npm ci
+          node-version: ${{ matrix.node-version }}
         
+      - name: Install
+        run: npm ci --no-audit --prefer-offline 
+
       - name: Build
-		run: npm run build --if-present
-		
-	- name: Run Lint Check
+        run: npm run build --if-present
+
+      - name: Run Lint Check
         run: npm run lint
         continue-on-error: true
         
       - name: Run Test Check
         run: npm run test
         continue-on-error: true
-
+        
       - name: Annotate Checks
         uses: agyemanjp/ci-checks-action@1.0.2
         with:
-          ghToken: "${{ secrets.GITHUB_TOKEN }}"
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
           checks: "lint:.lint-report.json|test:.test-report.json"
 ```
