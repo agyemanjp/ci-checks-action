@@ -1,6 +1,6 @@
 {
 	"name": "ci-checks-action",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Create Github checks from tooling script output files",
 	"main": "dist/index.js",
 	"files": [

@@ -68,7 +68,7 @@ function parse(generalCheckJSON: string, checkName?: string) {
 		text: "",
 		annotations: flatten(Object.entries(byFile).map(kv => {
 			const filePath = kv[0]
-			//console.log(`Processing ${checkName} check file "${filePath}"`)
+			// console.log(`Processing ${checkName} check file "${filePath}"`)
 
 			const fileResult = kv[1]
 			return fileResult.details.map(detail => {
@@ -130,7 +130,7 @@ async function run(): Promise<void> {
 					const file = fs.readFileSync(check.outputFileName, 'utf8')
 					const { title, summary, conclusion, text, annotations: annotationsIter } = parse(file, check.name)
 					const annotations = [...annotationsIter]
-					console.log(`${title} check annotations length: ${annotations.length}`)
+					// console.log(`${title} check annotations length: ${annotations.length}`)
 
 					if (conclusion !== "success") {
 						core.setFailed(`"${title}" check reported failures.`)
@@ -141,12 +141,12 @@ async function run(): Promise<void> {
 
 						const checkId = await postCheckAsync({ ...getBaseInfo(check), status: 'in_progress' })
 
-						//console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
+						// console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
 						const annotationBatches = [...chunk(annotations, BATCH_SIZE)]
 						//console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
 
 						const numBatches = annotationBatches.length
-						console.log(`${check.name} check: number of batches = ${numBatches}`)
+						// console.log(`${check.name} check: number of batches = ${numBatches}`)
 						let batchIndex = 1
 						for (const annotationBatch of take(annotationBatches, numBatches - 1)) {
 							const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`

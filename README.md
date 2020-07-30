@@ -48,7 +48,7 @@ jobs:
         continue-on-error: true
 
       - name: Annotate Checks
-        uses: agyemanjp/ci-checks-action@1.0.1
+        uses: agyemanjp/ci-checks-action@1.0.2
         with:
           ghToken: "${{ secrets.GITHUB_TOKEN }}"
           checks: "lint:.lint-report.json|test:.test-report.json"
