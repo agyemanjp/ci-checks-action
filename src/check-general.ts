@@ -64,6 +64,10 @@ export interface CheckGeneralSchema {
          */
         Id?: string;
         /**
+         * Title of message
+         */
+        title?: string;
+        /**
          * Message content
          */
         message: string;

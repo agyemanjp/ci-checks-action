@@ -32,7 +32,8 @@
 		"lint": "eslint --ext ts --output-file .lint-report.json --format json-standard --cache src/*",
 		"build": "npm run schema && tsc && flatten dist && cp src/check-general.schema.json dist && rm -rf dist/*.test.js.map dist/*.test.d.ts",
 		"postbuild": "ncc build dist/index.js",
-		"test": "mocha ./dist/*.test.js ",
+		"test": "mocha dist/*.test.js --reporter mocha-reporter-json-standard >| .test-report.json",
+		"test2": "mocha dist/*.test.js",
 		"ci": "npm run clean && npm run lint && npm run build && npm run test"
 	},
 	"devDependencies": {
@@ -50,7 +51,7 @@
 		"eslint-plugin-fp": "2.3.0",
 		"json-schema-to-typescript": "^9.1.0",
 		"mocha": "8.0.1",
-		"mocha-reporter-json-standard": "^0.1.0",
+		"mocha-reporter-json-standard": "^0.1.1",
 		"source-map-support": "^0.5.19",
 		"ts-node": "^8.10.2",
 		"typescript": "3.7.2"

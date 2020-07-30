@@ -1,6 +1,5 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "http://danfortsystems.com/schemas/code-check-result.json",
 	"type": "object",
 	"properties": {
 		"name": {
@@ -80,6 +79,10 @@
 								"Id": {
 									"type": "string",
 									"description": "Id of message"
+								},
+								"title": {
+									"type": "string",
+									"description": "Title of message"
 								},
 								"message": {
 									"type": "string",

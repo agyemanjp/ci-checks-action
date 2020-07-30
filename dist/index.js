@@ -504,13 +504,17 @@ function last(collection, predicate) {
     }
 }
 exports.last = last;
-function* chunk(arr, chunkSize) {
-    const batch = [...take(arr, chunkSize)];
-    if (batch.length) {
+function* chunk(iter, chunkSize) {
+    // console.log(`\n\tStarting chunk()`)
+    const batch = [...take(iter, chunkSize)];
+    // console.assert(batch.length === Math.min([...iter].length, chunkSize))
+    // console.log(`\n\tBatch length ${batch.length}`)
+    if (batch.length > 0) {
+        // console.log(`\n\tYielding batch of length ${batch.length}`)
         // eslint-disable-next-line fp/no-unused-expression
         yield batch;
         // eslint-disable-next-line fp/no-unused-expression
-        yield* chunk(skip(arr, chunkSize), chunkSize);
+        yield* chunk(skip(iter, chunkSize), chunkSize);
     }
 }
 exports.chunk = chunk;
@@ -2325,7 +2329,7 @@ module.exports.MaxBufferError = MaxBufferError;
 /***/ 146:
 /***/ (function(module) {
 
-module.exports = {"$schema":"http://json-schema.org/draft-07/schema#","$id":"http://danfortsystems.com/schemas/code-check-result.json","type":"object","properties":{"name":{"type":"string","description":"Name of code check"},"description":{"type":"string","description":"Description of code check"},"summary":{"type":"string","description":"Summary of results of code check"},"counts":{"description":"Overall counts of different categories of messages","type":"object","properties":{"notice":{"type":"number","description":"Number of notice/successful messages"},"warning":{"type":"number","description":"Number of warning messages"},"failure":{"type":"number","description":"Number of failure message"}},"additionalProperties":false,"required":["failure"]},"byFile":{"type":"object","description":"Check results per each code file","additionalProperties":{"type":"object","required":["counts","details"],"properties":{"summary":{"type":"string"},"counts":{"properties":{"notice":{"type":"number","description":"Number of notice/successful messages"},"warning":{"type":"number","description":"Number of warning messages"},"failure":{"type":"number","description":"Number of failure message"}},"additionalProperties":false,"required":["failure"],"type":"object","description":"Counts of different categories of messages for a specific code file"},"details":{"type":"array","items":{"type":"object","properties":{"Id":{"type":"string","description":"Id of message"},"message":{"type":"string","description":"Message content"},"category":{"type":"string","description":"Message category","enum":["notice","warning","failure"]},"startLine":{"type":"integer"},"startColumn":{"type":"integer"},"endLine":{"type":"integer"},"endColumn":{"type":"integer"}},"additionalProperties":false,"required":["message","category"]}}},"additionalProperties":false}}},"additionalProperties":false,"required":["byFile","counts"]};
+module.exports = {"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"name":{"type":"string","description":"Name of code check"},"description":{"type":"string","description":"Description of code check"},"summary":{"type":"string","description":"Summary of results of code check"},"counts":{"description":"Overall counts of different categories of messages","type":"object","properties":{"notice":{"type":"number","description":"Number of notice/successful messages"},"warning":{"type":"number","description":"Number of warning messages"},"failure":{"type":"number","description":"Number of failure message"}},"additionalProperties":false,"required":["failure"]},"byFile":{"type":"object","description":"Check results per each code file","additionalProperties":{"type":"object","required":["counts","details"],"properties":{"summary":{"type":"string"},"counts":{"properties":{"notice":{"type":"number","description":"Number of notice/successful messages"},"warning":{"type":"number","description":"Number of warning messages"},"failure":{"type":"number","description":"Number of failure message"}},"additionalProperties":false,"required":["failure"],"type":"object","description":"Counts of different categories of messages for a specific code file"},"details":{"type":"array","items":{"type":"object","properties":{"Id":{"type":"string","description":"Id of message"},"title":{"type":"string","description":"Title of message"},"message":{"type":"string","description":"Message content"},"category":{"type":"string","description":"Message category","enum":["notice","warning","failure"]},"startLine":{"type":"integer"},"startColumn":{"type":"integer"},"endLine":{"type":"integer"},"endColumn":{"type":"integer"}},"additionalProperties":false,"required":["message","category"]}}},"additionalProperties":false}}},"additionalProperties":false,"required":["byFile","counts"]};
 
 /***/ }),
 
@@ -6800,6 +6804,7 @@ function parse(generalCheckJSON, checkName) {
                 console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`);
                 return {
                     path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
+                    title: detail.title,
                     message: detail.message,
                     start_line: (_a = detail.startLine, (_a !== null && _a !== void 0 ? _a : 0)),
                     start_column: detail.startColumn,

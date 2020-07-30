@@ -90,13 +90,19 @@ export function last<T>(collection: Iterable<T> | ArrayLike<T>, predicate?: (val
 	}
 }
 
-export function* chunk<T>(arr: Iterable<T>, chunkSize: number): Iterable<T[]> {
-	const batch = [...take(arr, chunkSize)]
-	if (batch.length) {
+export function* chunk<T>(iter: Iterable<T>, chunkSize: number): Iterable<T[]> {
+	// console.log(`\n\tStarting chunk()`)
+
+	const batch = [...take(iter, chunkSize)]
+	// console.assert(batch.length === Math.min([...iter].length, chunkSize))
+	// console.log(`\n\tBatch length ${batch.length}`)
+
+	if (batch.length > 0) {
+		// console.log(`\n\tYielding batch of length ${batch.length}`)
 		// eslint-disable-next-line fp/no-unused-expression
 		yield batch
 		// eslint-disable-next-line fp/no-unused-expression
-		yield* chunk(skip(arr, chunkSize), chunkSize)
+		yield* chunk(skip(iter, chunkSize), chunkSize)
 	}
 }
 

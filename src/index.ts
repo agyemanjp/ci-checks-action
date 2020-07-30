@@ -76,6 +76,7 @@ function parse(generalCheckJSON: string, checkName?: string) {
 
 				return {
 					path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
+					title: detail.title,
 					message: detail.message,
 					start_line: detail.startLine ?? 0,
 					start_column: detail.startColumn,
