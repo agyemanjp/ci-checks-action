@@ -58,6 +58,7 @@ function parse(generalCheckJSON: string, checkName?: string) {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { byFile, summary, name, description, counts } = result
+	core.info(`Check results by file: ${(byFile)}`)
 	return {
 		title: checkName ?? name ?? "",
 		summary: summary ?? `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`,
@@ -129,7 +130,8 @@ async function run(): Promise<void> {
 						const checkId = await postCheckAsync({ ...getBaseInfo(check), status: 'in_progress' })
 
 						const annotationBatches = [...chunk(annotations, BATCH_SIZE)]
-						const batchNum = annotationBatches.length; let batchIndex = 1
+						const batchNum = annotationBatches.length
+						let batchIndex = 1
 						for (const annotationBatch of take(annotationBatches, batchNum - 1)) {
 							const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`
 							core.info(batchMessage)
@@ -160,9 +162,9 @@ async function run(): Promise<void> {
 				}
 			}
 			catch (e) {
-				const msg = 'message' in e ? e.message : String(e)
-				core.error(`Error processing requested check "${check.name}"\n\t${msg}\n`)
-				//core.setFailed('Error creating checks')
+				const msg = `Error processing requested check "${check.name}"\n\t${'stack' in e ? e.stack : 'message' in e ? e.message : String(e)}\n`
+				core.error(msg)
+				core.setFailed(msg)
 			}
 		}
 	}

@@ -6772,6 +6772,7 @@ function parse(generalCheckJSON, checkName) {
     */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { byFile, summary, name, description, counts } = result;
+    core.info(`Check results by file: ${(byFile)}`);
     return {
         title: (_a = (checkName !== null && checkName !== void 0 ? checkName : name), (_a !== null && _a !== void 0 ? _a : "")),
         summary: (summary !== null && summary !== void 0 ? summary : `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`),
@@ -6853,9 +6854,9 @@ function run() {
                     }
                 }
                 catch (e) {
-                    const msg = 'message' in e ? e.message : String(e);
-                    core.error(`Error processing requested check "${check.name}"\n\t${msg}\n`);
-                    //core.setFailed('Error creating checks')
+                    const msg = `Error processing requested check "${check.name}"\n\t${'stack' in e ? e.stack : 'message' in e ? e.message : String(e)}\n`;
+                    core.error(msg);
+                    core.setFailed(msg);
                 }
             }
         }
