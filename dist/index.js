@@ -443,10 +443,12 @@ function* take(iterable, n) {
         console.warn(`Invalid value ${n} for argument "n"\nMust be zero or positive number`);
         return;
     }
-    for (const element of iterable) {
-        yield element;
-        if (--n <= 0)
-            break;
+    if (n > 0) {
+        for (const element of iterable) {
+            yield element;
+            if (--n <= 0)
+                break;
+        }
     }
 }
 exports.take = take;
@@ -6774,7 +6776,7 @@ function parse(generalCheckJSON, checkName) {
     */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { byFile, summary, name, description, counts } = result;
-    core.info(`Check results by file: ${JSON.stringify(byFile)}`);
+    //core.info(`Check results by file: ${JSON.stringify(byFile)}`)
     return {
         title: (_a = (checkName !== null && checkName !== void 0 ? checkName : name), (_a !== null && _a !== void 0 ? _a : "")),
         summary: (summary !== null && summary !== void 0 ? summary : `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`),
@@ -6841,9 +6843,10 @@ function run() {
                             core.info("This is a PR...");
                             const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
                             const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
-                            const batchNum = annotationBatches.length;
+                            const numBatches = annotationBatches.length;
+                            console.log(`${check.name} check: numBatches=${numBatches}`);
                             let batchIndex = 1;
-                            for (const annotationBatch of utility_1.take(annotationBatches, batchNum - 1)) {
+                            for (const annotationBatch of utility_1.take(annotationBatches, numBatches - 1)) {
                                 const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`;
                                 core.info(batchMessage);
                                 yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title, summary: batchMessage, annotations: annotationBatch } }));

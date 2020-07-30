@@ -136,9 +136,10 @@ async function run(): Promise<void> {
 						const checkId = await postCheckAsync({ ...getBaseInfo(check), status: 'in_progress' })
 
 						const annotationBatches = [...chunk(annotations, BATCH_SIZE)]
-						const batchNum = annotationBatches.length
+						const numBatches = annotationBatches.length
+						console.log(`${check.name} check: numBatches=${numBatches}`)
 						let batchIndex = 1
-						for (const annotationBatch of take(annotationBatches, batchNum - 1)) {
+						for (const annotationBatch of take(annotationBatches, numBatches - 1)) {
 							const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`
 							core.info(batchMessage)
 							await postCheckAsync({
