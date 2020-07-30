@@ -6857,7 +6857,9 @@ function run() {
                         if (pullRequest) {
                             core.info("This is a PR...");
                             const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
+                            console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`);
                             const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
+                            console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`);
                             const numBatches = annotationBatches.length;
                             console.log(`${check.name} check: number of batches = ${numBatches}`);
                             let batchIndex = 1;

@@ -140,7 +140,10 @@ async function run(): Promise<void> {
 
 						const checkId = await postCheckAsync({ ...getBaseInfo(check), status: 'in_progress' })
 
+						console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
 						const annotationBatches = [...chunk(annotations, BATCH_SIZE)]
+						console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
+
 						const numBatches = annotationBatches.length
 						console.log(`${check.name} check: number of batches = ${numBatches}`)
 						let batchIndex = 1
