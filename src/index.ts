@@ -58,7 +58,7 @@ function parse(generalCheckJSON: string, checkName?: string) {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { byFile, summary, name, description, counts } = result
-	//core.info(`Check results by file: ${JSON.stringify(byFile)}`)
+	//core.info(`Check results by file: ${JSON.stringify(byFile)}`) 
 	return {
 		title: checkName ?? name ?? "",
 		summary: summary ?? `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`,
