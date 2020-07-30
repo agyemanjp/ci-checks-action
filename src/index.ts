@@ -69,15 +69,19 @@ function parse(generalCheckJSON: string, checkName?: string) {
 			console.log(`Processing ${checkName} check file "${filePath}"`)
 
 			const fileResult = kv[1]
-			return fileResult.details.map(detail => ({
-				path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
-				message: detail.message,
-				start_line: detail.startLine ?? 0,
-				start_column: detail.startColumn,
-				end_line: detail.endLine ?? 0,
-				end_column: detail.endColumn,
-				annotation_level: detail.category as GitHubAnnotation.Level
-			} as GitHubAnnotation))
+			return fileResult.details.map(detail => {
+				console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
+
+				return {
+					path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
+					message: detail.message,
+					start_line: detail.startLine ?? 0,
+					start_column: detail.startColumn,
+					end_line: detail.endLine ?? 0,
+					end_column: detail.endColumn,
+					annotation_level: detail.category as GitHubAnnotation.Level
+				} as GitHubAnnotation
+			})
 		})),
 		// errorText: '',
 		// warningText: '',
