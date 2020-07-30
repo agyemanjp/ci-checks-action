@@ -6801,7 +6801,7 @@ function run() {
         const head_sha = pullRequest ? pullRequest.head.sha : github.context.sha;
         const owner = github.context.repo.owner;
         const repo = github.context.repo.repo;
-        const githubToken = getInput('ghToken', true);
+        const githubToken = getInput('repo-token', true);
         const githubClient = new github.GitHub(githubToken);
         const BATCH_SIZE = 50;
         function getBaseInfo(opts) {
