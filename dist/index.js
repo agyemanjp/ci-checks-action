@@ -427,6 +427,7 @@ function getLastPage (octokit, link, headers) {
 /* eslint-disable brace-style */
 Object.defineProperty(exports, "__esModule", { value: true });
 function* flatten(nestedIterable) {
+    console.log(`\nInput to flatten: ${JSON.stringify(nestedIterable)}`);
     for (const element of nestedIterable) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (hasValue(element) && typeof element[Symbol.iterator] === 'function')

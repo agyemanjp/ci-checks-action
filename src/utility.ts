@@ -9,6 +9,8 @@ type UnwrapIterable3<T> = T extends Iterable<infer X> ? UnwrapIterable2<X> : T
 export type UnwrapNestedIterable<T> = T extends Iterable<infer X> ? UnwrapIterable3<X> : T
 
 export function* flatten<X>(nestedIterable: Iterable<X>): Iterable<UnwrapNestedIterable<X>> {
+	console.log(`\nInput to flatten: ${JSON.stringify(nestedIterable)}`)
+
 	for (const element of nestedIterable) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		if (hasValue(element) && typeof (element as any)[Symbol.iterator] === 'function')
