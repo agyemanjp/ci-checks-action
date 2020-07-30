@@ -6782,11 +6782,11 @@ function parse(generalCheckJSON, checkName) {
         text: "",
         annotations: utility_1.flatten(Object.entries(byFile).map(kv => {
             const filePath = kv[0];
-            console.log(`Processing ${checkName} check file "${filePath}"`);
+            //console.log(`Processing ${checkName} check file "${filePath}"`)
             const fileResult = kv[1];
             return fileResult.details.map(detail => {
+                //console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
                 var _a, _b;
-                console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`);
                 return {
                     path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
                     message: detail.message,
@@ -6848,8 +6848,10 @@ function run() {
                                 core.info(batchMessage);
                                 yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title, summary: batchMessage, annotations: annotationBatch } }));
                             }
-                            core.info(`Processing last batch of "${title}" check`);
-                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
+                            if (annotationBatches.length > 0) {
+                                core.info(`Processing last batch of "${title}" check`);
+                                yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
+                            }
                         }
                         else { // push
                             core.info("This is a push...");

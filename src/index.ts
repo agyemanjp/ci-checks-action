@@ -58,7 +58,7 @@ function parse(generalCheckJSON: string, checkName?: string) {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { byFile, summary, name, description, counts } = result
-	core.info(`Check results by file: ${JSON.stringify(byFile)}`)
+	//core.info(`Check results by file: ${JSON.stringify(byFile)}`)
 	return {
 		title: checkName ?? name ?? "",
 		summary: summary ?? `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`,
@@ -66,11 +66,11 @@ function parse(generalCheckJSON: string, checkName?: string) {
 		text: "",
 		annotations: flatten(Object.entries(byFile).map(kv => {
 			const filePath = kv[0]
-			console.log(`Processing ${checkName} check file "${filePath}"`)
+			//console.log(`Processing ${checkName} check file "${filePath}"`)
 
 			const fileResult = kv[1]
 			return fileResult.details.map(detail => {
-				console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
+				//console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
 
 				return {
 					path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
@@ -146,14 +146,16 @@ async function run(): Promise<void> {
 								output: { title, summary: batchMessage, annotations: annotationBatch }
 							})
 						}
-						core.info(`Processing last batch of "${title}" check`)
-						await postCheckAsync({
-							...getBaseInfo({ checkId }),
-							status: 'completed',
-							conclusion,
-							completed_at: new Date().toISOString(),
-							output: { title, summary, text, annotations: last(annotationBatches) }
-						})
+						if (annotationBatches.length > 0) {
+							core.info(`Processing last batch of "${title}" check`)
+							await postCheckAsync({
+								...getBaseInfo({ checkId }),
+								status: 'completed',
+								conclusion,
+								completed_at: new Date().toISOString(),
+								output: { title, summary, text, annotations: last(annotationBatches) }
+							})
+						}
 					}
 					else { // push
 						core.info("This is a push...")
