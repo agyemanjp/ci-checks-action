@@ -1,6 +1,11 @@
+# ignore dist in a way that allows the following negated blobs to work
+dist/*
+!dist/index.js
+!dist/check-general.schema.json
 node_modules/
-output/
+*-report.json
 *.tsbuildinfo
 .eslintcache
 .node_repl_history
 .DS_Store
+.vscode/
