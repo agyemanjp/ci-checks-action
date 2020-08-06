@@ -1,4 +1,4 @@
-name: Annotate check scripts JSON output"
+name: Annotate check scripts output
 description: "Create Github checks (with annotations for PRs) from JSON file outputs of custom code check scripts"
 inputs:
   ghToken:

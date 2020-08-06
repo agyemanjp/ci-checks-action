@@ -1,4 +1,4 @@
-# Create Github checks from script output files
+# Create Github annotated checks from script output files
 
 ## Description
 
