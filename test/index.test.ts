@@ -84,7 +84,6 @@ describe('chunk()', function () {
 	})
 })
 
-
 describe('hasValue()', function () {
 	it('should return true for an empty array', function () {
 		assert.equal(hasValue([]), true)

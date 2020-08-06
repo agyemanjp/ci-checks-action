@@ -6716,6 +6716,7 @@ function errname(uv, code) {
 
 "use strict";
 
+/* eslint-disable brace-style */
 /* eslint-disable camelcase */
 /* eslint-disable fp/no-mutation */
 /* eslint-disable fp/no-let */
@@ -6762,7 +6763,7 @@ function getChecksToReport() {
         return { name, outputFileName };
     });
 }
-function parse(generalCheckJSON, checkName) {
+function parse(generalCheckJSON, changedFiles, checkName) {
     // console.log(`Parsing check JSON: "${generalCheckJSON}"`)
     var _a;
     const toValidate = JSON.parse(generalCheckJSON);
@@ -6795,9 +6796,11 @@ function parse(generalCheckJSON, checkName) {
         summary: (summary !== null && summary !== void 0 ? summary : `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`),
         conclusion: counts.failure > 0 ? 'failure' : 'success',
         text: "",
-        annotations: utility_1.flatten(Object.entries(byFile).map(kv => {
+        annotations: utility_1.flatten(Object.entries(byFile)
+            .filter(kv => changedFiles === undefined || changedFiles.includes(kv[0]))
+            .map(kv => {
             const filePath = kv[0];
-            //console.log(`Processing ${checkName} check file "${filePath}"`)
+            // console.log(`Processing ${checkName} check file "${filePath}"`)
             const fileResult = kv[1];
             return fileResult.details.map(detail => {
                 // console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
@@ -6830,6 +6833,51 @@ function run() {
                 ? { check_run_id: opts.checkId, owner, repo }
                 : { name: opts.name, owner, repo, started_at: new Date().toISOString(), head_sha };
         }
+        function getChangedFilesAsync(prNumber) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const { data: prInfo } = yield githubClient.pulls.get({
+                    owner: github.context.repo.owner,
+                    repo: github.context.repo.repo,
+                    number: prNumber
+                });
+                let changedFiles = [];
+                const fetchPerPage = 100;
+                for (let pageIndex = 0; pageIndex * fetchPerPage < prInfo.changed_files; pageIndex++) {
+                    const listFilesResponse = yield githubClient.pulls.listFiles({
+                        owner: github.context.repo.owner,
+                        repo: github.context.repo.repo,
+                        number: prNumber,
+                        page: pageIndex,
+                        per_page: fetchPerPage,
+                    });
+                    //const pattern = core.getInput("pattern")
+                    //const re = new RegExp(pattern.length ? pattern : ".*")
+                    changedFiles = changedFiles.concat(listFilesResponse.data.filter(f => f.status !== "removed").map(f => f.filename));
+                    /*listFilesResponse.data
+                        //.filter(f => re.test(f.filename))
+                        .forEach(f => {
+                            // eslint-disable-next-line fp/no-mutating-methods
+                            if (f.status === "added") changedFiles.created.push(f.filename)
+                            // eslint-disable-next-line fp/no-mutating-methods
+                            else if (f.status === "removed") changedFiles.deleted.push(f.filename)
+                            // eslint-disable-next-line fp/no-mutating-methods
+                            else if (f.status === "modified") changedFiles.updated.push(f.filename)
+                            else if (f.status === "renamed") {
+                                // eslint-disable-next-line fp/no-mutating-methods
+                                changedFiles.created.push(f.filename)
+        
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                if (re.test((f as any)["previous_filename"])) {
+                                    // eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
+                                    changedFiles.deleted.push((f as any)["previous_filename"])
+                                }
+                            }
+                        })
+                    */
+                }
+                return changedFiles;
+            });
+        }
         function postCheckAsync(info) {
             return __awaiter(this, void 0, void 0, function* () {
                 const { data: { id: checkId } } = 'check_run_id' in info
@@ -6839,7 +6887,7 @@ function run() {
             });
         }
         try {
-            //const checks = getChecksToReport()
+            const changedFiles = pullRequest ? yield getChangedFilesAsync(pullRequest.number) : undefined;
             for (const check of getChecksToReport()) {
                 try {
                     if (check && check.name && check.outputFileName) {
@@ -6849,34 +6897,28 @@ function run() {
                             continue;
                         }
                         const file = fs.readFileSync(check.outputFileName, 'utf8');
-                        const { title, summary, conclusion, text, annotations: annotationsIter } = parse(file, check.name);
-                        const annotations = [...annotationsIter];
-                        console.log(`${title} check annotations length: ${annotations.length}`);
+                        const { title, summary, conclusion, text, annotations: annotationsIterable } = parse(file, changedFiles, check.name);
+                        const annotations = [...annotationsIterable];
+                        // console.log(`${title} check annotations length: ${annotations.length}`)
                         if (conclusion !== "success") {
                             core.setFailed(`"${title}" check reported failures.`);
                         }
-                        if (pullRequest) {
-                            core.info("This is a PR...");
-                            const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
-                            //console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
-                            const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
-                            //console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
-                            const numBatches = annotationBatches.length;
-                            console.log(`${check.name} check: number of batches = ${numBatches}`);
-                            let batchIndex = 1;
-                            for (const annotationBatch of utility_1.take(annotationBatches, numBatches - 1)) {
-                                const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`;
-                                core.info(batchMessage);
-                                yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title, summary: batchMessage, annotations: annotationBatch } }));
-                            }
-                            if (annotationBatches.length > 0) {
-                                core.info(`Processing last batch of "${title}" check`);
-                                yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
-                            }
+                        // core.info("This is a PR...")
+                        const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
+                        // console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
+                        const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
+                        //console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
+                        const numBatches = annotationBatches.length;
+                        // console.log(`${check.name} check: number of batches = ${numBatches}`)
+                        let batchIndex = 1;
+                        for (const annotationBatch of utility_1.take(annotationBatches, numBatches - 1)) {
+                            const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`;
+                            core.info(batchMessage);
+                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title, summary: batchMessage, annotations: annotationBatch } }));
                         }
-                        else { // push
-                            core.info("This is a push...");
-                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ name: check.name })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text } }));
+                        if (annotationBatches.length > 0) {
+                            core.info(`Processing last batch of "${title}" check`);
+                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
                         }
                     }
                 }
