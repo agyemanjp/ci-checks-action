@@ -1,8 +1,8 @@
 name: Default
 
 on:
-  # push:
-  #   branches: [ dev ]
+  push:
+    branches: [ master ]
   pull_request:
   # branches: [ dev ]
 
