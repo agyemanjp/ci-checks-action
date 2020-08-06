@@ -172,7 +172,7 @@ async function run(): Promise<void> {
 
 	try {
 		const changedFiles = pullRequest ? await getChangedFilesAsync(pullRequest.number) : undefined
-
+		core.info(`changed files: ${changedFiles}`)
 		for (const check of getChecksToReport()) {
 			try {
 				if (check && check.name && check.outputFileName) {
