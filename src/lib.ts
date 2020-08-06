@@ -22,7 +22,7 @@ interface CheckToReport { name: string, fileName: string, prChangesOnly: boolean
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getChecksToReport() {
 	const checks = JSON.parse(core.getInput('checks', { required: true })) as CheckToReport[]
-	console.log(colors.magenta(`checks input: ${JSON.stringify(checks)}`))
+	console.log(`\nchecks input: ${JSON.stringify(checks)}`)
 
 	return checks
 }
@@ -165,7 +165,7 @@ export async function run(): Promise<void> {
 						annotations: annotationsIterable
 					} = parse(file, check.prChangesOnly ? changedFiles : undefined, check.name)
 					const annotations = [...annotationsIterable]
-					console.log(`${title} check annotations length: ${annotations.length}`)
+					console.log(`\n${title} check annotations length: ${annotations.length}`)
 
 					if (conclusion !== "success") {
 						core.setFailed(`"${title}" check reported failures.`)
