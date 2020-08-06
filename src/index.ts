@@ -62,7 +62,7 @@ function parse(generalCheckJSON: string, changedFiles: string[] | undefined, che
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { byFile, summary, name, description, counts } = result;
-	console.info(`\nCheck results by file: ${JSON.stringify(byFile)}`)
+	//console.info(`\nCheck results by file: ${JSON.stringify(byFile)}`)
 
 	return {
 		title: checkName ?? name ?? "",
@@ -72,8 +72,8 @@ function parse(generalCheckJSON: string, changedFiles: string[] | undefined, che
 		annotations: flatten(Object.entries(byFile)
 			.filter(kv => {
 				const fileName = kv[0]
-				console.log(`\nParsed file name: ${fileName}`)
-				console.log(`\nChanged file names: ${changedFiles}`)
+				//console.log(`\nParsed file name: ${fileName}`)
+				//console.log(`\nChanged file names: ${changedFiles}`)
 
 				return changedFiles === undefined || changedFiles.some(f => fileName.endsWith(f))
 			})
