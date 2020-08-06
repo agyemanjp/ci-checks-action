@@ -61,6 +61,7 @@
 		"@actions/core": "1.2.0",
 		"@actions/github": "1.1.0",
 		"@octokit/graphql": "2.0.1",
-		"@octokit/rest": "16.15.0"
+		"@octokit/rest": "16.15.0",
+		"colors": "^1.4.0"
 	}
 }

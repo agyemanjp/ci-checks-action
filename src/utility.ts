@@ -32,12 +32,12 @@ export function* take<T>(iterable: Iterable<T>, n: number): Iterable<T> {
 		return
 	}
 
-	//if (n > 0) {
-	for (const element of iterable) {
-		yield element
-		if (--n <= 0) break
+	if (n > 0) {
+		for (const element of iterable) {
+			yield element
+			if (--n <= 0) break
+		}
 	}
-	//}
 }
 
 export function* skip<T>(iterable: Iterable<T>, n: number): Iterable<T> {
@@ -48,8 +48,14 @@ export function* skip<T>(iterable: Iterable<T>, n: number): Iterable<T> {
 		return
 	}
 
+	// for (const element of iterable) {
+	// 	if (n === 0)
+	// 		yield element
+	// 	else
+	// 		n--
+	// }
 	for (const element of iterable) {
-		if (n === 0)
+		if (n > 0)
 			yield element
 		else
 			n--

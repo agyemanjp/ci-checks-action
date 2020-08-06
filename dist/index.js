@@ -298,6 +298,59 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 16:
+/***/ (function(module) {
+
+module.exports = function runTheTrap(text, options) {
+  var result = '';
+  text = text || 'Run the trap, drop the bass';
+  text = text.split('');
+  var trap = {
+    a: ['\u0040', '\u0104', '\u023a', '\u0245', '\u0394', '\u039b', '\u0414'],
+    b: ['\u00df', '\u0181', '\u0243', '\u026e', '\u03b2', '\u0e3f'],
+    c: ['\u00a9', '\u023b', '\u03fe'],
+    d: ['\u00d0', '\u018a', '\u0500', '\u0501', '\u0502', '\u0503'],
+    e: ['\u00cb', '\u0115', '\u018e', '\u0258', '\u03a3', '\u03be', '\u04bc',
+      '\u0a6c'],
+    f: ['\u04fa'],
+    g: ['\u0262'],
+    h: ['\u0126', '\u0195', '\u04a2', '\u04ba', '\u04c7', '\u050a'],
+    i: ['\u0f0f'],
+    j: ['\u0134'],
+    k: ['\u0138', '\u04a0', '\u04c3', '\u051e'],
+    l: ['\u0139'],
+    m: ['\u028d', '\u04cd', '\u04ce', '\u0520', '\u0521', '\u0d69'],
+    n: ['\u00d1', '\u014b', '\u019d', '\u0376', '\u03a0', '\u048a'],
+    o: ['\u00d8', '\u00f5', '\u00f8', '\u01fe', '\u0298', '\u047a', '\u05dd',
+      '\u06dd', '\u0e4f'],
+    p: ['\u01f7', '\u048e'],
+    q: ['\u09cd'],
+    r: ['\u00ae', '\u01a6', '\u0210', '\u024c', '\u0280', '\u042f'],
+    s: ['\u00a7', '\u03de', '\u03df', '\u03e8'],
+    t: ['\u0141', '\u0166', '\u0373'],
+    u: ['\u01b1', '\u054d'],
+    v: ['\u05d8'],
+    w: ['\u0428', '\u0460', '\u047c', '\u0d70'],
+    x: ['\u04b2', '\u04fe', '\u04fc', '\u04fd'],
+    y: ['\u00a5', '\u04b0', '\u04cb'],
+    z: ['\u01b5', '\u0240'],
+  };
+  text.forEach(function(c) {
+    c = c.toLowerCase();
+    var chars = trap[c] || [' '];
+    var rand = Math.floor(Math.random() * chars.length);
+    if (typeof trap[c] !== 'undefined') {
+      result += trap[c][rand];
+    } else {
+      result += c;
+    }
+  });
+  return result;
+};
+
+
+/***/ }),
+
 /***/ 18:
 /***/ (function(module) {
 
@@ -342,7 +395,7 @@ function authenticationPlugin (octokit, options) {
 
 const cp = __webpack_require__(129);
 const parse = __webpack_require__(568);
-const enoent = __webpack_require__(478);
+const enoent = __webpack_require__(881);
 
 function spawn(command, args, options) {
     // Parse the arguments
@@ -448,13 +501,13 @@ function* take(iterable, n) {
         console.warn(`Warning: Negative value ${n} passed to argument <n> of take()`);
         return;
     }
-    //if (n > 0) {
-    for (const element of iterable) {
-        yield element;
-        if (--n <= 0)
-            break;
+    if (n > 0) {
+        for (const element of iterable) {
+            yield element;
+            if (--n <= 0)
+                break;
+        }
     }
-    //}
 }
 exports.take = take;
 function* skip(iterable, n) {
@@ -464,8 +517,14 @@ function* skip(iterable, n) {
         console.warn(`Warning: Negative value ${n} passed to argument <n> of skip()`);
         return;
     }
+    // for (const element of iterable) {
+    // 	if (n === 0)
+    // 		yield element
+    // 	else
+    // 		n--
+    // }
     for (const element of iterable) {
-        if (n === 0)
+        if (n > 0)
             yield element;
         else
             n--;
@@ -541,6 +600,23 @@ exports.hasValue = hasValue;
 
 /***/ }),
 
+/***/ 37:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+//
+// Remark: Requiring this file will use the "safe" colors API,
+// which will not touch String.prototype.
+//
+//   var colors = require('colors/safe');
+//   colors.red("foo")
+//
+//
+var colors = __webpack_require__(464);
+module.exports = colors;
+
+
+/***/ }),
+
 /***/ 39:
 /***/ (function(module) {
 
@@ -576,7 +652,7 @@ module.exports = {"_from":"@octokit/request@2.3.0","_id":"@octokit/request@2.3.0
 
 
 var IDENTIFIER = /^[a-z_$][a-z0-9_$-]*$/i;
-var customRuleCode = __webpack_require__(314);
+var customRuleCode = __webpack_require__(187);
 var definitionSchema = __webpack_require__(952);
 
 module.exports = {
@@ -751,7 +827,7 @@ function getUserAgentNode () {
 module.exports = factory
 
 const Octokit = __webpack_require__(402)
-const registerPlugin = __webpack_require__(980)
+const registerPlugin = __webpack_require__(855)
 
 function factory (plugins) {
   const Api = Octokit.bind(null, plugins || [])
@@ -768,7 +844,7 @@ function factory (plugins) {
 "use strict";
 
 const os = __webpack_require__(87);
-const execa = __webpack_require__(84);
+const execa = __webpack_require__(955);
 
 // Reference: https://www.gaijin.at/en/lstwinver.php
 const names = new Map([
@@ -822,371 +898,21 @@ module.exports = windowsRelease;
 
 /***/ }),
 
-/***/ 84:
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ 56:
+/***/ (function(module) {
 
-"use strict";
-
-const path = __webpack_require__(622);
-const childProcess = __webpack_require__(129);
-const crossSpawn = __webpack_require__(20);
-const stripEof = __webpack_require__(768);
-const npmRunPath = __webpack_require__(621);
-const isStream = __webpack_require__(323);
-const _getStream = __webpack_require__(145);
-const pFinally = __webpack_require__(697);
-const onExit = __webpack_require__(260);
-const errname = __webpack_require__(427);
-const stdio = __webpack_require__(168);
-
-const TEN_MEGABYTES = 1000 * 1000 * 10;
-
-function handleArgs(cmd, args, opts) {
-	let parsed;
-
-	opts = Object.assign({
-		extendEnv: true,
-		env: {}
-	}, opts);
-
-	if (opts.extendEnv) {
-		opts.env = Object.assign({}, process.env, opts.env);
-	}
-
-	if (opts.__winShell === true) {
-		delete opts.__winShell;
-		parsed = {
-			command: cmd,
-			args,
-			options: opts,
-			file: cmd,
-			original: {
-				cmd,
-				args
-			}
-		};
-	} else {
-		parsed = crossSpawn._parse(cmd, args, opts);
-	}
-
-	opts = Object.assign({
-		maxBuffer: TEN_MEGABYTES,
-		buffer: true,
-		stripEof: true,
-		preferLocal: true,
-		localDir: parsed.options.cwd || process.cwd(),
-		encoding: 'utf8',
-		reject: true,
-		cleanup: true
-	}, parsed.options);
-
-	opts.stdio = stdio(opts);
-
-	if (opts.preferLocal) {
-		opts.env = npmRunPath.env(Object.assign({}, opts, {cwd: opts.localDir}));
-	}
-
-	if (opts.detached) {
-		// #115
-		opts.cleanup = false;
-	}
-
-	if (process.platform === 'win32' && path.basename(parsed.command) === 'cmd.exe') {
-		// #116
-		parsed.args.unshift('/q');
-	}
-
-	return {
-		cmd: parsed.command,
-		args: parsed.args,
-		opts,
-		parsed
-	};
-}
-
-function handleInput(spawned, input) {
-	if (input === null || input === undefined) {
-		return;
-	}
-
-	if (isStream(input)) {
-		input.pipe(spawned.stdin);
-	} else {
-		spawned.stdin.end(input);
-	}
-}
-
-function handleOutput(opts, val) {
-	if (val && opts.stripEof) {
-		val = stripEof(val);
-	}
-
-	return val;
-}
-
-function handleShell(fn, cmd, opts) {
-	let file = '/bin/sh';
-	let args = ['-c', cmd];
-
-	opts = Object.assign({}, opts);
-
-	if (process.platform === 'win32') {
-		opts.__winShell = true;
-		file = process.env.comspec || 'cmd.exe';
-		args = ['/s', '/c', `"${cmd}"`];
-		opts.windowsVerbatimArguments = true;
-	}
-
-	if (opts.shell) {
-		file = opts.shell;
-		delete opts.shell;
-	}
-
-	return fn(file, args, opts);
-}
-
-function getStream(process, stream, {encoding, buffer, maxBuffer}) {
-	if (!process[stream]) {
-		return null;
-	}
-
-	let ret;
-
-	if (!buffer) {
-		// TODO: Use `ret = util.promisify(stream.finished)(process[stream]);` when targeting Node.js 10
-		ret = new Promise((resolve, reject) => {
-			process[stream]
-				.once('end', resolve)
-				.once('error', reject);
-		});
-	} else if (encoding) {
-		ret = _getStream(process[stream], {
-			encoding,
-			maxBuffer
-		});
-	} else {
-		ret = _getStream.buffer(process[stream], {maxBuffer});
-	}
-
-	return ret.catch(err => {
-		err.stream = stream;
-		err.message = `${stream} ${err.message}`;
-		throw err;
-	});
-}
-
-function makeError(result, options) {
-	const {stdout, stderr} = result;
-
-	let err = result.error;
-	const {code, signal} = result;
-
-	const {parsed, joinedCmd} = options;
-	const timedOut = options.timedOut || false;
-
-	if (!err) {
-		let output = '';
-
-		if (Array.isArray(parsed.opts.stdio)) {
-			if (parsed.opts.stdio[2] !== 'inherit') {
-				output += output.length > 0 ? stderr : `\n${stderr}`;
-			}
-
-			if (parsed.opts.stdio[1] !== 'inherit') {
-				output += `\n${stdout}`;
-			}
-		} else if (parsed.opts.stdio !== 'inherit') {
-			output = `\n${stderr}${stdout}`;
-		}
-
-		err = new Error(`Command failed: ${joinedCmd}${output}`);
-		err.code = code < 0 ? errname(code) : code;
-	}
-
-	err.stdout = stdout;
-	err.stderr = stderr;
-	err.failed = true;
-	err.signal = signal || null;
-	err.cmd = joinedCmd;
-	err.timedOut = timedOut;
-
-	return err;
-}
-
-function joinCmd(cmd, args) {
-	let joinedCmd = cmd;
-
-	if (Array.isArray(args) && args.length > 0) {
-		joinedCmd += ' ' + args.join(' ');
-	}
-
-	return joinedCmd;
-}
-
-module.exports = (cmd, args, opts) => {
-	const parsed = handleArgs(cmd, args, opts);
-	const {encoding, buffer, maxBuffer} = parsed.opts;
-	const joinedCmd = joinCmd(cmd, args);
-
-	let spawned;
-	try {
-		spawned = childProcess.spawn(parsed.cmd, parsed.args, parsed.opts);
-	} catch (err) {
-		return Promise.reject(err);
-	}
-
-	let removeExitHandler;
-	if (parsed.opts.cleanup) {
-		removeExitHandler = onExit(() => {
-			spawned.kill();
-		});
-	}
-
-	let timeoutId = null;
-	let timedOut = false;
-
-	const cleanup = () => {
-		if (timeoutId) {
-			clearTimeout(timeoutId);
-			timeoutId = null;
-		}
-
-		if (removeExitHandler) {
-			removeExitHandler();
-		}
-	};
-
-	if (parsed.opts.timeout > 0) {
-		timeoutId = setTimeout(() => {
-			timeoutId = null;
-			timedOut = true;
-			spawned.kill(parsed.opts.killSignal);
-		}, parsed.opts.timeout);
-	}
-
-	const processDone = new Promise(resolve => {
-		spawned.on('exit', (code, signal) => {
-			cleanup();
-			resolve({code, signal});
-		});
-
-		spawned.on('error', err => {
-			cleanup();
-			resolve({error: err});
-		});
-
-		if (spawned.stdin) {
-			spawned.stdin.on('error', err => {
-				cleanup();
-				resolve({error: err});
-			});
-		}
-	});
-
-	function destroy() {
-		if (spawned.stdout) {
-			spawned.stdout.destroy();
-		}
-
-		if (spawned.stderr) {
-			spawned.stderr.destroy();
-		}
-	}
-
-	const handlePromise = () => pFinally(Promise.all([
-		processDone,
-		getStream(spawned, 'stdout', {encoding, buffer, maxBuffer}),
-		getStream(spawned, 'stderr', {encoding, buffer, maxBuffer})
-	]).then(arr => {
-		const result = arr[0];
-		result.stdout = arr[1];
-		result.stderr = arr[2];
-
-		if (result.error || result.code !== 0 || result.signal !== null) {
-			const err = makeError(result, {
-				joinedCmd,
-				parsed,
-				timedOut
-			});
-
-			// TODO: missing some timeout logic for killed
-			// https://github.com/nodejs/node/blob/master/lib/child_process.js#L203
-			// err.killed = spawned.killed || killed;
-			err.killed = err.killed || spawned.killed;
-
-			if (!parsed.opts.reject) {
-				return err;
-			}
-
-			throw err;
-		}
-
-		return {
-			stdout: handleOutput(parsed.opts, result.stdout),
-			stderr: handleOutput(parsed.opts, result.stderr),
-			code: 0,
-			failed: false,
-			killed: false,
-			signal: null,
-			cmd: joinedCmd,
-			timedOut: false
-		};
-	}), destroy);
-
-	crossSpawn._enoent.hookChildProcess(spawned, parsed.parsed);
-
-	handleInput(spawned, parsed.opts.input);
-
-	spawned.then = (onfulfilled, onrejected) => handlePromise().then(onfulfilled, onrejected);
-	spawned.catch = onrejected => handlePromise().catch(onrejected);
-
-	return spawned;
+module.exports = function(colors) {
+  // RoY G BiV
+  var rainbowColors = ['red', 'yellow', 'green', 'blue', 'magenta'];
+  return function(letter, i, exploded) {
+    if (letter === ' ') {
+      return letter;
+    } else {
+      return colors[rainbowColors[i++ % rainbowColors.length]](letter);
+    }
+  };
 };
 
-// TODO: set `stderr: 'ignore'` when that option is implemented
-module.exports.stdout = (...args) => module.exports(...args).then(x => x.stdout);
-
-// TODO: set `stdout: 'ignore'` when that option is implemented
-module.exports.stderr = (...args) => module.exports(...args).then(x => x.stderr);
-
-module.exports.shell = (cmd, opts) => handleShell(module.exports, cmd, opts);
-
-module.exports.sync = (cmd, args, opts) => {
-	const parsed = handleArgs(cmd, args, opts);
-	const joinedCmd = joinCmd(cmd, args);
-
-	if (isStream(parsed.opts.input)) {
-		throw new TypeError('The `input` option cannot be a stream in sync mode');
-	}
-
-	const result = childProcess.spawnSync(parsed.cmd, parsed.args, parsed.opts);
-	result.code = result.status;
-
-	if (result.error || result.status !== 0 || result.signal !== null) {
-		const err = makeError(result, {
-			joinedCmd,
-			parsed
-		});
-
-		if (!parsed.opts.reject) {
-			return err;
-		}
-
-		throw err;
-	}
-
-	return {
-		stdout: handleOutput(parsed.opts, result.stdout),
-		stderr: handleOutput(parsed.opts, result.stderr),
-		code: 0,
-		failed: false,
-		signal: null,
-		cmd: joinedCmd,
-		timedOut: false
-	};
-};
-
-module.exports.shellSync = (cmd, opts) => handleShell(module.exports.sync, cmd, opts);
 
 
 /***/ }),
@@ -1332,6 +1058,151 @@ module.exports = function generate_allOf(it, $keyword, $ruleType) {
   }
   return out;
 }
+
+
+/***/ }),
+
+/***/ 115:
+/***/ (function(module) {
+
+"use strict";
+/*
+MIT License
+
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
+
+module.exports = function(flag, argv) {
+  argv = argv || process.argv;
+
+  var terminatorPos = argv.indexOf('--');
+  var prefix = /^-{1,2}/.test(flag) ? '' : '--';
+  var pos = argv.indexOf(prefix + flag);
+
+  return pos !== -1 && (terminatorPos === -1 ? true : pos < terminatorPos);
+};
+
+
+/***/ }),
+
+/***/ 117:
+/***/ (function(module) {
+
+/*
+The MIT License (MIT)
+
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+var styles = {};
+module.exports = styles;
+
+var codes = {
+  reset: [0, 0],
+
+  bold: [1, 22],
+  dim: [2, 22],
+  italic: [3, 23],
+  underline: [4, 24],
+  inverse: [7, 27],
+  hidden: [8, 28],
+  strikethrough: [9, 29],
+
+  black: [30, 39],
+  red: [31, 39],
+  green: [32, 39],
+  yellow: [33, 39],
+  blue: [34, 39],
+  magenta: [35, 39],
+  cyan: [36, 39],
+  white: [37, 39],
+  gray: [90, 39],
+  grey: [90, 39],
+
+  brightRed: [91, 39],
+  brightGreen: [92, 39],
+  brightYellow: [93, 39],
+  brightBlue: [94, 39],
+  brightMagenta: [95, 39],
+  brightCyan: [96, 39],
+  brightWhite: [97, 39],
+
+  bgBlack: [40, 49],
+  bgRed: [41, 49],
+  bgGreen: [42, 49],
+  bgYellow: [43, 49],
+  bgBlue: [44, 49],
+  bgMagenta: [45, 49],
+  bgCyan: [46, 49],
+  bgWhite: [47, 49],
+  bgGray: [100, 49],
+  bgGrey: [100, 49],
+
+  bgBrightRed: [101, 49],
+  bgBrightGreen: [102, 49],
+  bgBrightYellow: [103, 49],
+  bgBrightBlue: [104, 49],
+  bgBrightMagenta: [105, 49],
+  bgBrightCyan: [106, 49],
+  bgBrightWhite: [107, 49],
+
+  // legacy styles for colors pre v1.0.0
+  blackBG: [40, 49],
+  redBG: [41, 49],
+  greenBG: [42, 49],
+  yellowBG: [43, 49],
+  blueBG: [44, 49],
+  magentaBG: [45, 49],
+  cyanBG: [46, 49],
+  whiteBG: [47, 49],
+
+};
+
+Object.keys(codes).forEach(function(key) {
+  var val = codes[key];
+  var style = styles[key] = [];
+  style.open = '\u001b[' + val[0] + 'm';
+  style.close = '\u001b[' + val[1] + 'm';
+});
 
 
 /***/ }),
@@ -2499,6 +2370,242 @@ module.exports = opts => {
 
 /***/ }),
 
+/***/ 187:
+/***/ (function(module) {
+
+"use strict";
+
+module.exports = function generate_custom(it, $keyword, $ruleType) {
+  var out = ' ';
+  var $lvl = it.level;
+  var $dataLvl = it.dataLevel;
+  var $schema = it.schema[$keyword];
+  var $schemaPath = it.schemaPath + it.util.getProperty($keyword);
+  var $errSchemaPath = it.errSchemaPath + '/' + $keyword;
+  var $breakOnError = !it.opts.allErrors;
+  var $errorKeyword;
+  var $data = 'data' + ($dataLvl || '');
+  var $valid = 'valid' + $lvl;
+  var $errs = 'errs__' + $lvl;
+  var $isData = it.opts.$data && $schema && $schema.$data,
+    $schemaValue;
+  if ($isData) {
+    out += ' var schema' + ($lvl) + ' = ' + (it.util.getData($schema.$data, $dataLvl, it.dataPathArr)) + '; ';
+    $schemaValue = 'schema' + $lvl;
+  } else {
+    $schemaValue = $schema;
+  }
+  var $rule = this,
+    $definition = 'definition' + $lvl,
+    $rDef = $rule.definition,
+    $closingBraces = '';
+  var $compile, $inline, $macro, $ruleValidate, $validateCode;
+  if ($isData && $rDef.$data) {
+    $validateCode = 'keywordValidate' + $lvl;
+    var $validateSchema = $rDef.validateSchema;
+    out += ' var ' + ($definition) + ' = RULES.custom[\'' + ($keyword) + '\'].definition; var ' + ($validateCode) + ' = ' + ($definition) + '.validate;';
+  } else {
+    $ruleValidate = it.useCustomRule($rule, $schema, it.schema, it);
+    if (!$ruleValidate) return;
+    $schemaValue = 'validate.schema' + $schemaPath;
+    $validateCode = $ruleValidate.code;
+    $compile = $rDef.compile;
+    $inline = $rDef.inline;
+    $macro = $rDef.macro;
+  }
+  var $ruleErrs = $validateCode + '.errors',
+    $i = 'i' + $lvl,
+    $ruleErr = 'ruleErr' + $lvl,
+    $asyncKeyword = $rDef.async;
+  if ($asyncKeyword && !it.async) throw new Error('async keyword in sync schema');
+  if (!($inline || $macro)) {
+    out += '' + ($ruleErrs) + ' = null;';
+  }
+  out += 'var ' + ($errs) + ' = errors;var ' + ($valid) + ';';
+  if ($isData && $rDef.$data) {
+    $closingBraces += '}';
+    out += ' if (' + ($schemaValue) + ' === undefined) { ' + ($valid) + ' = true; } else { ';
+    if ($validateSchema) {
+      $closingBraces += '}';
+      out += ' ' + ($valid) + ' = ' + ($definition) + '.validateSchema(' + ($schemaValue) + '); if (' + ($valid) + ') { ';
+    }
+  }
+  if ($inline) {
+    if ($rDef.statements) {
+      out += ' ' + ($ruleValidate.validate) + ' ';
+    } else {
+      out += ' ' + ($valid) + ' = ' + ($ruleValidate.validate) + '; ';
+    }
+  } else if ($macro) {
+    var $it = it.util.copy(it);
+    var $closingBraces = '';
+    $it.level++;
+    var $nextValid = 'valid' + $it.level;
+    $it.schema = $ruleValidate.validate;
+    $it.schemaPath = '';
+    var $wasComposite = it.compositeRule;
+    it.compositeRule = $it.compositeRule = true;
+    var $code = it.validate($it).replace(/validate\.schema/g, $validateCode);
+    it.compositeRule = $it.compositeRule = $wasComposite;
+    out += ' ' + ($code);
+  } else {
+    var $$outStack = $$outStack || [];
+    $$outStack.push(out);
+    out = '';
+    out += '  ' + ($validateCode) + '.call( ';
+    if (it.opts.passContext) {
+      out += 'this';
+    } else {
+      out += 'self';
+    }
+    if ($compile || $rDef.schema === false) {
+      out += ' , ' + ($data) + ' ';
+    } else {
+      out += ' , ' + ($schemaValue) + ' , ' + ($data) + ' , validate.schema' + (it.schemaPath) + ' ';
+    }
+    out += ' , (dataPath || \'\')';
+    if (it.errorPath != '""') {
+      out += ' + ' + (it.errorPath);
+    }
+    var $parentData = $dataLvl ? 'data' + (($dataLvl - 1) || '') : 'parentData',
+      $parentDataProperty = $dataLvl ? it.dataPathArr[$dataLvl] : 'parentDataProperty';
+    out += ' , ' + ($parentData) + ' , ' + ($parentDataProperty) + ' , rootData )  ';
+    var def_callRuleValidate = out;
+    out = $$outStack.pop();
+    if ($rDef.errors === false) {
+      out += ' ' + ($valid) + ' = ';
+      if ($asyncKeyword) {
+        out += 'await ';
+      }
+      out += '' + (def_callRuleValidate) + '; ';
+    } else {
+      if ($asyncKeyword) {
+        $ruleErrs = 'customErrors' + $lvl;
+        out += ' var ' + ($ruleErrs) + ' = null; try { ' + ($valid) + ' = await ' + (def_callRuleValidate) + '; } catch (e) { ' + ($valid) + ' = false; if (e instanceof ValidationError) ' + ($ruleErrs) + ' = e.errors; else throw e; } ';
+      } else {
+        out += ' ' + ($ruleErrs) + ' = null; ' + ($valid) + ' = ' + (def_callRuleValidate) + '; ';
+      }
+    }
+  }
+  if ($rDef.modifying) {
+    out += ' if (' + ($parentData) + ') ' + ($data) + ' = ' + ($parentData) + '[' + ($parentDataProperty) + '];';
+  }
+  out += '' + ($closingBraces);
+  if ($rDef.valid) {
+    if ($breakOnError) {
+      out += ' if (true) { ';
+    }
+  } else {
+    out += ' if ( ';
+    if ($rDef.valid === undefined) {
+      out += ' !';
+      if ($macro) {
+        out += '' + ($nextValid);
+      } else {
+        out += '' + ($valid);
+      }
+    } else {
+      out += ' ' + (!$rDef.valid) + ' ';
+    }
+    out += ') { ';
+    $errorKeyword = $rule.keyword;
+    var $$outStack = $$outStack || [];
+    $$outStack.push(out);
+    out = '';
+    var $$outStack = $$outStack || [];
+    $$outStack.push(out);
+    out = ''; /* istanbul ignore else */
+    if (it.createErrors !== false) {
+      out += ' { keyword: \'' + ($errorKeyword || 'custom') + '\' , dataPath: (dataPath || \'\') + ' + (it.errorPath) + ' , schemaPath: ' + (it.util.toQuotedString($errSchemaPath)) + ' , params: { keyword: \'' + ($rule.keyword) + '\' } ';
+      if (it.opts.messages !== false) {
+        out += ' , message: \'should pass "' + ($rule.keyword) + '" keyword validation\' ';
+      }
+      if (it.opts.verbose) {
+        out += ' , schema: validate.schema' + ($schemaPath) + ' , parentSchema: validate.schema' + (it.schemaPath) + ' , data: ' + ($data) + ' ';
+      }
+      out += ' } ';
+    } else {
+      out += ' {} ';
+    }
+    var __err = out;
+    out = $$outStack.pop();
+    if (!it.compositeRule && $breakOnError) {
+      /* istanbul ignore if */
+      if (it.async) {
+        out += ' throw new ValidationError([' + (__err) + ']); ';
+      } else {
+        out += ' validate.errors = [' + (__err) + ']; return false; ';
+      }
+    } else {
+      out += ' var err = ' + (__err) + ';  if (vErrors === null) vErrors = [err]; else vErrors.push(err); errors++; ';
+    }
+    var def_customError = out;
+    out = $$outStack.pop();
+    if ($inline) {
+      if ($rDef.errors) {
+        if ($rDef.errors != 'full') {
+          out += '  for (var ' + ($i) + '=' + ($errs) + '; ' + ($i) + '<errors; ' + ($i) + '++) { var ' + ($ruleErr) + ' = vErrors[' + ($i) + ']; if (' + ($ruleErr) + '.dataPath === undefined) ' + ($ruleErr) + '.dataPath = (dataPath || \'\') + ' + (it.errorPath) + '; if (' + ($ruleErr) + '.schemaPath === undefined) { ' + ($ruleErr) + '.schemaPath = "' + ($errSchemaPath) + '"; } ';
+          if (it.opts.verbose) {
+            out += ' ' + ($ruleErr) + '.schema = ' + ($schemaValue) + '; ' + ($ruleErr) + '.data = ' + ($data) + '; ';
+          }
+          out += ' } ';
+        }
+      } else {
+        if ($rDef.errors === false) {
+          out += ' ' + (def_customError) + ' ';
+        } else {
+          out += ' if (' + ($errs) + ' == errors) { ' + (def_customError) + ' } else {  for (var ' + ($i) + '=' + ($errs) + '; ' + ($i) + '<errors; ' + ($i) + '++) { var ' + ($ruleErr) + ' = vErrors[' + ($i) + ']; if (' + ($ruleErr) + '.dataPath === undefined) ' + ($ruleErr) + '.dataPath = (dataPath || \'\') + ' + (it.errorPath) + '; if (' + ($ruleErr) + '.schemaPath === undefined) { ' + ($ruleErr) + '.schemaPath = "' + ($errSchemaPath) + '"; } ';
+          if (it.opts.verbose) {
+            out += ' ' + ($ruleErr) + '.schema = ' + ($schemaValue) + '; ' + ($ruleErr) + '.data = ' + ($data) + '; ';
+          }
+          out += ' } } ';
+        }
+      }
+    } else if ($macro) {
+      out += '   var err =   '; /* istanbul ignore else */
+      if (it.createErrors !== false) {
+        out += ' { keyword: \'' + ($errorKeyword || 'custom') + '\' , dataPath: (dataPath || \'\') + ' + (it.errorPath) + ' , schemaPath: ' + (it.util.toQuotedString($errSchemaPath)) + ' , params: { keyword: \'' + ($rule.keyword) + '\' } ';
+        if (it.opts.messages !== false) {
+          out += ' , message: \'should pass "' + ($rule.keyword) + '" keyword validation\' ';
+        }
+        if (it.opts.verbose) {
+          out += ' , schema: validate.schema' + ($schemaPath) + ' , parentSchema: validate.schema' + (it.schemaPath) + ' , data: ' + ($data) + ' ';
+        }
+        out += ' } ';
+      } else {
+        out += ' {} ';
+      }
+      out += ';  if (vErrors === null) vErrors = [err]; else vErrors.push(err); errors++; ';
+      if (!it.compositeRule && $breakOnError) {
+        /* istanbul ignore if */
+        if (it.async) {
+          out += ' throw new ValidationError(vErrors); ';
+        } else {
+          out += ' validate.errors = vErrors; return false; ';
+        }
+      }
+    } else {
+      if ($rDef.errors === false) {
+        out += ' ' + (def_customError) + ' ';
+      } else {
+        out += ' if (Array.isArray(' + ($ruleErrs) + ')) { if (vErrors === null) vErrors = ' + ($ruleErrs) + '; else vErrors = vErrors.concat(' + ($ruleErrs) + '); errors = vErrors.length;  for (var ' + ($i) + '=' + ($errs) + '; ' + ($i) + '<errors; ' + ($i) + '++) { var ' + ($ruleErr) + ' = vErrors[' + ($i) + ']; if (' + ($ruleErr) + '.dataPath === undefined) ' + ($ruleErr) + '.dataPath = (dataPath || \'\') + ' + (it.errorPath) + ';  ' + ($ruleErr) + '.schemaPath = "' + ($errSchemaPath) + '";  ';
+        if (it.opts.verbose) {
+          out += ' ' + ($ruleErr) + '.schema = ' + ($schemaValue) + '; ' + ($ruleErr) + '.data = ' + ($data) + '; ';
+        }
+        out += ' } } else { ' + (def_customError) + ' } ';
+      }
+    }
+    out += ' } ';
+    if ($breakOnError) {
+      out += ' else { ';
+    }
+  }
+  return out;
+}
+
+
+/***/ }),
+
 /***/ 190:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -2595,6 +2702,23 @@ module.exports = require("https");
 /***/ (function(module) {
 
 module.exports = {"_from":"@octokit/rest@16.15.0","_id":"@octokit/rest@16.15.0","_inBundle":false,"_integrity":"sha512-Un+e7rgh38RtPOTe453pT/KPM/p2KZICimBmuZCd2wEo8PacDa4h6RqTPZs+f2DPazTTqdM7QU4LKlUjgiBwWw==","_location":"/@octokit/rest","_phantomChildren":{"@octokit/endpoint":"3.2.3","is-plain-object":"2.0.4","node-fetch":"2.6.0","universal-user-agent":"2.1.0"},"_requested":{"type":"version","registry":true,"raw":"@octokit/rest@16.15.0","name":"@octokit/rest","escapedName":"@octokit%2frest","scope":"@octokit","rawSpec":"16.15.0","saveSpec":null,"fetchSpec":"16.15.0"},"_requiredBy":["/","/@actions/github"],"_resolved":"https://registry.npmjs.org/@octokit/rest/-/rest-16.15.0.tgz","_shasum":"648a88d5de055bcf38976709c5b2bdf1227b926f","_spec":"@octokit/rest@16.15.0","_where":"/Users/prmph/Code/ci-checks-action","apidoc":{"template":{"withCompare":false}},"author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/rest.js/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/octokit-rest.min.js.gz","maxSize":"33 kB"}],"contributors":[{"name":"Mike de Boer","email":"info@mikedeboer.nl"},{"name":"Fabian Jakobs","email":"fabian@c9.io"},{"name":"Joe Gallo","email":"joe@brassafrax.com"},{"name":"Gregor Martynus","url":"https://github.com/gr2m"}],"dependencies":{"@octokit/request":"2.3.0","before-after-hook":"^1.2.0","btoa-lite":"^1.0.0","lodash.get":"^4.4.2","lodash.set":"^4.3.2","lodash.uniq":"^4.5.0","octokit-pagination-methods":"^1.1.0","universal-user-agent":"^2.0.0","url-template":"^2.0.8"},"deprecated":false,"description":"GitHub REST API client for Node.js","devDependencies":{"@gimenete/type-writer":"^0.1.3","@octokit/fixtures-server":"^5.0.1","@octokit/routes":"18.4.0","@types/node":"^10.1.2","apidoc":"^0.17.6","bundlesize":"^0.17.0","chai":"^4.1.2","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.0","dotenv":"^6.0.0","gh-pages-with-token":"^1.0.0","glob":"^7.1.2","http-proxy-agent":"^2.1.0","lodash.camelcase":"^4.3.0","lodash.merge":"^4.6.1","lodash.upperfirst":"^4.3.1","mkdirp":"^0.5.1","mocha":"^5.0.0","mustache":"^3.0.0","nock":"^10.0.0","npm-run-all":"^4.1.2","nyc":"^12.0.1","prettier":"^1.14.2","proxy":"^0.2.4","semantic-release":"^15.0.0","sinon":"^6.0.0","sinon-chai":"^3.0.0","sort-keys":"^2.0.0","standard":"^12.0.0","string-to-arraybuffer":"^1.0.0","typescript":"^3.3.1","webpack":"^4.0.0","webpack-bundle-analyzer":"^3.0.0","webpack-cli":"^3.0.0"},"files":["index.js","index.d.ts","lib","plugins"],"homepage":"https://github.com/octokit/rest.js#readme","keywords":["octokit","github","rest","api-client"],"license":"MIT","name":"@octokit/rest","nyc":{"ignore":["test"]},"publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/rest.js.git"},"scripts":{"build":"npm-run-all build:*","build:browser":"npm-run-all build:browser:*","build:browser:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-rest.js --profile --json > dist/bundle-stats.json","build:browser:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-rest.min.js --devtool source-map","build:docs":"node scripts/generate-api-docs","build:ts":"node scripts/generate-types","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","deploy-docs":"gh-pages-with-token -d doc","generate-bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","generate-routes":"node scripts/generate-routes","postbuild:docs":"apidoc -i doc/ -o doc/","postvalidate:ts":"tsc --noEmit --target es6 test/typescript-validate.ts","prebuild:browser":"mkdirp dist/","prebuild:docs":"mkdirp doc/","pretest":"standard","prevalidate:ts":"npm run -s build:ts","semantic-release":"semantic-release","start-fixtures-server":"octokit-fixtures-server","test":"nyc mocha test/mocha-node-setup.js \"test/*/**/*-test.js\"","test:browser":"cypress run --browser chrome","test:memory":"mocha test/memory-test","validate:ts":"tsc --target es6 --noImplicitAny index.d.ts"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect","cy"]},"types":"index.d.ts","version":"16.15.0"};
+
+/***/ }),
+
+/***/ 216:
+/***/ (function(module) {
+
+module.exports = function(colors) {
+  return function(letter, i, exploded) {
+    if (letter === ' ') return letter;
+    switch (i%3) {
+      case 0: return colors.red(letter);
+      case 1: return colors.white(letter);
+      case 2: return colors.blue(letter);
+    }
+  };
+};
+
 
 /***/ }),
 
@@ -2800,7 +2924,7 @@ function withDefaults (oldEndpoint, newDefaults) {
 
 module.exports = octokitRegisterEndpoints
 
-const registerEndpoints = __webpack_require__(961)
+const registerEndpoints = __webpack_require__(899)
 
 function octokitRegisterEndpoints (octokit) {
   octokit.registerEndpoints = registerEndpoints.bind(null, octokit)
@@ -3240,7 +3364,7 @@ module.exports = function generate_ref(it, $keyword, $ruleType) {
 /***/ 277:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-const Deprecation = __webpack_require__(444)
+const Deprecation = __webpack_require__(832)
 const logOnce = __webpack_require__(969)(deprecation => console.warn(deprecation))
 
 module.exports = class HttpError extends Error {
@@ -5126,236 +5250,7 @@ module.exports = {
 /***/ 314:
 /***/ (function(module) {
 
-"use strict";
-
-module.exports = function generate_custom(it, $keyword, $ruleType) {
-  var out = ' ';
-  var $lvl = it.level;
-  var $dataLvl = it.dataLevel;
-  var $schema = it.schema[$keyword];
-  var $schemaPath = it.schemaPath + it.util.getProperty($keyword);
-  var $errSchemaPath = it.errSchemaPath + '/' + $keyword;
-  var $breakOnError = !it.opts.allErrors;
-  var $errorKeyword;
-  var $data = 'data' + ($dataLvl || '');
-  var $valid = 'valid' + $lvl;
-  var $errs = 'errs__' + $lvl;
-  var $isData = it.opts.$data && $schema && $schema.$data,
-    $schemaValue;
-  if ($isData) {
-    out += ' var schema' + ($lvl) + ' = ' + (it.util.getData($schema.$data, $dataLvl, it.dataPathArr)) + '; ';
-    $schemaValue = 'schema' + $lvl;
-  } else {
-    $schemaValue = $schema;
-  }
-  var $rule = this,
-    $definition = 'definition' + $lvl,
-    $rDef = $rule.definition,
-    $closingBraces = '';
-  var $compile, $inline, $macro, $ruleValidate, $validateCode;
-  if ($isData && $rDef.$data) {
-    $validateCode = 'keywordValidate' + $lvl;
-    var $validateSchema = $rDef.validateSchema;
-    out += ' var ' + ($definition) + ' = RULES.custom[\'' + ($keyword) + '\'].definition; var ' + ($validateCode) + ' = ' + ($definition) + '.validate;';
-  } else {
-    $ruleValidate = it.useCustomRule($rule, $schema, it.schema, it);
-    if (!$ruleValidate) return;
-    $schemaValue = 'validate.schema' + $schemaPath;
-    $validateCode = $ruleValidate.code;
-    $compile = $rDef.compile;
-    $inline = $rDef.inline;
-    $macro = $rDef.macro;
-  }
-  var $ruleErrs = $validateCode + '.errors',
-    $i = 'i' + $lvl,
-    $ruleErr = 'ruleErr' + $lvl,
-    $asyncKeyword = $rDef.async;
-  if ($asyncKeyword && !it.async) throw new Error('async keyword in sync schema');
-  if (!($inline || $macro)) {
-    out += '' + ($ruleErrs) + ' = null;';
-  }
-  out += 'var ' + ($errs) + ' = errors;var ' + ($valid) + ';';
-  if ($isData && $rDef.$data) {
-    $closingBraces += '}';
-    out += ' if (' + ($schemaValue) + ' === undefined) { ' + ($valid) + ' = true; } else { ';
-    if ($validateSchema) {
-      $closingBraces += '}';
-      out += ' ' + ($valid) + ' = ' + ($definition) + '.validateSchema(' + ($schemaValue) + '); if (' + ($valid) + ') { ';
-    }
-  }
-  if ($inline) {
-    if ($rDef.statements) {
-      out += ' ' + ($ruleValidate.validate) + ' ';
-    } else {
-      out += ' ' + ($valid) + ' = ' + ($ruleValidate.validate) + '; ';
-    }
-  } else if ($macro) {
-    var $it = it.util.copy(it);
-    var $closingBraces = '';
-    $it.level++;
-    var $nextValid = 'valid' + $it.level;
-    $it.schema = $ruleValidate.validate;
-    $it.schemaPath = '';
-    var $wasComposite = it.compositeRule;
-    it.compositeRule = $it.compositeRule = true;
-    var $code = it.validate($it).replace(/validate\.schema/g, $validateCode);
-    it.compositeRule = $it.compositeRule = $wasComposite;
-    out += ' ' + ($code);
-  } else {
-    var $$outStack = $$outStack || [];
-    $$outStack.push(out);
-    out = '';
-    out += '  ' + ($validateCode) + '.call( ';
-    if (it.opts.passContext) {
-      out += 'this';
-    } else {
-      out += 'self';
-    }
-    if ($compile || $rDef.schema === false) {
-      out += ' , ' + ($data) + ' ';
-    } else {
-      out += ' , ' + ($schemaValue) + ' , ' + ($data) + ' , validate.schema' + (it.schemaPath) + ' ';
-    }
-    out += ' , (dataPath || \'\')';
-    if (it.errorPath != '""') {
-      out += ' + ' + (it.errorPath);
-    }
-    var $parentData = $dataLvl ? 'data' + (($dataLvl - 1) || '') : 'parentData',
-      $parentDataProperty = $dataLvl ? it.dataPathArr[$dataLvl] : 'parentDataProperty';
-    out += ' , ' + ($parentData) + ' , ' + ($parentDataProperty) + ' , rootData )  ';
-    var def_callRuleValidate = out;
-    out = $$outStack.pop();
-    if ($rDef.errors === false) {
-      out += ' ' + ($valid) + ' = ';
-      if ($asyncKeyword) {
-        out += 'await ';
-      }
-      out += '' + (def_callRuleValidate) + '; ';
-    } else {
-      if ($asyncKeyword) {
-        $ruleErrs = 'customErrors' + $lvl;
-        out += ' var ' + ($ruleErrs) + ' = null; try { ' + ($valid) + ' = await ' + (def_callRuleValidate) + '; } catch (e) { ' + ($valid) + ' = false; if (e instanceof ValidationError) ' + ($ruleErrs) + ' = e.errors; else throw e; } ';
-      } else {
-        out += ' ' + ($ruleErrs) + ' = null; ' + ($valid) + ' = ' + (def_callRuleValidate) + '; ';
-      }
-    }
-  }
-  if ($rDef.modifying) {
-    out += ' if (' + ($parentData) + ') ' + ($data) + ' = ' + ($parentData) + '[' + ($parentDataProperty) + '];';
-  }
-  out += '' + ($closingBraces);
-  if ($rDef.valid) {
-    if ($breakOnError) {
-      out += ' if (true) { ';
-    }
-  } else {
-    out += ' if ( ';
-    if ($rDef.valid === undefined) {
-      out += ' !';
-      if ($macro) {
-        out += '' + ($nextValid);
-      } else {
-        out += '' + ($valid);
-      }
-    } else {
-      out += ' ' + (!$rDef.valid) + ' ';
-    }
-    out += ') { ';
-    $errorKeyword = $rule.keyword;
-    var $$outStack = $$outStack || [];
-    $$outStack.push(out);
-    out = '';
-    var $$outStack = $$outStack || [];
-    $$outStack.push(out);
-    out = ''; /* istanbul ignore else */
-    if (it.createErrors !== false) {
-      out += ' { keyword: \'' + ($errorKeyword || 'custom') + '\' , dataPath: (dataPath || \'\') + ' + (it.errorPath) + ' , schemaPath: ' + (it.util.toQuotedString($errSchemaPath)) + ' , params: { keyword: \'' + ($rule.keyword) + '\' } ';
-      if (it.opts.messages !== false) {
-        out += ' , message: \'should pass "' + ($rule.keyword) + '" keyword validation\' ';
-      }
-      if (it.opts.verbose) {
-        out += ' , schema: validate.schema' + ($schemaPath) + ' , parentSchema: validate.schema' + (it.schemaPath) + ' , data: ' + ($data) + ' ';
-      }
-      out += ' } ';
-    } else {
-      out += ' {} ';
-    }
-    var __err = out;
-    out = $$outStack.pop();
-    if (!it.compositeRule && $breakOnError) {
-      /* istanbul ignore if */
-      if (it.async) {
-        out += ' throw new ValidationError([' + (__err) + ']); ';
-      } else {
-        out += ' validate.errors = [' + (__err) + ']; return false; ';
-      }
-    } else {
-      out += ' var err = ' + (__err) + ';  if (vErrors === null) vErrors = [err]; else vErrors.push(err); errors++; ';
-    }
-    var def_customError = out;
-    out = $$outStack.pop();
-    if ($inline) {
-      if ($rDef.errors) {
-        if ($rDef.errors != 'full') {
-          out += '  for (var ' + ($i) + '=' + ($errs) + '; ' + ($i) + '<errors; ' + ($i) + '++) { var ' + ($ruleErr) + ' = vErrors[' + ($i) + ']; if (' + ($ruleErr) + '.dataPath === undefined) ' + ($ruleErr) + '.dataPath = (dataPath || \'\') + ' + (it.errorPath) + '; if (' + ($ruleErr) + '.schemaPath === undefined) { ' + ($ruleErr) + '.schemaPath = "' + ($errSchemaPath) + '"; } ';
-          if (it.opts.verbose) {
-            out += ' ' + ($ruleErr) + '.schema = ' + ($schemaValue) + '; ' + ($ruleErr) + '.data = ' + ($data) + '; ';
-          }
-          out += ' } ';
-        }
-      } else {
-        if ($rDef.errors === false) {
-          out += ' ' + (def_customError) + ' ';
-        } else {
-          out += ' if (' + ($errs) + ' == errors) { ' + (def_customError) + ' } else {  for (var ' + ($i) + '=' + ($errs) + '; ' + ($i) + '<errors; ' + ($i) + '++) { var ' + ($ruleErr) + ' = vErrors[' + ($i) + ']; if (' + ($ruleErr) + '.dataPath === undefined) ' + ($ruleErr) + '.dataPath = (dataPath || \'\') + ' + (it.errorPath) + '; if (' + ($ruleErr) + '.schemaPath === undefined) { ' + ($ruleErr) + '.schemaPath = "' + ($errSchemaPath) + '"; } ';
-          if (it.opts.verbose) {
-            out += ' ' + ($ruleErr) + '.schema = ' + ($schemaValue) + '; ' + ($ruleErr) + '.data = ' + ($data) + '; ';
-          }
-          out += ' } } ';
-        }
-      }
-    } else if ($macro) {
-      out += '   var err =   '; /* istanbul ignore else */
-      if (it.createErrors !== false) {
-        out += ' { keyword: \'' + ($errorKeyword || 'custom') + '\' , dataPath: (dataPath || \'\') + ' + (it.errorPath) + ' , schemaPath: ' + (it.util.toQuotedString($errSchemaPath)) + ' , params: { keyword: \'' + ($rule.keyword) + '\' } ';
-        if (it.opts.messages !== false) {
-          out += ' , message: \'should pass "' + ($rule.keyword) + '" keyword validation\' ';
-        }
-        if (it.opts.verbose) {
-          out += ' , schema: validate.schema' + ($schemaPath) + ' , parentSchema: validate.schema' + (it.schemaPath) + ' , data: ' + ($data) + ' ';
-        }
-        out += ' } ';
-      } else {
-        out += ' {} ';
-      }
-      out += ';  if (vErrors === null) vErrors = [err]; else vErrors.push(err); errors++; ';
-      if (!it.compositeRule && $breakOnError) {
-        /* istanbul ignore if */
-        if (it.async) {
-          out += ' throw new ValidationError(vErrors); ';
-        } else {
-          out += ' validate.errors = vErrors; return false; ';
-        }
-      }
-    } else {
-      if ($rDef.errors === false) {
-        out += ' ' + (def_customError) + ' ';
-      } else {
-        out += ' if (Array.isArray(' + ($ruleErrs) + ')) { if (vErrors === null) vErrors = ' + ($ruleErrs) + '; else vErrors = vErrors.concat(' + ($ruleErrs) + '); errors = vErrors.length;  for (var ' + ($i) + '=' + ($errs) + '; ' + ($i) + '<errors; ' + ($i) + '++) { var ' + ($ruleErr) + ' = vErrors[' + ($i) + ']; if (' + ($ruleErr) + '.dataPath === undefined) ' + ($ruleErr) + '.dataPath = (dataPath || \'\') + ' + (it.errorPath) + ';  ' + ($ruleErr) + '.schemaPath = "' + ($errSchemaPath) + '";  ';
-        if (it.opts.verbose) {
-          out += ' ' + ($ruleErr) + '.schema = ' + ($schemaValue) + '; ' + ($ruleErr) + '.data = ' + ($data) + '; ';
-        }
-        out += ' } } else { ' + (def_customError) + ' } ';
-      }
-    }
-    out += ' } ';
-    if ($breakOnError) {
-      out += ' else { ';
-    }
-  }
-  return out;
-}
-
+module.exports = {"_from":"@octokit/graphql@2.0.1","_id":"@octokit/graphql@2.0.1","_inBundle":false,"_integrity":"sha512-IBNr05yBYqffy9L37Vv3/5xQMw+swmYFtMsuwqUA5vSEUr+s/POf8DOpCaTtS8f7e9k+cEuKLC5AbOoXkdZZOA==","_location":"/@octokit/graphql","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@octokit/graphql@2.0.1","name":"@octokit/graphql","escapedName":"@octokit%2fgraphql","scope":"@octokit","rawSpec":"2.0.1","saveSpec":null,"fetchSpec":"2.0.1"},"_requiredBy":["/","/@actions/github"],"_resolved":"https://registry.npmjs.org/@octokit/graphql/-/graphql-2.0.1.tgz","_shasum":"0e9d7f41d6ac3305f37767e723183bd0b77af7d2","_spec":"@octokit/graphql@2.0.1","_where":"/Users/prmph/Code/ci-checks-action","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/graphql.js/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/octokit-graphql.min.js.gz","maxSize":"5KB"}],"dependencies":{"@octokit/request":"^2.1.2"},"deprecated":false,"description":"GitHub GraphQL API client for browsers and Node","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","fetch-mock":"^7.2.0","mkdirp":"^0.5.1","mocha":"^5.2.0","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.12.1","simple-mock":"^0.8.0","standard":"^12.0.1","webpack":"^4.22.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"files":["lib"],"homepage":"https://github.com/octokit/graphql.js#readme","keywords":["octokit","github","api","graphql"],"license":"MIT","main":"index.js","name":"@octokit/graphql","publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/graphql.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=octokitGraphql --output=./dist/octokit-graphql.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=octokitGraphql --output-path=./dist --output-filename=octokit-graphql.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"2.0.1"};
 
 /***/ }),
 
@@ -6301,33 +6196,39 @@ module.exports = require("assert");
 /***/ 363:
 /***/ (function(module) {
 
-"use strict";
+module.exports = register
 
+function register (state, name, options, method) {
+  if (arguments.length === 3) {
+    method = options
+    options = {}
+  }
 
+  if (typeof method !== 'function') {
+    throw new Error('method for before hook must be a function')
+  }
 
-var Cache = module.exports = function Cache() {
-  this._cache = {};
-};
+  if (typeof options !== 'object') {
+    throw new Error('options for before hook must be an object')
+  }
 
+  if (Array.isArray(name)) {
+    return name.reverse().reduce(function (callback, name) {
+      return register.bind(null, state, name, options, callback)
+    }, method)()
+  }
 
-Cache.prototype.put = function Cache_put(key, value) {
-  this._cache[key] = value;
-};
+  return Promise.resolve()
+    .then(function () {
+      if (!state.registry[name]) {
+        return method(options)
+      }
 
-
-Cache.prototype.get = function Cache_get(key) {
-  return this._cache[key];
-};
-
-
-Cache.prototype.del = function Cache_del(key) {
-  delete this._cache[key];
-};
-
-
-Cache.prototype.clear = function Cache_clear() {
-  this._cache = {};
-};
+      return (state.registry[name]).reduce(function (method, registered) {
+        return registered.hook.bind(null, method, options)
+      }, method)()
+    })
+}
 
 
 /***/ }),
@@ -6414,9 +6315,226 @@ module.exports = {
   properties: __webpack_require__(343),
   propertyNames: __webpack_require__(566),
   required: __webpack_require__(858),
-  uniqueItems: __webpack_require__(899),
+  uniqueItems: __webpack_require__(434),
   validate: __webpack_require__(967)
 };
+
+
+/***/ }),
+
+/***/ 387:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+/* eslint-disable camelcase */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable fp/no-loops */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-namespace */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs = __importStar(__webpack_require__(747));
+const path = __importStar(__webpack_require__(622));
+const core = __importStar(__webpack_require__(470));
+const github = __importStar(__webpack_require__(469));
+const ajv_1 = __importDefault(__webpack_require__(514));
+const safe_1 = __importDefault(__webpack_require__(37));
+const utility_1 = __webpack_require__(31);
+const generalCheckSchema = __importStar(__webpack_require__(146));
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+function getChecksToReport() {
+    const checks = JSON.parse(core.getInput('checks', { required: true }));
+    console.log(safe_1.default.magenta(`checks input: ${JSON.stringify(checks)}`));
+    return checks;
+}
+exports.getChecksToReport = getChecksToReport;
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+function parse(generalCheckJSON, changedFiles, checkName) {
+    // console.log(`Parsing check JSON: "${generalCheckJSON}"`)
+    // console.log(`changed files: ${changedFiles}`)
+    var _a;
+    const toValidate = JSON.parse(generalCheckJSON);
+    const valid = new ajv_1.default().validate(generalCheckSchema, toValidate);
+    if (valid === false) {
+        throw new Error(`Error parsing check script output`);
+    }
+    const result = toValidate;
+    // User-friendly markdown message text for the error/warning
+    /*const link = `https://github.com/${OWNER}/${REPO}/blob/${SHA}/${filePathTrimmed}#L${line}:L${endLine}`
+        let messageText = '### [`' + filePathTrimmed + '` line `' + line + '`](' + link + ')\n';
+        messageText += '- Start Line: `' + line + '`\n';
+        messageText += '- End Line: `' + endLine + '`\n';
+        messageText += '- Message: ' + message + '\n';
+        messageText += '  - From: [`' + ruleId + '`]\n';
+
+        // Add the markdown text to the appropriate placeholder
+        if (isWarning) {
+            warningText += messageText
+        }
+        else {
+            errorText += messageText
+        }
+    */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { byFile, summary, name, description, counts } = result;
+    //console.info(`\nCheck results by file: ${JSON.stringify(byFile)}`)
+    return {
+        title: (_a = (checkName !== null && checkName !== void 0 ? checkName : name), (_a !== null && _a !== void 0 ? _a : "")),
+        summary: (summary !== null && summary !== void 0 ? summary : `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`),
+        conclusion: counts.failure > 0 ? 'failure' : 'success',
+        text: "",
+        annotations: utility_1.flatten(Object.entries(byFile)
+            .filter(kv => {
+            const fileName = kv[0];
+            //console.log(`\nParsed file name: ${fileName}`)
+            return changedFiles === undefined || changedFiles.includes(fileName);
+        })
+            .map(kv => {
+            const filePath = kv[0];
+            // console.log(`Processing ${checkName} check file "${filePath}"`)
+            const fileResult = kv[1];
+            return fileResult.details.map(detail => {
+                // console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
+                var _a, _b;
+                return {
+                    path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
+                    title: detail.title,
+                    message: detail.message,
+                    start_line: (_a = detail.startLine, (_a !== null && _a !== void 0 ? _a : 0)),
+                    start_column: detail.startColumn,
+                    end_line: (_b = detail.endLine, (_b !== null && _b !== void 0 ? _b : 0)),
+                    end_column: detail.endColumn,
+                    annotation_level: detail.category
+                };
+            });
+        })),
+    };
+}
+exports.parse = parse;
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const pullRequest = github.context.payload.pull_request;
+        const head_sha = pullRequest ? pullRequest.head.sha : github.context.sha;
+        const owner = github.context.repo.owner;
+        const repo = github.context.repo.repo;
+        const githubToken = core.getInput('ghToken');
+        const githubClient = new github.GitHub(githubToken);
+        const BATCH_SIZE = 50;
+        function getBaseInfo(opts) {
+            return 'checkId' in opts
+                ? { check_run_id: opts.checkId, owner, repo }
+                : { name: opts.name, owner, repo, started_at: new Date().toISOString(), head_sha };
+        }
+        function getChangedFilesAsync(prNumber) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const { data: prInfo } = yield githubClient.pulls.get({ owner, repo, number: prNumber });
+                // eslint-disable-next-line fp/no-let
+                let changedFiles = [];
+                const fetchPerPage = 100;
+                // eslint-disable-next-line fp/no-mutation, fp/no-let
+                for (let pageIndex = 0; pageIndex * fetchPerPage < prInfo.changed_files; pageIndex++) {
+                    const response = yield githubClient.pulls.listFiles({
+                        owner,
+                        repo,
+                        number: prNumber,
+                        page: pageIndex,
+                        per_page: fetchPerPage,
+                    });
+                    // eslint-disable-next-line fp/no-mutation
+                    changedFiles = changedFiles.concat(response.data.filter(f => f.status !== "removed").map(f => f.filename));
+                }
+                return changedFiles.map(fName => path.resolve(fName));
+            });
+        }
+        function postCheckAsync(info) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const { data: { id: checkId } } = 'check_run_id' in info
+                    ? yield githubClient.checks.update(info)
+                    : yield githubClient.checks.create(info);
+                return checkId;
+            });
+        }
+        try {
+            const changedFiles = pullRequest ? yield getChangedFilesAsync(pullRequest.number) : undefined;
+            //console.log(`changed files: ${changedFiles}`)
+            for (const check of getChecksToReport()) {
+                try {
+                    if (check && check.name && check.fileName) {
+                        const outputFilePath = path.resolve(check.fileName);
+                        if (!fs.existsSync(outputFilePath)) {
+                            core.warning(`Output file "${outputFilePath}" for the "${check.name}" check not found.`);
+                            continue;
+                        }
+                        const file = fs.readFileSync(outputFilePath, 'utf8');
+                        const { title, summary, conclusion, text, annotations: annotationsIterable } = parse(file, check.prChangesOnly ? changedFiles : undefined, check.name);
+                        const annotations = [...annotationsIterable];
+                        console.log(`${title} check annotations length: ${annotations.length}`);
+                        if (conclusion !== "success") {
+                            core.setFailed(`"${title}" check reported failures.`);
+                        }
+                        // core.info("This is a PR...")
+                        const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
+                        // console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
+                        const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
+                        //console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
+                        const numBatches = annotationBatches.length;
+                        console.log(`${check.name} check: number of batches = ${numBatches}`);
+                        // eslint-disable-next-line fp/no-let
+                        let batchIndex = 1;
+                        for (const annotationBatch of utility_1.take(annotationBatches, numBatches - 1)) {
+                            // eslint-disable-next-line fp/no-mutation
+                            const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`;
+                            core.info(batchMessage);
+                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title, summary: batchMessage, annotations: annotationBatch } }));
+                        }
+                        core.info(`Posting annotations completions for "${title}" check`);
+                        yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
+                        /*if (push) {
+                            core.info(`Processing last batch of "${title}" check`)
+                            await postCheckAsync({
+                                ...getBaseInfo({ name: check.name }),
+                                ...getBaseInfo({ checkId }),
+                                status: 'completed',
+                                conclusion,
+                                completed_at: new Date().toISOString(),
+                                output: { title, summary, text }
+                                output: { title, summary, text, annotations: last(annotationBatches) }
+                            })
+                        }*/
+                    }
+                }
+                catch (e) {
+                    const msg = `Error processing requested check "${check.name}"\n\t${'stack' in e ? e.stack : 'message' in e ? e.message : String(e)}\n`;
+                    core.error(msg);
+                    core.setFailed(msg);
+                }
+            }
+        }
+        catch (err) {
+            core.setFailed(err.message ? err.message : 'Error creating checks');
+        }
+    });
+}
+exports.run = run;
 
 
 /***/ }),
@@ -6597,7 +6715,7 @@ module.exports = require("stream");
 
 
 var ruleModules = __webpack_require__(383)
-  , toHash = __webpack_require__(855).toHash;
+  , toHash = __webpack_require__(949).toHash;
 
 module.exports = function rules() {
   var RULES = [
@@ -6716,247 +6834,13 @@ function errname(uv, code) {
 
 "use strict";
 
-/* eslint-disable brace-style */
-/* eslint-disable camelcase */
-/* eslint-disable fp/no-mutation */
-/* eslint-disable fp/no-let */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable fp/no-loops */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-namespace */
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = __importStar(__webpack_require__(747));
-const path = __importStar(__webpack_require__(622));
-const ajv_1 = __importDefault(__webpack_require__(514));
-const core = __importStar(__webpack_require__(470));
-const github = __importStar(__webpack_require__(469));
-const utility_1 = __webpack_require__(31);
-const generalCheckSchema = __importStar(__webpack_require__(146));
-function getInput(key, required = false) {
-    return core.getInput(key, { required });
-}
-function getChecksToReport() {
-    const checksInput = core.getInput('checks', { required: true });
-    return checksInput
-        .split("|")
-        .map(check => {
-        const [name, outputFileName] = check.split(":");
-        return { name, outputFileName };
-    });
-}
-function parse(generalCheckJSON, changedFiles, checkName) {
-    // console.log(`Parsing check JSON: "${generalCheckJSON}"`)
-    // console.log(`changed files: ${changedFiles}`)
-    var _a;
-    const toValidate = JSON.parse(generalCheckJSON);
-    const valid = new ajv_1.default().validate(generalCheckSchema, toValidate);
-    if (valid === false) {
-        throw new Error(`Error parsing check script output`);
-    }
-    const result = toValidate;
-    // User-friendly markdown message text for the error/warning
-    /*const link = `https://github.com/${OWNER}/${REPO}/blob/${SHA}/${filePathTrimmed}#L${line}:L${endLine}`
-        let messageText = '### [`' + filePathTrimmed + '` line `' + line + '`](' + link + ')\n';
-        messageText += '- Start Line: `' + line + '`\n';
-        messageText += '- End Line: `' + endLine + '`\n';
-        messageText += '- Message: ' + message + '\n';
-        messageText += '  - From: [`' + ruleId + '`]\n';
-
-        // Add the markdown text to the appropriate placeholder
-        if (isWarning) {
-            warningText += messageText
-        }
-        else {
-            errorText += messageText
-        }
-    */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { byFile, summary, name, description, counts } = result;
-    //console.info(`\nCheck results by file: ${JSON.stringify(byFile)}`)
-    return {
-        title: (_a = (checkName !== null && checkName !== void 0 ? checkName : name), (_a !== null && _a !== void 0 ? _a : "")),
-        summary: (summary !== null && summary !== void 0 ? summary : `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`),
-        conclusion: counts.failure > 0 ? 'failure' : 'success',
-        text: "",
-        annotations: utility_1.flatten(Object.entries(byFile)
-            .filter(kv => {
-            const fileName = kv[0];
-            //console.log(`\nParsed file name: ${fileName}`)
-            //console.log(`\nChanged file names: ${changedFiles}`)
-            return changedFiles === undefined || changedFiles.some(f => fileName.endsWith(f));
-        })
-            .map(kv => {
-            const filePath = kv[0];
-            // console.log(`Processing ${checkName} check file "${filePath}"`)
-            const fileResult = kv[1];
-            return fileResult.details.map(detail => {
-                // console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
-                var _a, _b;
-                return {
-                    path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
-                    title: detail.title,
-                    message: detail.message,
-                    start_line: (_a = detail.startLine, (_a !== null && _a !== void 0 ? _a : 0)),
-                    start_column: detail.startColumn,
-                    end_line: (_b = detail.endLine, (_b !== null && _b !== void 0 ? _b : 0)),
-                    end_column: detail.endColumn,
-                    annotation_level: detail.category
-                };
-            });
-        })),
-    };
-}
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const pullRequest = github.context.payload.pull_request;
-        const head_sha = pullRequest ? pullRequest.head.sha : github.context.sha;
-        const owner = github.context.repo.owner;
-        const repo = github.context.repo.repo;
-        const githubToken = getInput('ghToken', true);
-        const githubClient = new github.GitHub(githubToken);
-        const BATCH_SIZE = 50;
-        function getBaseInfo(opts) {
-            return 'checkId' in opts
-                ? { check_run_id: opts.checkId, owner, repo }
-                : { name: opts.name, owner, repo, started_at: new Date().toISOString(), head_sha };
-        }
-        function getChangedFilesAsync(prNumber) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const { data: prInfo } = yield githubClient.pulls.get({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
-                    number: prNumber
-                });
-                let changedFiles = [];
-                const fetchPerPage = 100;
-                for (let pageIndex = 0; pageIndex * fetchPerPage < prInfo.changed_files; pageIndex++) {
-                    const listFilesResponse = yield githubClient.pulls.listFiles({
-                        owner: github.context.repo.owner,
-                        repo: github.context.repo.repo,
-                        number: prNumber,
-                        page: pageIndex,
-                        per_page: fetchPerPage,
-                    });
-                    //const pattern = core.getInput("pattern")
-                    //const re = new RegExp(pattern.length ? pattern : ".*")
-                    changedFiles = changedFiles.concat(listFilesResponse.data.filter(f => f.status !== "removed").map(f => f.filename));
-                    /*listFilesResponse.data
-                        //.filter(f => re.test(f.filename))
-                        .forEach(f => {
-                            // eslint-disable-next-line fp/no-mutating-methods
-                            if (f.status === "added") changedFiles.created.push(f.filename)
-                            // eslint-disable-next-line fp/no-mutating-methods
-                            else if (f.status === "removed") changedFiles.deleted.push(f.filename)
-                            // eslint-disable-next-line fp/no-mutating-methods
-                            else if (f.status === "modified") changedFiles.updated.push(f.filename)
-                            else if (f.status === "renamed") {
-                                // eslint-disable-next-line fp/no-mutating-methods
-                                changedFiles.created.push(f.filename)
-        
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                if (re.test((f as any)["previous_filename"])) {
-                                    // eslint-disable-next-line fp/no-mutating-methods, @typescript-eslint/no-explicit-any
-                                    changedFiles.deleted.push((f as any)["previous_filename"])
-                                }
-                            }
-                        })
-                    */
-                }
-                return changedFiles;
-            });
-        }
-        function postCheckAsync(info) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const { data: { id: checkId } } = 'check_run_id' in info
-                    ? yield githubClient.checks.update(info)
-                    : yield githubClient.checks.create(info);
-                return checkId;
-            });
-        }
-        try {
-            const changedFiles = pullRequest ? yield getChangedFilesAsync(pullRequest.number) : undefined;
-            //console.log(`changed files: ${changedFiles}`)
-            //core.info(`changed files: ${changedFiles}`)
-            for (const check of getChecksToReport()) {
-                try {
-                    if (check && check.name && check.outputFileName) {
-                        const outputFilePath = path.resolve(check.outputFileName);
-                        if (!fs.existsSync(outputFilePath)) {
-                            core.warning(`Output file "${check.outputFileName}" for the "${check.name}" check not found.`);
-                            continue;
-                        }
-                        const file = fs.readFileSync(check.outputFileName, 'utf8');
-                        const { title, summary, conclusion, text, annotations: annotationsIterable } = parse(file, changedFiles, check.name);
-                        const annotations = [...annotationsIterable];
-                        console.log(`${title} check annotations length: ${annotations.length}`);
-                        if (conclusion !== "success") {
-                            core.setFailed(`"${title}" check reported failures.`);
-                        }
-                        // core.info("This is a PR...")
-                        const checkId = yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo(check)), { status: 'in_progress' }));
-                        // console.log(`\nAnnotations: ${JSON.stringify([...annotations])}`)
-                        const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
-                        //console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
-                        const numBatches = annotationBatches.length;
-                        console.log(`${check.name} check: number of batches = ${numBatches}`);
-                        let batchIndex = 1;
-                        for (const annotationBatch of utility_1.take(annotationBatches, numBatches - 1)) {
-                            const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`;
-                            core.info(batchMessage);
-                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title, summary: batchMessage, annotations: annotationBatch } }));
-                        }
-                        core.info(`Posting annotations completions for "${title}" check`);
-                        yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
-                        /*if (push) {
-                            core.info(`Processing last batch of "${title}" check`)
-                            await postCheckAsync({
-                                ...getBaseInfo({ name: check.name }),
-                                ...getBaseInfo({ checkId }),
-                                status: 'completed',
-                                conclusion,
-                                completed_at: new Date().toISOString(),
-                                output: { title, summary, text }
-                                output: { title, summary, text, annotations: last(annotationBatches) }
-                            })
-                        }*/
-                    }
-                }
-                catch (e) {
-                    const msg = `Error processing requested check "${check.name}"\n\t${'stack' in e ? e.stack : 'message' in e ? e.message : String(e)}\n`;
-                    core.error(msg);
-                    core.setFailed(msg);
-                }
-            }
-        }
-        catch (err) {
-            core.setFailed(err.message ? err.message : 'Error creating checks');
-        }
-    });
-}
+const lib_1 = __webpack_require__(387);
 process.on("unhandledRejection", (err) => {
     console.error(err, "error");
     throw new Error(`Exiting due to unhandled promise rejection`);
 });
-run();
+lib_1.run();
 
 
 /***/ }),
@@ -7048,24 +6932,96 @@ function escape(s) {
 
 /***/ }),
 
-/***/ 444:
+/***/ 434:
 /***/ (function(module) {
 
-class Deprecation extends Error {
-  constructor (message) {
-    super(message)
+"use strict";
 
-    // Maintains proper stack trace (only available on V8)
-    /* istanbul ignore next */
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor)
-    }
-
-    this.name = 'Deprecation'
+module.exports = function generate_uniqueItems(it, $keyword, $ruleType) {
+  var out = ' ';
+  var $lvl = it.level;
+  var $dataLvl = it.dataLevel;
+  var $schema = it.schema[$keyword];
+  var $schemaPath = it.schemaPath + it.util.getProperty($keyword);
+  var $errSchemaPath = it.errSchemaPath + '/' + $keyword;
+  var $breakOnError = !it.opts.allErrors;
+  var $data = 'data' + ($dataLvl || '');
+  var $valid = 'valid' + $lvl;
+  var $isData = it.opts.$data && $schema && $schema.$data,
+    $schemaValue;
+  if ($isData) {
+    out += ' var schema' + ($lvl) + ' = ' + (it.util.getData($schema.$data, $dataLvl, it.dataPathArr)) + '; ';
+    $schemaValue = 'schema' + $lvl;
+  } else {
+    $schemaValue = $schema;
   }
+  if (($schema || $isData) && it.opts.uniqueItems !== false) {
+    if ($isData) {
+      out += ' var ' + ($valid) + '; if (' + ($schemaValue) + ' === false || ' + ($schemaValue) + ' === undefined) ' + ($valid) + ' = true; else if (typeof ' + ($schemaValue) + ' != \'boolean\') ' + ($valid) + ' = false; else { ';
+    }
+    out += ' var i = ' + ($data) + '.length , ' + ($valid) + ' = true , j; if (i > 1) { ';
+    var $itemType = it.schema.items && it.schema.items.type,
+      $typeIsArray = Array.isArray($itemType);
+    if (!$itemType || $itemType == 'object' || $itemType == 'array' || ($typeIsArray && ($itemType.indexOf('object') >= 0 || $itemType.indexOf('array') >= 0))) {
+      out += ' outer: for (;i--;) { for (j = i; j--;) { if (equal(' + ($data) + '[i], ' + ($data) + '[j])) { ' + ($valid) + ' = false; break outer; } } } ';
+    } else {
+      out += ' var itemIndices = {}, item; for (;i--;) { var item = ' + ($data) + '[i]; ';
+      var $method = 'checkDataType' + ($typeIsArray ? 's' : '');
+      out += ' if (' + (it.util[$method]($itemType, 'item', it.opts.strictNumbers, true)) + ') continue; ';
+      if ($typeIsArray) {
+        out += ' if (typeof item == \'string\') item = \'"\' + item; ';
+      }
+      out += ' if (typeof itemIndices[item] == \'number\') { ' + ($valid) + ' = false; j = itemIndices[item]; break; } itemIndices[item] = i; } ';
+    }
+    out += ' } ';
+    if ($isData) {
+      out += '  }  ';
+    }
+    out += ' if (!' + ($valid) + ') {   ';
+    var $$outStack = $$outStack || [];
+    $$outStack.push(out);
+    out = ''; /* istanbul ignore else */
+    if (it.createErrors !== false) {
+      out += ' { keyword: \'' + ('uniqueItems') + '\' , dataPath: (dataPath || \'\') + ' + (it.errorPath) + ' , schemaPath: ' + (it.util.toQuotedString($errSchemaPath)) + ' , params: { i: i, j: j } ';
+      if (it.opts.messages !== false) {
+        out += ' , message: \'should NOT have duplicate items (items ## \' + j + \' and \' + i + \' are identical)\' ';
+      }
+      if (it.opts.verbose) {
+        out += ' , schema:  ';
+        if ($isData) {
+          out += 'validate.schema' + ($schemaPath);
+        } else {
+          out += '' + ($schema);
+        }
+        out += '         , parentSchema: validate.schema' + (it.schemaPath) + ' , data: ' + ($data) + ' ';
+      }
+      out += ' } ';
+    } else {
+      out += ' {} ';
+    }
+    var __err = out;
+    out = $$outStack.pop();
+    if (!it.compositeRule && $breakOnError) {
+      /* istanbul ignore if */
+      if (it.async) {
+        out += ' throw new ValidationError([' + (__err) + ']); ';
+      } else {
+        out += ' validate.errors = [' + (__err) + ']; return false; ';
+      }
+    } else {
+      out += ' var err = ' + (__err) + ';  if (vErrors === null) vErrors = [err]; else vErrors.push(err); errors++; ';
+    }
+    out += ' } ';
+    if ($breakOnError) {
+      out += ' else { ';
+    }
+  } else {
+    if ($breakOnError) {
+      out += ' if (true) { ';
+    }
+  }
+  return out;
 }
-
-module.exports = module.exports.Deprecation = Deprecation
 
 
 /***/ }),
@@ -8862,6 +8818,224 @@ module.exports.argument = escapeArgument;
 
 /***/ }),
 
+/***/ 464:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+/*
+
+The MIT License (MIT)
+
+Original Library
+  - Copyright (c) Marak Squires
+
+Additional functionality
+ - Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+var colors = {};
+module.exports = colors;
+
+colors.themes = {};
+
+var util = __webpack_require__(669);
+var ansiStyles = colors.styles = __webpack_require__(117);
+var defineProps = Object.defineProperties;
+var newLineRegex = new RegExp(/[\r\n]+/g);
+
+colors.supportsColor = __webpack_require__(480).supportsColor;
+
+if (typeof colors.enabled === 'undefined') {
+  colors.enabled = colors.supportsColor() !== false;
+}
+
+colors.enable = function() {
+  colors.enabled = true;
+};
+
+colors.disable = function() {
+  colors.enabled = false;
+};
+
+colors.stripColors = colors.strip = function(str) {
+  return ('' + str).replace(/\x1B\[\d+m/g, '');
+};
+
+// eslint-disable-next-line no-unused-vars
+var stylize = colors.stylize = function stylize(str, style) {
+  if (!colors.enabled) {
+    return str+'';
+  }
+
+  var styleMap = ansiStyles[style];
+
+  // Stylize should work for non-ANSI styles, too
+  if(!styleMap && style in colors){
+    // Style maps like trap operate as functions on strings;
+    // they don't have properties like open or close.
+    return colors[style](str);
+  }
+
+  return styleMap.open + str + styleMap.close;
+};
+
+var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
+var escapeStringRegexp = function(str) {
+  if (typeof str !== 'string') {
+    throw new TypeError('Expected a string');
+  }
+  return str.replace(matchOperatorsRe, '\\$&');
+};
+
+function build(_styles) {
+  var builder = function builder() {
+    return applyStyle.apply(builder, arguments);
+  };
+  builder._styles = _styles;
+  // __proto__ is used because we must return a function, but there is
+  // no way to create a function with a different prototype.
+  builder.__proto__ = proto;
+  return builder;
+}
+
+var styles = (function() {
+  var ret = {};
+  ansiStyles.grey = ansiStyles.gray;
+  Object.keys(ansiStyles).forEach(function(key) {
+    ansiStyles[key].closeRe =
+      new RegExp(escapeStringRegexp(ansiStyles[key].close), 'g');
+    ret[key] = {
+      get: function() {
+        return build(this._styles.concat(key));
+      },
+    };
+  });
+  return ret;
+})();
+
+var proto = defineProps(function colors() {}, styles);
+
+function applyStyle() {
+  var args = Array.prototype.slice.call(arguments);
+
+  var str = args.map(function(arg) {
+    // Use weak equality check so we can colorize null/undefined in safe mode
+    if (arg != null && arg.constructor === String) {
+      return arg;
+    } else {
+      return util.inspect(arg);
+    }
+  }).join(' ');
+
+  if (!colors.enabled || !str) {
+    return str;
+  }
+
+  var newLinesPresent = str.indexOf('\n') != -1;
+
+  var nestedStyles = this._styles;
+
+  var i = nestedStyles.length;
+  while (i--) {
+    var code = ansiStyles[nestedStyles[i]];
+    str = code.open + str.replace(code.closeRe, code.open) + code.close;
+    if (newLinesPresent) {
+      str = str.replace(newLineRegex, function(match) {
+        return code.close + match + code.open;
+      });
+    }
+  }
+
+  return str;
+}
+
+colors.setTheme = function(theme) {
+  if (typeof theme === 'string') {
+    console.log('colors.setTheme now only accepts an object, not a string.  ' +
+      'If you are trying to set a theme from a file, it is now your (the ' +
+      'caller\'s) responsibility to require the file.  The old syntax ' +
+      'looked like colors.setTheme(__dirname + ' +
+      '\'/../themes/generic-logging.js\'); The new syntax looks like '+
+      'colors.setTheme(require(__dirname + ' +
+      '\'/../themes/generic-logging.js\'));');
+    return;
+  }
+  for (var style in theme) {
+    (function(style) {
+      colors[style] = function(str) {
+        if (typeof theme[style] === 'object') {
+          var out = str;
+          for (var i in theme[style]) {
+            out = colors[theme[style][i]](out);
+          }
+          return out;
+        }
+        return colors[theme[style]](str);
+      };
+    })(style);
+  }
+};
+
+function init() {
+  var ret = {};
+  Object.keys(styles).forEach(function(name) {
+    ret[name] = {
+      get: function() {
+        return build([name]);
+      },
+    };
+  });
+  return ret;
+}
+
+var sequencer = function sequencer(map, str) {
+  var exploded = str.split('');
+  exploded = exploded.map(map);
+  return exploded.join('');
+};
+
+// custom formatter methods
+colors.trap = __webpack_require__(16);
+colors.zalgo = __webpack_require__(640);
+
+// maps
+colors.maps = {};
+colors.maps.america = __webpack_require__(216)(colors);
+colors.maps.zebra = __webpack_require__(732)(colors);
+colors.maps.rainbow = __webpack_require__(56)(colors);
+colors.maps.random = __webpack_require__(961)(colors);
+
+for (var map in colors.maps) {
+  (function(map) {
+    colors[map] = function(str) {
+      return sequencer(colors.maps[map], str);
+    };
+  })(map);
+}
+
+defineProps(colors, init());
+
+
+/***/ }),
+
 /***/ 469:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -9236,68 +9410,160 @@ function toRequestOptions (options) {
 
 /***/ }),
 
-/***/ 478:
-/***/ (function(module) {
+/***/ 480:
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
+/*
+The MIT License (MIT)
+
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
 
 
-const isWin = process.platform === 'win32';
 
-function notFoundError(original, syscall) {
-    return Object.assign(new Error(`${syscall} ${original.command} ENOENT`), {
-        code: 'ENOENT',
-        errno: 'ENOENT',
-        syscall: `${syscall} ${original.command}`,
-        path: original.command,
-        spawnargs: original.args,
-    });
+var os = __webpack_require__(87);
+var hasFlag = __webpack_require__(115);
+
+var env = process.env;
+
+var forceColor = void 0;
+if (hasFlag('no-color') || hasFlag('no-colors') || hasFlag('color=false')) {
+  forceColor = false;
+} else if (hasFlag('color') || hasFlag('colors') || hasFlag('color=true')
+           || hasFlag('color=always')) {
+  forceColor = true;
+}
+if ('FORCE_COLOR' in env) {
+  forceColor = env.FORCE_COLOR.length === 0
+    || parseInt(env.FORCE_COLOR, 10) !== 0;
 }
 
-function hookChildProcess(cp, parsed) {
-    if (!isWin) {
-        return;
-    }
+function translateLevel(level) {
+  if (level === 0) {
+    return false;
+  }
 
-    const originalEmit = cp.emit;
-
-    cp.emit = function (name, arg1) {
-        // If emitting "exit" event and exit code is 1, we need to check if
-        // the command exists and emit an "error" instead
-        // See https://github.com/IndigoUnited/node-cross-spawn/issues/16
-        if (name === 'exit') {
-            const err = verifyENOENT(arg1, parsed, 'spawn');
-
-            if (err) {
-                return originalEmit.call(cp, 'error', err);
-            }
-        }
-
-        return originalEmit.apply(cp, arguments); // eslint-disable-line prefer-rest-params
-    };
+  return {
+    level: level,
+    hasBasic: true,
+    has256: level >= 2,
+    has16m: level >= 3,
+  };
 }
 
-function verifyENOENT(status, parsed) {
-    if (isWin && status === 1 && !parsed.file) {
-        return notFoundError(parsed.original, 'spawn');
+function supportsColor(stream) {
+  if (forceColor === false) {
+    return 0;
+  }
+
+  if (hasFlag('color=16m') || hasFlag('color=full')
+      || hasFlag('color=truecolor')) {
+    return 3;
+  }
+
+  if (hasFlag('color=256')) {
+    return 2;
+  }
+
+  if (stream && !stream.isTTY && forceColor !== true) {
+    return 0;
+  }
+
+  var min = forceColor ? 1 : 0;
+
+  if (process.platform === 'win32') {
+    // Node.js 7.5.0 is the first version of Node.js to include a patch to
+    // libuv that enables 256 color output on Windows. Anything earlier and it
+    // won't work. However, here we target Node.js 8 at minimum as it is an LTS
+    // release, and Node.js 7 is not. Windows 10 build 10586 is the first
+    // Windows release that supports 256 colors. Windows 10 build 14931 is the
+    // first release that supports 16m/TrueColor.
+    var osRelease = os.release().split('.');
+    if (Number(process.versions.node.split('.')[0]) >= 8
+        && Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
+      return Number(osRelease[2]) >= 14931 ? 3 : 2;
     }
 
-    return null;
+    return 1;
+  }
+
+  if ('CI' in env) {
+    if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(function(sign) {
+      return sign in env;
+    }) || env.CI_NAME === 'codeship') {
+      return 1;
+    }
+
+    return min;
+  }
+
+  if ('TEAMCITY_VERSION' in env) {
+    return (/^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0
+    );
+  }
+
+  if ('TERM_PROGRAM' in env) {
+    var version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
+
+    switch (env.TERM_PROGRAM) {
+      case 'iTerm.app':
+        return version >= 3 ? 3 : 2;
+      case 'Hyper':
+        return 3;
+      case 'Apple_Terminal':
+        return 2;
+      // No default
+    }
+  }
+
+  if (/-256(color)?$/i.test(env.TERM)) {
+    return 2;
+  }
+
+  if (/^screen|^xterm|^vt100|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
+    return 1;
+  }
+
+  if ('COLORTERM' in env) {
+    return 1;
+  }
+
+  if (env.TERM === 'dumb') {
+    return min;
+  }
+
+  return min;
 }
 
-function verifyENOENTSync(status, parsed) {
-    if (isWin && status === 1 && !parsed.file) {
-        return notFoundError(parsed.original, 'spawnSync');
-    }
-
-    return null;
+function getSupportLevel(stream) {
+  var level = supportsColor(stream);
+  return translateLevel(level);
 }
 
 module.exports = {
-    hookChildProcess,
-    verifyENOENT,
-    verifyENOENTSync,
-    notFoundError,
+  supportsColor: getSupportLevel,
+  stdout: getSupportLevel(process.stdout),
+  stderr: getSupportLevel(process.stderr),
 };
 
 
@@ -9358,6 +9624,23 @@ module.exports = resolveCommand;
 
 /***/ }),
 
+/***/ 492:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+
+var util = __webpack_require__(949);
+
+module.exports = SchemaObject;
+
+function SchemaObject(obj) {
+  util.copy(obj, this);
+}
+
+
+/***/ }),
+
 /***/ 500:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -9401,53 +9684,13 @@ function graphql (request, query, options) {
 
 /***/ }),
 
-/***/ 501:
-/***/ (function(module) {
-
-module.exports = register
-
-function register (state, name, options, method) {
-  if (arguments.length === 3) {
-    method = options
-    options = {}
-  }
-
-  if (typeof method !== 'function') {
-    throw new Error('method for before hook must be a function')
-  }
-
-  if (typeof options !== 'object') {
-    throw new Error('options for before hook must be an object')
-  }
-
-  if (Array.isArray(name)) {
-    return name.reverse().reduce(function (callback, name) {
-      return register.bind(null, state, name, options, callback)
-    }, method)()
-  }
-
-  return Promise.resolve()
-    .then(function () {
-      if (!state.registry[name]) {
-        return method(options)
-      }
-
-      return (state.registry[name]).reduce(function (method, registered) {
-        return registered.hook.bind(null, method, options)
-      }, method)()
-    })
-}
-
-
-/***/ }),
-
 /***/ 503:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const request = __webpack_require__(649)
 const getUserAgent = __webpack_require__(46)
 
-const version = __webpack_require__(799).version
+const version = __webpack_require__(314).version
 const userAgent = `octokit-graphql.js/${version} ${getUserAgent()}`
 
 const withDefaults = __webpack_require__(0)
@@ -9531,13 +9774,13 @@ function addHook (state, kind, name, hook) {
 
 var compileSchema = __webpack_require__(805)
   , resolve = __webpack_require__(867)
-  , Cache = __webpack_require__(363)
-  , SchemaObject = __webpack_require__(955)
+  , Cache = __webpack_require__(921)
+  , SchemaObject = __webpack_require__(492)
   , stableStringify = __webpack_require__(741)
-  , formats = __webpack_require__(881)
+  , formats = __webpack_require__(635)
   , rules = __webpack_require__(417)
   , $dataMetaSchema = __webpack_require__(628)
-  , util = __webpack_require__(855);
+  , util = __webpack_require__(949);
 
 module.exports = Ajv;
 
@@ -10047,7 +10290,7 @@ module.exports = {"$schema":"http://json-schema.org/draft-07/schema#","$id":"htt
 /***/ 523:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-var register = __webpack_require__(501)
+var register = __webpack_require__(363)
 var addHook = __webpack_require__(510)
 var removeHook = __webpack_require__(763)
 
@@ -10787,6 +11030,273 @@ module.exports = function (metaSchema, keywordsJsonPointers) {
 
   return metaSchema;
 };
+
+
+/***/ }),
+
+/***/ 635:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+
+var util = __webpack_require__(949);
+
+var DATE = /^(\d\d\d\d)-(\d\d)-(\d\d)$/;
+var DAYS = [0,31,28,31,30,31,30,31,31,30,31,30,31];
+var TIME = /^(\d\d):(\d\d):(\d\d)(\.\d+)?(z|[+-]\d\d(?::?\d\d)?)?$/i;
+var HOSTNAME = /^(?=.{1,253}\.?$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[-0-9a-z]{0,61}[0-9a-z])?)*\.?$/i;
+var URI = /^(?:[a-z][a-z0-9+\-.]*:)(?:\/?\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\[(?:(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?))|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)|[Vv][0-9a-f]+\.[a-z0-9\-._~!$&'()*+,;=:]+)\]|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)|(?:[a-z0-9\-._~!$&'()*+,;=]|%[0-9a-f]{2})*)(?::\d*)?(?:\/(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*|\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)(?:\?(?:[a-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?$/i;
+var URIREF = /^(?:[a-z][a-z0-9+\-.]*:)?(?:\/?\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\[(?:(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?))|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)|[Vv][0-9a-f]+\.[a-z0-9\-._~!$&'()*+,;=:]+)\]|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)|(?:[a-z0-9\-._~!$&'"()*+,;=]|%[0-9a-f]{2})*)(?::\d*)?(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*|\/(?:(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\?(?:[a-z0-9\-._~!$&'"()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\-._~!$&'"()*+,;=:@/?]|%[0-9a-f]{2})*)?$/i;
+// uri-template: https://tools.ietf.org/html/rfc6570
+var URITEMPLATE = /^(?:(?:[^\x00-\x20"'<>%\\^`{|}]|%[0-9a-f]{2})|\{[+#./;?&=,!@|]?(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?(?:,(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?)*\})*$/i;
+// For the source: https://gist.github.com/dperini/729294
+// For test cases: https://mathiasbynens.be/demo/url-regex
+// @todo Delete current URL in favour of the commented out URL rule when this issue is fixed https://github.com/eslint/eslint/issues/7983.
+// var URL = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)(?:\.(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
+var URL = /^(?:(?:http[s\u017F]?|ftp):\/\/)(?:(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+(?::(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*)?@)?(?:(?!10(?:\.[0-9]{1,3}){3})(?!127(?:\.[0-9]{1,3}){3})(?!169\.254(?:\.[0-9]{1,3}){2})(?!192\.168(?:\.[0-9]{1,3}){2})(?!172\.(?:1[6-9]|2[0-9]|3[01])(?:\.[0-9]{1,3}){2})(?:[1-9][0-9]?|1[0-9][0-9]|2[01][0-9]|22[0-3])(?:\.(?:1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])){2}(?:\.(?:[1-9][0-9]?|1[0-9][0-9]|2[0-4][0-9]|25[0-4]))|(?:(?:(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+-?)*(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+)(?:\.(?:(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+-?)*(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+)*(?:\.(?:(?:[KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]){2,})))(?::[0-9]{2,5})?(?:\/(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*)?$/i;
+var UUID = /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+var JSON_POINTER = /^(?:\/(?:[^~/]|~0|~1)*)*$/;
+var JSON_POINTER_URI_FRAGMENT = /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i;
+var RELATIVE_JSON_POINTER = /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/;
+
+
+module.exports = formats;
+
+function formats(mode) {
+  mode = mode == 'full' ? 'full' : 'fast';
+  return util.copy(formats[mode]);
+}
+
+
+formats.fast = {
+  // date: http://tools.ietf.org/html/rfc3339#section-5.6
+  date: /^\d\d\d\d-[0-1]\d-[0-3]\d$/,
+  // date-time: http://tools.ietf.org/html/rfc3339#section-5.6
+  time: /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
+  'date-time': /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
+  // uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
+  uri: /^(?:[a-z][a-z0-9+-.]*:)(?:\/?\/)?[^\s]*$/i,
+  'uri-reference': /^(?:(?:[a-z][a-z0-9+-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i,
+  'uri-template': URITEMPLATE,
+  url: URL,
+  // email (sources from jsen validator):
+  // http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address#answer-8829363
+  // http://www.w3.org/TR/html5/forms.html#valid-e-mail-address (search for 'willful violation')
+  email: /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i,
+  hostname: HOSTNAME,
+  // optimized https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
+  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
+  // optimized http://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
+  ipv6: /^\s*(?:(?:(?:[0-9a-f]{1,4}:){7}(?:[0-9a-f]{1,4}|:))|(?:(?:[0-9a-f]{1,4}:){6}(?::[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){5}(?:(?:(?::[0-9a-f]{1,4}){1,2})|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){4}(?:(?:(?::[0-9a-f]{1,4}){1,3})|(?:(?::[0-9a-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){3}(?:(?:(?::[0-9a-f]{1,4}){1,4})|(?:(?::[0-9a-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){2}(?:(?:(?::[0-9a-f]{1,4}){1,5})|(?:(?::[0-9a-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){1}(?:(?:(?::[0-9a-f]{1,4}){1,6})|(?:(?::[0-9a-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?::(?:(?:(?::[0-9a-f]{1,4}){1,7})|(?:(?::[0-9a-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(?:%.+)?\s*$/i,
+  regex: regex,
+  // uuid: http://tools.ietf.org/html/rfc4122
+  uuid: UUID,
+  // JSON-pointer: https://tools.ietf.org/html/rfc6901
+  // uri fragment: https://tools.ietf.org/html/rfc3986#appendix-A
+  'json-pointer': JSON_POINTER,
+  'json-pointer-uri-fragment': JSON_POINTER_URI_FRAGMENT,
+  // relative JSON-pointer: http://tools.ietf.org/html/draft-luff-relative-json-pointer-00
+  'relative-json-pointer': RELATIVE_JSON_POINTER
+};
+
+
+formats.full = {
+  date: date,
+  time: time,
+  'date-time': date_time,
+  uri: uri,
+  'uri-reference': URIREF,
+  'uri-template': URITEMPLATE,
+  url: URL,
+  email: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i,
+  hostname: HOSTNAME,
+  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
+  ipv6: /^\s*(?:(?:(?:[0-9a-f]{1,4}:){7}(?:[0-9a-f]{1,4}|:))|(?:(?:[0-9a-f]{1,4}:){6}(?::[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){5}(?:(?:(?::[0-9a-f]{1,4}){1,2})|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){4}(?:(?:(?::[0-9a-f]{1,4}){1,3})|(?:(?::[0-9a-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){3}(?:(?:(?::[0-9a-f]{1,4}){1,4})|(?:(?::[0-9a-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){2}(?:(?:(?::[0-9a-f]{1,4}){1,5})|(?:(?::[0-9a-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){1}(?:(?:(?::[0-9a-f]{1,4}){1,6})|(?:(?::[0-9a-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?::(?:(?:(?::[0-9a-f]{1,4}){1,7})|(?:(?::[0-9a-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(?:%.+)?\s*$/i,
+  regex: regex,
+  uuid: UUID,
+  'json-pointer': JSON_POINTER,
+  'json-pointer-uri-fragment': JSON_POINTER_URI_FRAGMENT,
+  'relative-json-pointer': RELATIVE_JSON_POINTER
+};
+
+
+function isLeapYear(year) {
+  // https://tools.ietf.org/html/rfc3339#appendix-C
+  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+}
+
+
+function date(str) {
+  // full-date from http://tools.ietf.org/html/rfc3339#section-5.6
+  var matches = str.match(DATE);
+  if (!matches) return false;
+
+  var year = +matches[1];
+  var month = +matches[2];
+  var day = +matches[3];
+
+  return month >= 1 && month <= 12 && day >= 1 &&
+          day <= (month == 2 && isLeapYear(year) ? 29 : DAYS[month]);
+}
+
+
+function time(str, full) {
+  var matches = str.match(TIME);
+  if (!matches) return false;
+
+  var hour = matches[1];
+  var minute = matches[2];
+  var second = matches[3];
+  var timeZone = matches[5];
+  return ((hour <= 23 && minute <= 59 && second <= 59) ||
+          (hour == 23 && minute == 59 && second == 60)) &&
+         (!full || timeZone);
+}
+
+
+var DATE_TIME_SEPARATOR = /t|\s/i;
+function date_time(str) {
+  // http://tools.ietf.org/html/rfc3339#section-5.6
+  var dateTime = str.split(DATE_TIME_SEPARATOR);
+  return dateTime.length == 2 && date(dateTime[0]) && time(dateTime[1], true);
+}
+
+
+var NOT_URI_FRAGMENT = /\/|:/;
+function uri(str) {
+  // http://jmrware.com/articles/2009/uri_regexp/URI_regex.html + optional protocol + required "."
+  return NOT_URI_FRAGMENT.test(str) && URI.test(str);
+}
+
+
+var Z_ANCHOR = /[^\\]\\Z/;
+function regex(str) {
+  if (Z_ANCHOR.test(str)) return false;
+  try {
+    new RegExp(str);
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+
+/***/ }),
+
+/***/ 640:
+/***/ (function(module) {
+
+// please no
+module.exports = function zalgo(text, options) {
+  text = text || '   he is here   ';
+  var soul = {
+    'up': [
+      '̍', '̎', '̄', '̅',
+      '̿', '̑', '̆', '̐',
+      '͒', '͗', '͑', '̇',
+      '̈', '̊', '͂', '̓',
+      '̈', '͊', '͋', '͌',
+      '̃', '̂', '̌', '͐',
+      '̀', '́', '̋', '̏',
+      '̒', '̓', '̔', '̽',
+      '̉', 'ͣ', 'ͤ', 'ͥ',
+      'ͦ', 'ͧ', 'ͨ', 'ͩ',
+      'ͪ', 'ͫ', 'ͬ', 'ͭ',
+      'ͮ', 'ͯ', '̾', '͛',
+      '͆', '̚',
+    ],
+    'down': [
+      '̖', '̗', '̘', '̙',
+      '̜', '̝', '̞', '̟',
+      '̠', '̤', '̥', '̦',
+      '̩', '̪', '̫', '̬',
+      '̭', '̮', '̯', '̰',
+      '̱', '̲', '̳', '̹',
+      '̺', '̻', '̼', 'ͅ',
+      '͇', '͈', '͉', '͍',
+      '͎', '͓', '͔', '͕',
+      '͖', '͙', '͚', '̣',
+    ],
+    'mid': [
+      '̕', '̛', '̀', '́',
+      '͘', '̡', '̢', '̧',
+      '̨', '̴', '̵', '̶',
+      '͜', '͝', '͞',
+      '͟', '͠', '͢', '̸',
+      '̷', '͡', ' ҉',
+    ],
+  };
+  var all = [].concat(soul.up, soul.down, soul.mid);
+
+  function randomNumber(range) {
+    var r = Math.floor(Math.random() * range);
+    return r;
+  }
+
+  function isChar(character) {
+    var bool = false;
+    all.filter(function(i) {
+      bool = (i === character);
+    });
+    return bool;
+  }
+
+
+  function heComes(text, options) {
+    var result = '';
+    var counts;
+    var l;
+    options = options || {};
+    options['up'] =
+      typeof options['up'] !== 'undefined' ? options['up'] : true;
+    options['mid'] =
+      typeof options['mid'] !== 'undefined' ? options['mid'] : true;
+    options['down'] =
+      typeof options['down'] !== 'undefined' ? options['down'] : true;
+    options['size'] =
+      typeof options['size'] !== 'undefined' ? options['size'] : 'maxi';
+    text = text.split('');
+    for (l in text) {
+      if (isChar(l)) {
+        continue;
+      }
+      result = result + text[l];
+      counts = {'up': 0, 'down': 0, 'mid': 0};
+      switch (options.size) {
+        case 'mini':
+          counts.up = randomNumber(8);
+          counts.mid = randomNumber(2);
+          counts.down = randomNumber(8);
+          break;
+        case 'maxi':
+          counts.up = randomNumber(16) + 3;
+          counts.mid = randomNumber(4) + 1;
+          counts.down = randomNumber(64) + 3;
+          break;
+        default:
+          counts.up = randomNumber(8) + 1;
+          counts.mid = randomNumber(6) / 2;
+          counts.down = randomNumber(8) + 1;
+          break;
+      }
+
+      var arr = ['up', 'mid', 'down'];
+      for (var d in arr) {
+        var index = arr[d];
+        for (var i = 0; i <= counts[index]; i++) {
+          if (options[index]) {
+            result = result + soul[index][randomNumber(soul[index].length)];
+          }
+        }
+      }
+    }
+    return result;
+  }
+  // don't summon him
+  return heComes(text, options);
+};
+
 
 
 /***/ }),
@@ -11844,6 +12354,18 @@ module.exports = {"_from":"@octokit/endpoint@^3.2.0","_id":"@octokit/endpoint@3.
 
 /***/ }),
 
+/***/ 732:
+/***/ (function(module) {
+
+module.exports = function(colors) {
+  return function(letter, i, exploded) {
+    return i % 2 === 0 ? letter : colors.inverse(letter);
+  };
+};
+
+
+/***/ }),
+
 /***/ 741:
 /***/ (function(module) {
 
@@ -12245,13 +12767,6 @@ module.exports = function isObject(val) {
 
 /***/ }),
 
-/***/ 799:
-/***/ (function(module) {
-
-module.exports = {"_from":"@octokit/graphql@2.0.1","_id":"@octokit/graphql@2.0.1","_inBundle":false,"_integrity":"sha512-IBNr05yBYqffy9L37Vv3/5xQMw+swmYFtMsuwqUA5vSEUr+s/POf8DOpCaTtS8f7e9k+cEuKLC5AbOoXkdZZOA==","_location":"/@octokit/graphql","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@octokit/graphql@2.0.1","name":"@octokit/graphql","escapedName":"@octokit%2fgraphql","scope":"@octokit","rawSpec":"2.0.1","saveSpec":null,"fetchSpec":"2.0.1"},"_requiredBy":["/","/@actions/github"],"_resolved":"https://registry.npmjs.org/@octokit/graphql/-/graphql-2.0.1.tgz","_shasum":"0e9d7f41d6ac3305f37767e723183bd0b77af7d2","_spec":"@octokit/graphql@2.0.1","_where":"/Users/prmph/Code/ci-checks-action","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/graphql.js/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/octokit-graphql.min.js.gz","maxSize":"5KB"}],"dependencies":{"@octokit/request":"^2.1.2"},"deprecated":false,"description":"GitHub GraphQL API client for browsers and Node","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","fetch-mock":"^7.2.0","mkdirp":"^0.5.1","mocha":"^5.2.0","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.12.1","simple-mock":"^0.8.0","standard":"^12.0.1","webpack":"^4.22.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"files":["lib"],"homepage":"https://github.com/octokit/graphql.js#readme","keywords":["octokit","github","api","graphql"],"license":"MIT","main":"index.js","name":"@octokit/graphql","publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/graphql.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=octokitGraphql --output=./dist/octokit-graphql.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=octokitGraphql --output-path=./dist --output-filename=octokit-graphql.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"2.0.1"};
-
-/***/ }),
-
 /***/ 805:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -12259,7 +12774,7 @@ module.exports = {"_from":"@octokit/graphql@2.0.1","_id":"@octokit/graphql@2.0.1
 
 
 var resolve = __webpack_require__(867)
-  , util = __webpack_require__(855)
+  , util = __webpack_require__(949)
   , errorClasses = __webpack_require__(844)
   , stableStringify = __webpack_require__(741);
 
@@ -12270,7 +12785,7 @@ var validateGenerator = __webpack_require__(967);
  */
 
 var ucs2length = util.ucs2length;
-var equal = __webpack_require__(832);
+var equal = __webpack_require__(930);
 
 // this error is thrown by async schemas to return validation errors via exception
 var ValidationError = errorClasses.Validation;
@@ -12956,53 +13471,21 @@ function sync (path, options) {
 /***/ 832:
 /***/ (function(module) {
 
-"use strict";
+class Deprecation extends Error {
+  constructor (message) {
+    super(message)
 
-
-// do not edit .js files directly - edit src/index.jst
-
-
-
-module.exports = function equal(a, b) {
-  if (a === b) return true;
-
-  if (a && b && typeof a == 'object' && typeof b == 'object') {
-    if (a.constructor !== b.constructor) return false;
-
-    var length, i, keys;
-    if (Array.isArray(a)) {
-      length = a.length;
-      if (length != b.length) return false;
-      for (i = length; i-- !== 0;)
-        if (!equal(a[i], b[i])) return false;
-      return true;
+    // Maintains proper stack trace (only available on V8)
+    /* istanbul ignore next */
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor)
     }
 
-
-
-    if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
-    if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
-    if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
-
-    keys = Object.keys(a);
-    length = keys.length;
-    if (length !== Object.keys(b).length) return false;
-
-    for (i = length; i-- !== 0;)
-      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
-
-    for (i = length; i-- !== 0;) {
-      var key = keys[i];
-
-      if (!equal(a[key], b[key])) return false;
-    }
-
-    return true;
+    this.name = 'Deprecation'
   }
+}
 
-  // true if both NaN, false otherwise
-  return a!==a && b!==b;
-};
+module.exports = module.exports.Deprecation = Deprecation
 
 
 /***/ }),
@@ -15434,245 +15917,12 @@ module.exports = get;
 /***/ 855:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-"use strict";
+module.exports = registerPlugin
 
+const factory = __webpack_require__(47)
 
-
-module.exports = {
-  copy: copy,
-  checkDataType: checkDataType,
-  checkDataTypes: checkDataTypes,
-  coerceToTypes: coerceToTypes,
-  toHash: toHash,
-  getProperty: getProperty,
-  escapeQuotes: escapeQuotes,
-  equal: __webpack_require__(832),
-  ucs2length: __webpack_require__(691),
-  varOccurences: varOccurences,
-  varReplace: varReplace,
-  schemaHasRules: schemaHasRules,
-  schemaHasRulesExcept: schemaHasRulesExcept,
-  schemaUnknownRules: schemaUnknownRules,
-  toQuotedString: toQuotedString,
-  getPathExpr: getPathExpr,
-  getPath: getPath,
-  getData: getData,
-  unescapeFragment: unescapeFragment,
-  unescapeJsonPointer: unescapeJsonPointer,
-  escapeFragment: escapeFragment,
-  escapeJsonPointer: escapeJsonPointer
-};
-
-
-function copy(o, to) {
-  to = to || {};
-  for (var key in o) to[key] = o[key];
-  return to;
-}
-
-
-function checkDataType(dataType, data, strictNumbers, negate) {
-  var EQUAL = negate ? ' !== ' : ' === '
-    , AND = negate ? ' || ' : ' && '
-    , OK = negate ? '!' : ''
-    , NOT = negate ? '' : '!';
-  switch (dataType) {
-    case 'null': return data + EQUAL + 'null';
-    case 'array': return OK + 'Array.isArray(' + data + ')';
-    case 'object': return '(' + OK + data + AND +
-                          'typeof ' + data + EQUAL + '"object"' + AND +
-                          NOT + 'Array.isArray(' + data + '))';
-    case 'integer': return '(typeof ' + data + EQUAL + '"number"' + AND +
-                           NOT + '(' + data + ' % 1)' +
-                           AND + data + EQUAL + data +
-                           (strictNumbers ? (AND + OK + 'isFinite(' + data + ')') : '') + ')';
-    case 'number': return '(typeof ' + data + EQUAL + '"' + dataType + '"' +
-                          (strictNumbers ? (AND + OK + 'isFinite(' + data + ')') : '') + ')';
-    default: return 'typeof ' + data + EQUAL + '"' + dataType + '"';
-  }
-}
-
-
-function checkDataTypes(dataTypes, data, strictNumbers) {
-  switch (dataTypes.length) {
-    case 1: return checkDataType(dataTypes[0], data, strictNumbers, true);
-    default:
-      var code = '';
-      var types = toHash(dataTypes);
-      if (types.array && types.object) {
-        code = types.null ? '(': '(!' + data + ' || ';
-        code += 'typeof ' + data + ' !== "object")';
-        delete types.null;
-        delete types.array;
-        delete types.object;
-      }
-      if (types.number) delete types.integer;
-      for (var t in types)
-        code += (code ? ' && ' : '' ) + checkDataType(t, data, strictNumbers, true);
-
-      return code;
-  }
-}
-
-
-var COERCE_TO_TYPES = toHash([ 'string', 'number', 'integer', 'boolean', 'null' ]);
-function coerceToTypes(optionCoerceTypes, dataTypes) {
-  if (Array.isArray(dataTypes)) {
-    var types = [];
-    for (var i=0; i<dataTypes.length; i++) {
-      var t = dataTypes[i];
-      if (COERCE_TO_TYPES[t]) types[types.length] = t;
-      else if (optionCoerceTypes === 'array' && t === 'array') types[types.length] = t;
-    }
-    if (types.length) return types;
-  } else if (COERCE_TO_TYPES[dataTypes]) {
-    return [dataTypes];
-  } else if (optionCoerceTypes === 'array' && dataTypes === 'array') {
-    return ['array'];
-  }
-}
-
-
-function toHash(arr) {
-  var hash = {};
-  for (var i=0; i<arr.length; i++) hash[arr[i]] = true;
-  return hash;
-}
-
-
-var IDENTIFIER = /^[a-z$_][a-z$_0-9]*$/i;
-var SINGLE_QUOTE = /'|\\/g;
-function getProperty(key) {
-  return typeof key == 'number'
-          ? '[' + key + ']'
-          : IDENTIFIER.test(key)
-            ? '.' + key
-            : "['" + escapeQuotes(key) + "']";
-}
-
-
-function escapeQuotes(str) {
-  return str.replace(SINGLE_QUOTE, '\\$&')
-            .replace(/\n/g, '\\n')
-            .replace(/\r/g, '\\r')
-            .replace(/\f/g, '\\f')
-            .replace(/\t/g, '\\t');
-}
-
-
-function varOccurences(str, dataVar) {
-  dataVar += '[^0-9]';
-  var matches = str.match(new RegExp(dataVar, 'g'));
-  return matches ? matches.length : 0;
-}
-
-
-function varReplace(str, dataVar, expr) {
-  dataVar += '([^0-9])';
-  expr = expr.replace(/\$/g, '$$$$');
-  return str.replace(new RegExp(dataVar, 'g'), expr + '$1');
-}
-
-
-function schemaHasRules(schema, rules) {
-  if (typeof schema == 'boolean') return !schema;
-  for (var key in schema) if (rules[key]) return true;
-}
-
-
-function schemaHasRulesExcept(schema, rules, exceptKeyword) {
-  if (typeof schema == 'boolean') return !schema && exceptKeyword != 'not';
-  for (var key in schema) if (key != exceptKeyword && rules[key]) return true;
-}
-
-
-function schemaUnknownRules(schema, rules) {
-  if (typeof schema == 'boolean') return;
-  for (var key in schema) if (!rules[key]) return key;
-}
-
-
-function toQuotedString(str) {
-  return '\'' + escapeQuotes(str) + '\'';
-}
-
-
-function getPathExpr(currentPath, expr, jsonPointers, isNumber) {
-  var path = jsonPointers // false by default
-              ? '\'/\' + ' + expr + (isNumber ? '' : '.replace(/~/g, \'~0\').replace(/\\//g, \'~1\')')
-              : (isNumber ? '\'[\' + ' + expr + ' + \']\'' : '\'[\\\'\' + ' + expr + ' + \'\\\']\'');
-  return joinPaths(currentPath, path);
-}
-
-
-function getPath(currentPath, prop, jsonPointers) {
-  var path = jsonPointers // false by default
-              ? toQuotedString('/' + escapeJsonPointer(prop))
-              : toQuotedString(getProperty(prop));
-  return joinPaths(currentPath, path);
-}
-
-
-var JSON_POINTER = /^\/(?:[^~]|~0|~1)*$/;
-var RELATIVE_JSON_POINTER = /^([0-9]+)(#|\/(?:[^~]|~0|~1)*)?$/;
-function getData($data, lvl, paths) {
-  var up, jsonPointer, data, matches;
-  if ($data === '') return 'rootData';
-  if ($data[0] == '/') {
-    if (!JSON_POINTER.test($data)) throw new Error('Invalid JSON-pointer: ' + $data);
-    jsonPointer = $data;
-    data = 'rootData';
-  } else {
-    matches = $data.match(RELATIVE_JSON_POINTER);
-    if (!matches) throw new Error('Invalid JSON-pointer: ' + $data);
-    up = +matches[1];
-    jsonPointer = matches[2];
-    if (jsonPointer == '#') {
-      if (up >= lvl) throw new Error('Cannot access property/index ' + up + ' levels up, current level is ' + lvl);
-      return paths[lvl - up];
-    }
-
-    if (up > lvl) throw new Error('Cannot access data ' + up + ' levels up, current level is ' + lvl);
-    data = 'data' + ((lvl - up) || '');
-    if (!jsonPointer) return data;
-  }
-
-  var expr = data;
-  var segments = jsonPointer.split('/');
-  for (var i=0; i<segments.length; i++) {
-    var segment = segments[i];
-    if (segment) {
-      data += getProperty(unescapeJsonPointer(segment));
-      expr += ' && ' + data;
-    }
-  }
-  return expr;
-}
-
-
-function joinPaths (a, b) {
-  if (a == '""') return b;
-  return (a + ' + ' + b).replace(/([^\\])' \+ '/g, '$1');
-}
-
-
-function unescapeFragment(str) {
-  return unescapeJsonPointer(decodeURIComponent(str));
-}
-
-
-function escapeFragment(str) {
-  return encodeURIComponent(escapeJsonPointer(str));
-}
-
-
-function escapeJsonPointer(str) {
-  return str.replace(/~/g, '~0').replace(/\//g, '~1');
-}
-
-
-function unescapeJsonPointer(str) {
-  return str.replace(/~1/g, '/').replace(/~0/g, '~');
+function registerPlugin (plugins, pluginFunction) {
+  return factory(plugins.includes(pluginFunction) ? plugins : plugins.concat(pluginFunction))
 }
 
 
@@ -16076,9 +16326,9 @@ module.exports = function (str) {
 
 
 var URI = __webpack_require__(853)
-  , equal = __webpack_require__(832)
-  , util = __webpack_require__(855)
-  , SchemaObject = __webpack_require__(955)
+  , equal = __webpack_require__(930)
+  , util = __webpack_require__(949)
+  , SchemaObject = __webpack_require__(492)
   , traverse = __webpack_require__(340);
 
 module.exports = resolve;
@@ -16374,151 +16624,68 @@ function requestWithHook (hook, endpoint, route, options) {
 /***/ }),
 
 /***/ 881:
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(module) {
 
 "use strict";
 
 
-var util = __webpack_require__(855);
+const isWin = process.platform === 'win32';
 
-var DATE = /^(\d\d\d\d)-(\d\d)-(\d\d)$/;
-var DAYS = [0,31,28,31,30,31,30,31,31,30,31,30,31];
-var TIME = /^(\d\d):(\d\d):(\d\d)(\.\d+)?(z|[+-]\d\d(?::?\d\d)?)?$/i;
-var HOSTNAME = /^(?=.{1,253}\.?$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[-0-9a-z]{0,61}[0-9a-z])?)*\.?$/i;
-var URI = /^(?:[a-z][a-z0-9+\-.]*:)(?:\/?\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\[(?:(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?))|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)|[Vv][0-9a-f]+\.[a-z0-9\-._~!$&'()*+,;=:]+)\]|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)|(?:[a-z0-9\-._~!$&'()*+,;=]|%[0-9a-f]{2})*)(?::\d*)?(?:\/(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*|\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)(?:\?(?:[a-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?$/i;
-var URIREF = /^(?:[a-z][a-z0-9+\-.]*:)?(?:\/?\/(?:(?:[a-z0-9\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\[(?:(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?))|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)|[Vv][0-9a-f]+\.[a-z0-9\-._~!$&'()*+,;=:]+)\]|(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)|(?:[a-z0-9\-._~!$&'"()*+,;=]|%[0-9a-f]{2})*)(?::\d*)?(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*|\/(?:(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})+(?:\/(?:[a-z0-9\-._~!$&'"()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\?(?:[a-z0-9\-._~!$&'"()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\-._~!$&'"()*+,;=:@/?]|%[0-9a-f]{2})*)?$/i;
-// uri-template: https://tools.ietf.org/html/rfc6570
-var URITEMPLATE = /^(?:(?:[^\x00-\x20"'<>%\\^`{|}]|%[0-9a-f]{2})|\{[+#./;?&=,!@|]?(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?(?:,(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\*)?)*\})*$/i;
-// For the source: https://gist.github.com/dperini/729294
-// For test cases: https://mathiasbynens.be/demo/url-regex
-// @todo Delete current URL in favour of the commented out URL rule when this issue is fixed https://github.com/eslint/eslint/issues/7983.
-// var URL = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)(?:\.(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
-var URL = /^(?:(?:http[s\u017F]?|ftp):\/\/)(?:(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+(?::(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*)?@)?(?:(?!10(?:\.[0-9]{1,3}){3})(?!127(?:\.[0-9]{1,3}){3})(?!169\.254(?:\.[0-9]{1,3}){2})(?!192\.168(?:\.[0-9]{1,3}){2})(?!172\.(?:1[6-9]|2[0-9]|3[01])(?:\.[0-9]{1,3}){2})(?:[1-9][0-9]?|1[0-9][0-9]|2[01][0-9]|22[0-3])(?:\.(?:1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])){2}(?:\.(?:[1-9][0-9]?|1[0-9][0-9]|2[0-4][0-9]|25[0-4]))|(?:(?:(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+-?)*(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+)(?:\.(?:(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+-?)*(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+)*(?:\.(?:(?:[KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]){2,})))(?::[0-9]{2,5})?(?:\/(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*)?$/i;
-var UUID = /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
-var JSON_POINTER = /^(?:\/(?:[^~/]|~0|~1)*)*$/;
-var JSON_POINTER_URI_FRAGMENT = /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i;
-var RELATIVE_JSON_POINTER = /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/;
-
-
-module.exports = formats;
-
-function formats(mode) {
-  mode = mode == 'full' ? 'full' : 'fast';
-  return util.copy(formats[mode]);
+function notFoundError(original, syscall) {
+    return Object.assign(new Error(`${syscall} ${original.command} ENOENT`), {
+        code: 'ENOENT',
+        errno: 'ENOENT',
+        syscall: `${syscall} ${original.command}`,
+        path: original.command,
+        spawnargs: original.args,
+    });
 }
 
+function hookChildProcess(cp, parsed) {
+    if (!isWin) {
+        return;
+    }
 
-formats.fast = {
-  // date: http://tools.ietf.org/html/rfc3339#section-5.6
-  date: /^\d\d\d\d-[0-1]\d-[0-3]\d$/,
-  // date-time: http://tools.ietf.org/html/rfc3339#section-5.6
-  time: /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
-  'date-time': /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
-  // uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
-  uri: /^(?:[a-z][a-z0-9+-.]*:)(?:\/?\/)?[^\s]*$/i,
-  'uri-reference': /^(?:(?:[a-z][a-z0-9+-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i,
-  'uri-template': URITEMPLATE,
-  url: URL,
-  // email (sources from jsen validator):
-  // http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address#answer-8829363
-  // http://www.w3.org/TR/html5/forms.html#valid-e-mail-address (search for 'willful violation')
-  email: /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i,
-  hostname: HOSTNAME,
-  // optimized https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
-  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
-  // optimized http://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
-  ipv6: /^\s*(?:(?:(?:[0-9a-f]{1,4}:){7}(?:[0-9a-f]{1,4}|:))|(?:(?:[0-9a-f]{1,4}:){6}(?::[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){5}(?:(?:(?::[0-9a-f]{1,4}){1,2})|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){4}(?:(?:(?::[0-9a-f]{1,4}){1,3})|(?:(?::[0-9a-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){3}(?:(?:(?::[0-9a-f]{1,4}){1,4})|(?:(?::[0-9a-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){2}(?:(?:(?::[0-9a-f]{1,4}){1,5})|(?:(?::[0-9a-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){1}(?:(?:(?::[0-9a-f]{1,4}){1,6})|(?:(?::[0-9a-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?::(?:(?:(?::[0-9a-f]{1,4}){1,7})|(?:(?::[0-9a-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(?:%.+)?\s*$/i,
-  regex: regex,
-  // uuid: http://tools.ietf.org/html/rfc4122
-  uuid: UUID,
-  // JSON-pointer: https://tools.ietf.org/html/rfc6901
-  // uri fragment: https://tools.ietf.org/html/rfc3986#appendix-A
-  'json-pointer': JSON_POINTER,
-  'json-pointer-uri-fragment': JSON_POINTER_URI_FRAGMENT,
-  // relative JSON-pointer: http://tools.ietf.org/html/draft-luff-relative-json-pointer-00
-  'relative-json-pointer': RELATIVE_JSON_POINTER
+    const originalEmit = cp.emit;
+
+    cp.emit = function (name, arg1) {
+        // If emitting "exit" event and exit code is 1, we need to check if
+        // the command exists and emit an "error" instead
+        // See https://github.com/IndigoUnited/node-cross-spawn/issues/16
+        if (name === 'exit') {
+            const err = verifyENOENT(arg1, parsed, 'spawn');
+
+            if (err) {
+                return originalEmit.call(cp, 'error', err);
+            }
+        }
+
+        return originalEmit.apply(cp, arguments); // eslint-disable-line prefer-rest-params
+    };
+}
+
+function verifyENOENT(status, parsed) {
+    if (isWin && status === 1 && !parsed.file) {
+        return notFoundError(parsed.original, 'spawn');
+    }
+
+    return null;
+}
+
+function verifyENOENTSync(status, parsed) {
+    if (isWin && status === 1 && !parsed.file) {
+        return notFoundError(parsed.original, 'spawnSync');
+    }
+
+    return null;
+}
+
+module.exports = {
+    hookChildProcess,
+    verifyENOENT,
+    verifyENOENTSync,
+    notFoundError,
 };
-
-
-formats.full = {
-  date: date,
-  time: time,
-  'date-time': date_time,
-  uri: uri,
-  'uri-reference': URIREF,
-  'uri-template': URITEMPLATE,
-  url: URL,
-  email: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i,
-  hostname: HOSTNAME,
-  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
-  ipv6: /^\s*(?:(?:(?:[0-9a-f]{1,4}:){7}(?:[0-9a-f]{1,4}|:))|(?:(?:[0-9a-f]{1,4}:){6}(?::[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){5}(?:(?:(?::[0-9a-f]{1,4}){1,2})|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){4}(?:(?:(?::[0-9a-f]{1,4}){1,3})|(?:(?::[0-9a-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){3}(?:(?:(?::[0-9a-f]{1,4}){1,4})|(?:(?::[0-9a-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){2}(?:(?:(?::[0-9a-f]{1,4}){1,5})|(?:(?::[0-9a-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){1}(?:(?:(?::[0-9a-f]{1,4}){1,6})|(?:(?::[0-9a-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?::(?:(?:(?::[0-9a-f]{1,4}){1,7})|(?:(?::[0-9a-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(?:%.+)?\s*$/i,
-  regex: regex,
-  uuid: UUID,
-  'json-pointer': JSON_POINTER,
-  'json-pointer-uri-fragment': JSON_POINTER_URI_FRAGMENT,
-  'relative-json-pointer': RELATIVE_JSON_POINTER
-};
-
-
-function isLeapYear(year) {
-  // https://tools.ietf.org/html/rfc3339#appendix-C
-  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-}
-
-
-function date(str) {
-  // full-date from http://tools.ietf.org/html/rfc3339#section-5.6
-  var matches = str.match(DATE);
-  if (!matches) return false;
-
-  var year = +matches[1];
-  var month = +matches[2];
-  var day = +matches[3];
-
-  return month >= 1 && month <= 12 && day >= 1 &&
-          day <= (month == 2 && isLeapYear(year) ? 29 : DAYS[month]);
-}
-
-
-function time(str, full) {
-  var matches = str.match(TIME);
-  if (!matches) return false;
-
-  var hour = matches[1];
-  var minute = matches[2];
-  var second = matches[3];
-  var timeZone = matches[5];
-  return ((hour <= 23 && minute <= 59 && second <= 59) ||
-          (hour == 23 && minute == 59 && second == 60)) &&
-         (!full || timeZone);
-}
-
-
-var DATE_TIME_SEPARATOR = /t|\s/i;
-function date_time(str) {
-  // http://tools.ietf.org/html/rfc3339#section-5.6
-  var dateTime = str.split(DATE_TIME_SEPARATOR);
-  return dateTime.length == 2 && date(dateTime[0]) && time(dateTime[1], true);
-}
-
-
-var NOT_URI_FRAGMENT = /\/|:/;
-function uri(str) {
-  // http://jmrware.com/articles/2009/uri_regexp/URI_regex.html + optional protocol + required "."
-  return NOT_URI_FRAGMENT.test(str) && URI.test(str);
-}
-
-
-var Z_ANCHOR = /[^\\]\\Z/;
-function regex(str) {
-  if (Z_ANCHOR.test(str)) return false;
-  try {
-    new RegExp(str);
-    return true;
-  } catch(e) {
-    return false;
-  }
-}
 
 
 /***/ }),
@@ -17621,92 +17788,44 @@ function compileAsync(schema, meta, callback) {
 /***/ 899:
 /***/ (function(module) {
 
-"use strict";
+module.exports = registerEndpoints
 
-module.exports = function generate_uniqueItems(it, $keyword, $ruleType) {
-  var out = ' ';
-  var $lvl = it.level;
-  var $dataLvl = it.dataLevel;
-  var $schema = it.schema[$keyword];
-  var $schemaPath = it.schemaPath + it.util.getProperty($keyword);
-  var $errSchemaPath = it.errSchemaPath + '/' + $keyword;
-  var $breakOnError = !it.opts.allErrors;
-  var $data = 'data' + ($dataLvl || '');
-  var $valid = 'valid' + $lvl;
-  var $isData = it.opts.$data && $schema && $schema.$data,
-    $schemaValue;
-  if ($isData) {
-    out += ' var schema' + ($lvl) + ' = ' + (it.util.getData($schema.$data, $dataLvl, it.dataPathArr)) + '; ';
-    $schemaValue = 'schema' + $lvl;
-  } else {
-    $schemaValue = $schema;
-  }
-  if (($schema || $isData) && it.opts.uniqueItems !== false) {
-    if ($isData) {
-      out += ' var ' + ($valid) + '; if (' + ($schemaValue) + ' === false || ' + ($schemaValue) + ' === undefined) ' + ($valid) + ' = true; else if (typeof ' + ($schemaValue) + ' != \'boolean\') ' + ($valid) + ' = false; else { ';
+function registerEndpoints (octokit, routes) {
+  Object.keys(routes).forEach(namespaceName => {
+    if (!octokit[namespaceName]) {
+      octokit[namespaceName] = {}
     }
-    out += ' var i = ' + ($data) + '.length , ' + ($valid) + ' = true , j; if (i > 1) { ';
-    var $itemType = it.schema.items && it.schema.items.type,
-      $typeIsArray = Array.isArray($itemType);
-    if (!$itemType || $itemType == 'object' || $itemType == 'array' || ($typeIsArray && ($itemType.indexOf('object') >= 0 || $itemType.indexOf('array') >= 0))) {
-      out += ' outer: for (;i--;) { for (j = i; j--;) { if (equal(' + ($data) + '[i], ' + ($data) + '[j])) { ' + ($valid) + ' = false; break outer; } } } ';
-    } else {
-      out += ' var itemIndices = {}, item; for (;i--;) { var item = ' + ($data) + '[i]; ';
-      var $method = 'checkDataType' + ($typeIsArray ? 's' : '');
-      out += ' if (' + (it.util[$method]($itemType, 'item', it.opts.strictNumbers, true)) + ') continue; ';
-      if ($typeIsArray) {
-        out += ' if (typeof item == \'string\') item = \'"\' + item; ';
-      }
-      out += ' if (typeof itemIndices[item] == \'number\') { ' + ($valid) + ' = false; j = itemIndices[item]; break; } itemIndices[item] = i; } ';
-    }
-    out += ' } ';
-    if ($isData) {
-      out += '  }  ';
-    }
-    out += ' if (!' + ($valid) + ') {   ';
-    var $$outStack = $$outStack || [];
-    $$outStack.push(out);
-    out = ''; /* istanbul ignore else */
-    if (it.createErrors !== false) {
-      out += ' { keyword: \'' + ('uniqueItems') + '\' , dataPath: (dataPath || \'\') + ' + (it.errorPath) + ' , schemaPath: ' + (it.util.toQuotedString($errSchemaPath)) + ' , params: { i: i, j: j } ';
-      if (it.opts.messages !== false) {
-        out += ' , message: \'should NOT have duplicate items (items ## \' + j + \' and \' + i + \' are identical)\' ';
-      }
-      if (it.opts.verbose) {
-        out += ' , schema:  ';
-        if ($isData) {
-          out += 'validate.schema' + ($schemaPath);
-        } else {
-          out += '' + ($schema);
+
+    Object.keys(routes[namespaceName]).forEach(apiName => {
+      let apiOptions = routes[namespaceName][apiName]
+
+      const endpointDefaults = ['method', 'url', 'headers'].reduce((map, key) => {
+        if (typeof apiOptions[key] !== 'undefined') {
+          map[key] = apiOptions[key]
         }
-        out += '         , parentSchema: validate.schema' + (it.schemaPath) + ' , data: ' + ($data) + ' ';
+
+        return map
+      }, {})
+
+      endpointDefaults.request = {
+        validate: apiOptions.params
       }
-      out += ' } ';
-    } else {
-      out += ' {} ';
-    }
-    var __err = out;
-    out = $$outStack.pop();
-    if (!it.compositeRule && $breakOnError) {
-      /* istanbul ignore if */
-      if (it.async) {
-        out += ' throw new ValidationError([' + (__err) + ']); ';
-      } else {
-        out += ' validate.errors = [' + (__err) + ']; return false; ';
+
+      const request = octokit.request.defaults(endpointDefaults)
+
+      if (apiOptions.deprecated) {
+        octokit[namespaceName][apiName] = function () {
+          octokit.log.warn(apiOptions.deprecated)
+          octokit[namespaceName][apiName] = request
+          return request.apply(null, arguments)
+        }
+
+        return
       }
-    } else {
-      out += ' var err = ' + (__err) + ';  if (vErrors === null) vErrors = [err]; else vErrors.push(err); errors++; ';
-    }
-    out += ' } ';
-    if ($breakOnError) {
-      out += ' else { ';
-    }
-  } else {
-    if ($breakOnError) {
-      out += ' if (true) { ';
-    }
-  }
-  return out;
+
+      octokit[namespaceName][apiName] = request
+    })
+  })
 }
 
 
@@ -17812,6 +17931,40 @@ module.exports = withDefaults(endpoint, {
 
 /***/ }),
 
+/***/ 921:
+/***/ (function(module) {
+
+"use strict";
+
+
+
+var Cache = module.exports = function Cache() {
+  this._cache = {};
+};
+
+
+Cache.prototype.put = function Cache_put(key, value) {
+  this._cache[key] = value;
+};
+
+
+Cache.prototype.get = function Cache_get(key) {
+  return this._cache[key];
+};
+
+
+Cache.prototype.del = function Cache_del(key) {
+  delete this._cache[key];
+};
+
+
+Cache.prototype.clear = function Cache_clear() {
+  this._cache = {};
+};
+
+
+/***/ }),
+
 /***/ 929:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -17824,6 +17977,60 @@ function hasNextPage (link) {
   deprecate(`octokit.hasNextPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
   return getPageLinks(link).next
 }
+
+
+/***/ }),
+
+/***/ 930:
+/***/ (function(module) {
+
+"use strict";
+
+
+// do not edit .js files directly - edit src/index.jst
+
+
+
+module.exports = function equal(a, b) {
+  if (a === b) return true;
+
+  if (a && b && typeof a == 'object' && typeof b == 'object') {
+    if (a.constructor !== b.constructor) return false;
+
+    var length, i, keys;
+    if (Array.isArray(a)) {
+      length = a.length;
+      if (length != b.length) return false;
+      for (i = length; i-- !== 0;)
+        if (!equal(a[i], b[i])) return false;
+      return true;
+    }
+
+
+
+    if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
+    if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
+    if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
+
+    keys = Object.keys(a);
+    length = keys.length;
+    if (length !== Object.keys(b).length) return false;
+
+    for (i = length; i-- !== 0;)
+      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+
+    for (i = length; i-- !== 0;) {
+      var key = keys[i];
+
+      if (!equal(a[key], b[key])) return false;
+    }
+
+    return true;
+  }
+
+  // true if both NaN, false otherwise
+  return a!==a && b!==b;
+};
 
 
 /***/ }),
@@ -17844,6 +18051,253 @@ module.exports = function(fn) {
 	try { return fn() } catch (e) {}
 
 }
+
+/***/ }),
+
+/***/ 949:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+
+
+module.exports = {
+  copy: copy,
+  checkDataType: checkDataType,
+  checkDataTypes: checkDataTypes,
+  coerceToTypes: coerceToTypes,
+  toHash: toHash,
+  getProperty: getProperty,
+  escapeQuotes: escapeQuotes,
+  equal: __webpack_require__(930),
+  ucs2length: __webpack_require__(691),
+  varOccurences: varOccurences,
+  varReplace: varReplace,
+  schemaHasRules: schemaHasRules,
+  schemaHasRulesExcept: schemaHasRulesExcept,
+  schemaUnknownRules: schemaUnknownRules,
+  toQuotedString: toQuotedString,
+  getPathExpr: getPathExpr,
+  getPath: getPath,
+  getData: getData,
+  unescapeFragment: unescapeFragment,
+  unescapeJsonPointer: unescapeJsonPointer,
+  escapeFragment: escapeFragment,
+  escapeJsonPointer: escapeJsonPointer
+};
+
+
+function copy(o, to) {
+  to = to || {};
+  for (var key in o) to[key] = o[key];
+  return to;
+}
+
+
+function checkDataType(dataType, data, strictNumbers, negate) {
+  var EQUAL = negate ? ' !== ' : ' === '
+    , AND = negate ? ' || ' : ' && '
+    , OK = negate ? '!' : ''
+    , NOT = negate ? '' : '!';
+  switch (dataType) {
+    case 'null': return data + EQUAL + 'null';
+    case 'array': return OK + 'Array.isArray(' + data + ')';
+    case 'object': return '(' + OK + data + AND +
+                          'typeof ' + data + EQUAL + '"object"' + AND +
+                          NOT + 'Array.isArray(' + data + '))';
+    case 'integer': return '(typeof ' + data + EQUAL + '"number"' + AND +
+                           NOT + '(' + data + ' % 1)' +
+                           AND + data + EQUAL + data +
+                           (strictNumbers ? (AND + OK + 'isFinite(' + data + ')') : '') + ')';
+    case 'number': return '(typeof ' + data + EQUAL + '"' + dataType + '"' +
+                          (strictNumbers ? (AND + OK + 'isFinite(' + data + ')') : '') + ')';
+    default: return 'typeof ' + data + EQUAL + '"' + dataType + '"';
+  }
+}
+
+
+function checkDataTypes(dataTypes, data, strictNumbers) {
+  switch (dataTypes.length) {
+    case 1: return checkDataType(dataTypes[0], data, strictNumbers, true);
+    default:
+      var code = '';
+      var types = toHash(dataTypes);
+      if (types.array && types.object) {
+        code = types.null ? '(': '(!' + data + ' || ';
+        code += 'typeof ' + data + ' !== "object")';
+        delete types.null;
+        delete types.array;
+        delete types.object;
+      }
+      if (types.number) delete types.integer;
+      for (var t in types)
+        code += (code ? ' && ' : '' ) + checkDataType(t, data, strictNumbers, true);
+
+      return code;
+  }
+}
+
+
+var COERCE_TO_TYPES = toHash([ 'string', 'number', 'integer', 'boolean', 'null' ]);
+function coerceToTypes(optionCoerceTypes, dataTypes) {
+  if (Array.isArray(dataTypes)) {
+    var types = [];
+    for (var i=0; i<dataTypes.length; i++) {
+      var t = dataTypes[i];
+      if (COERCE_TO_TYPES[t]) types[types.length] = t;
+      else if (optionCoerceTypes === 'array' && t === 'array') types[types.length] = t;
+    }
+    if (types.length) return types;
+  } else if (COERCE_TO_TYPES[dataTypes]) {
+    return [dataTypes];
+  } else if (optionCoerceTypes === 'array' && dataTypes === 'array') {
+    return ['array'];
+  }
+}
+
+
+function toHash(arr) {
+  var hash = {};
+  for (var i=0; i<arr.length; i++) hash[arr[i]] = true;
+  return hash;
+}
+
+
+var IDENTIFIER = /^[a-z$_][a-z$_0-9]*$/i;
+var SINGLE_QUOTE = /'|\\/g;
+function getProperty(key) {
+  return typeof key == 'number'
+          ? '[' + key + ']'
+          : IDENTIFIER.test(key)
+            ? '.' + key
+            : "['" + escapeQuotes(key) + "']";
+}
+
+
+function escapeQuotes(str) {
+  return str.replace(SINGLE_QUOTE, '\\$&')
+            .replace(/\n/g, '\\n')
+            .replace(/\r/g, '\\r')
+            .replace(/\f/g, '\\f')
+            .replace(/\t/g, '\\t');
+}
+
+
+function varOccurences(str, dataVar) {
+  dataVar += '[^0-9]';
+  var matches = str.match(new RegExp(dataVar, 'g'));
+  return matches ? matches.length : 0;
+}
+
+
+function varReplace(str, dataVar, expr) {
+  dataVar += '([^0-9])';
+  expr = expr.replace(/\$/g, '$$$$');
+  return str.replace(new RegExp(dataVar, 'g'), expr + '$1');
+}
+
+
+function schemaHasRules(schema, rules) {
+  if (typeof schema == 'boolean') return !schema;
+  for (var key in schema) if (rules[key]) return true;
+}
+
+
+function schemaHasRulesExcept(schema, rules, exceptKeyword) {
+  if (typeof schema == 'boolean') return !schema && exceptKeyword != 'not';
+  for (var key in schema) if (key != exceptKeyword && rules[key]) return true;
+}
+
+
+function schemaUnknownRules(schema, rules) {
+  if (typeof schema == 'boolean') return;
+  for (var key in schema) if (!rules[key]) return key;
+}
+
+
+function toQuotedString(str) {
+  return '\'' + escapeQuotes(str) + '\'';
+}
+
+
+function getPathExpr(currentPath, expr, jsonPointers, isNumber) {
+  var path = jsonPointers // false by default
+              ? '\'/\' + ' + expr + (isNumber ? '' : '.replace(/~/g, \'~0\').replace(/\\//g, \'~1\')')
+              : (isNumber ? '\'[\' + ' + expr + ' + \']\'' : '\'[\\\'\' + ' + expr + ' + \'\\\']\'');
+  return joinPaths(currentPath, path);
+}
+
+
+function getPath(currentPath, prop, jsonPointers) {
+  var path = jsonPointers // false by default
+              ? toQuotedString('/' + escapeJsonPointer(prop))
+              : toQuotedString(getProperty(prop));
+  return joinPaths(currentPath, path);
+}
+
+
+var JSON_POINTER = /^\/(?:[^~]|~0|~1)*$/;
+var RELATIVE_JSON_POINTER = /^([0-9]+)(#|\/(?:[^~]|~0|~1)*)?$/;
+function getData($data, lvl, paths) {
+  var up, jsonPointer, data, matches;
+  if ($data === '') return 'rootData';
+  if ($data[0] == '/') {
+    if (!JSON_POINTER.test($data)) throw new Error('Invalid JSON-pointer: ' + $data);
+    jsonPointer = $data;
+    data = 'rootData';
+  } else {
+    matches = $data.match(RELATIVE_JSON_POINTER);
+    if (!matches) throw new Error('Invalid JSON-pointer: ' + $data);
+    up = +matches[1];
+    jsonPointer = matches[2];
+    if (jsonPointer == '#') {
+      if (up >= lvl) throw new Error('Cannot access property/index ' + up + ' levels up, current level is ' + lvl);
+      return paths[lvl - up];
+    }
+
+    if (up > lvl) throw new Error('Cannot access data ' + up + ' levels up, current level is ' + lvl);
+    data = 'data' + ((lvl - up) || '');
+    if (!jsonPointer) return data;
+  }
+
+  var expr = data;
+  var segments = jsonPointer.split('/');
+  for (var i=0; i<segments.length; i++) {
+    var segment = segments[i];
+    if (segment) {
+      data += getProperty(unescapeJsonPointer(segment));
+      expr += ' && ' + data;
+    }
+  }
+  return expr;
+}
+
+
+function joinPaths (a, b) {
+  if (a == '""') return b;
+  return (a + ' + ' + b).replace(/([^\\])' \+ '/g, '$1');
+}
+
+
+function unescapeFragment(str) {
+  return unescapeJsonPointer(decodeURIComponent(str));
+}
+
+
+function escapeFragment(str) {
+  return encodeURIComponent(escapeJsonPointer(str));
+}
+
+
+function escapeJsonPointer(str) {
+  return str.replace(/~/g, '~0').replace(/\//g, '~1');
+}
+
+
+function unescapeJsonPointer(str) {
+  return str.replace(/~1/g, '/').replace(/~0/g, '~');
+}
+
 
 /***/ }),
 
@@ -17925,14 +18379,366 @@ function validateAuth (auth) {
 
 "use strict";
 
+const path = __webpack_require__(622);
+const childProcess = __webpack_require__(129);
+const crossSpawn = __webpack_require__(20);
+const stripEof = __webpack_require__(768);
+const npmRunPath = __webpack_require__(621);
+const isStream = __webpack_require__(323);
+const _getStream = __webpack_require__(145);
+const pFinally = __webpack_require__(697);
+const onExit = __webpack_require__(260);
+const errname = __webpack_require__(427);
+const stdio = __webpack_require__(168);
 
-var util = __webpack_require__(855);
+const TEN_MEGABYTES = 1000 * 1000 * 10;
 
-module.exports = SchemaObject;
+function handleArgs(cmd, args, opts) {
+	let parsed;
 
-function SchemaObject(obj) {
-  util.copy(obj, this);
+	opts = Object.assign({
+		extendEnv: true,
+		env: {}
+	}, opts);
+
+	if (opts.extendEnv) {
+		opts.env = Object.assign({}, process.env, opts.env);
+	}
+
+	if (opts.__winShell === true) {
+		delete opts.__winShell;
+		parsed = {
+			command: cmd,
+			args,
+			options: opts,
+			file: cmd,
+			original: {
+				cmd,
+				args
+			}
+		};
+	} else {
+		parsed = crossSpawn._parse(cmd, args, opts);
+	}
+
+	opts = Object.assign({
+		maxBuffer: TEN_MEGABYTES,
+		buffer: true,
+		stripEof: true,
+		preferLocal: true,
+		localDir: parsed.options.cwd || process.cwd(),
+		encoding: 'utf8',
+		reject: true,
+		cleanup: true
+	}, parsed.options);
+
+	opts.stdio = stdio(opts);
+
+	if (opts.preferLocal) {
+		opts.env = npmRunPath.env(Object.assign({}, opts, {cwd: opts.localDir}));
+	}
+
+	if (opts.detached) {
+		// #115
+		opts.cleanup = false;
+	}
+
+	if (process.platform === 'win32' && path.basename(parsed.command) === 'cmd.exe') {
+		// #116
+		parsed.args.unshift('/q');
+	}
+
+	return {
+		cmd: parsed.command,
+		args: parsed.args,
+		opts,
+		parsed
+	};
 }
+
+function handleInput(spawned, input) {
+	if (input === null || input === undefined) {
+		return;
+	}
+
+	if (isStream(input)) {
+		input.pipe(spawned.stdin);
+	} else {
+		spawned.stdin.end(input);
+	}
+}
+
+function handleOutput(opts, val) {
+	if (val && opts.stripEof) {
+		val = stripEof(val);
+	}
+
+	return val;
+}
+
+function handleShell(fn, cmd, opts) {
+	let file = '/bin/sh';
+	let args = ['-c', cmd];
+
+	opts = Object.assign({}, opts);
+
+	if (process.platform === 'win32') {
+		opts.__winShell = true;
+		file = process.env.comspec || 'cmd.exe';
+		args = ['/s', '/c', `"${cmd}"`];
+		opts.windowsVerbatimArguments = true;
+	}
+
+	if (opts.shell) {
+		file = opts.shell;
+		delete opts.shell;
+	}
+
+	return fn(file, args, opts);
+}
+
+function getStream(process, stream, {encoding, buffer, maxBuffer}) {
+	if (!process[stream]) {
+		return null;
+	}
+
+	let ret;
+
+	if (!buffer) {
+		// TODO: Use `ret = util.promisify(stream.finished)(process[stream]);` when targeting Node.js 10
+		ret = new Promise((resolve, reject) => {
+			process[stream]
+				.once('end', resolve)
+				.once('error', reject);
+		});
+	} else if (encoding) {
+		ret = _getStream(process[stream], {
+			encoding,
+			maxBuffer
+		});
+	} else {
+		ret = _getStream.buffer(process[stream], {maxBuffer});
+	}
+
+	return ret.catch(err => {
+		err.stream = stream;
+		err.message = `${stream} ${err.message}`;
+		throw err;
+	});
+}
+
+function makeError(result, options) {
+	const {stdout, stderr} = result;
+
+	let err = result.error;
+	const {code, signal} = result;
+
+	const {parsed, joinedCmd} = options;
+	const timedOut = options.timedOut || false;
+
+	if (!err) {
+		let output = '';
+
+		if (Array.isArray(parsed.opts.stdio)) {
+			if (parsed.opts.stdio[2] !== 'inherit') {
+				output += output.length > 0 ? stderr : `\n${stderr}`;
+			}
+
+			if (parsed.opts.stdio[1] !== 'inherit') {
+				output += `\n${stdout}`;
+			}
+		} else if (parsed.opts.stdio !== 'inherit') {
+			output = `\n${stderr}${stdout}`;
+		}
+
+		err = new Error(`Command failed: ${joinedCmd}${output}`);
+		err.code = code < 0 ? errname(code) : code;
+	}
+
+	err.stdout = stdout;
+	err.stderr = stderr;
+	err.failed = true;
+	err.signal = signal || null;
+	err.cmd = joinedCmd;
+	err.timedOut = timedOut;
+
+	return err;
+}
+
+function joinCmd(cmd, args) {
+	let joinedCmd = cmd;
+
+	if (Array.isArray(args) && args.length > 0) {
+		joinedCmd += ' ' + args.join(' ');
+	}
+
+	return joinedCmd;
+}
+
+module.exports = (cmd, args, opts) => {
+	const parsed = handleArgs(cmd, args, opts);
+	const {encoding, buffer, maxBuffer} = parsed.opts;
+	const joinedCmd = joinCmd(cmd, args);
+
+	let spawned;
+	try {
+		spawned = childProcess.spawn(parsed.cmd, parsed.args, parsed.opts);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+
+	let removeExitHandler;
+	if (parsed.opts.cleanup) {
+		removeExitHandler = onExit(() => {
+			spawned.kill();
+		});
+	}
+
+	let timeoutId = null;
+	let timedOut = false;
+
+	const cleanup = () => {
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+			timeoutId = null;
+		}
+
+		if (removeExitHandler) {
+			removeExitHandler();
+		}
+	};
+
+	if (parsed.opts.timeout > 0) {
+		timeoutId = setTimeout(() => {
+			timeoutId = null;
+			timedOut = true;
+			spawned.kill(parsed.opts.killSignal);
+		}, parsed.opts.timeout);
+	}
+
+	const processDone = new Promise(resolve => {
+		spawned.on('exit', (code, signal) => {
+			cleanup();
+			resolve({code, signal});
+		});
+
+		spawned.on('error', err => {
+			cleanup();
+			resolve({error: err});
+		});
+
+		if (spawned.stdin) {
+			spawned.stdin.on('error', err => {
+				cleanup();
+				resolve({error: err});
+			});
+		}
+	});
+
+	function destroy() {
+		if (spawned.stdout) {
+			spawned.stdout.destroy();
+		}
+
+		if (spawned.stderr) {
+			spawned.stderr.destroy();
+		}
+	}
+
+	const handlePromise = () => pFinally(Promise.all([
+		processDone,
+		getStream(spawned, 'stdout', {encoding, buffer, maxBuffer}),
+		getStream(spawned, 'stderr', {encoding, buffer, maxBuffer})
+	]).then(arr => {
+		const result = arr[0];
+		result.stdout = arr[1];
+		result.stderr = arr[2];
+
+		if (result.error || result.code !== 0 || result.signal !== null) {
+			const err = makeError(result, {
+				joinedCmd,
+				parsed,
+				timedOut
+			});
+
+			// TODO: missing some timeout logic for killed
+			// https://github.com/nodejs/node/blob/master/lib/child_process.js#L203
+			// err.killed = spawned.killed || killed;
+			err.killed = err.killed || spawned.killed;
+
+			if (!parsed.opts.reject) {
+				return err;
+			}
+
+			throw err;
+		}
+
+		return {
+			stdout: handleOutput(parsed.opts, result.stdout),
+			stderr: handleOutput(parsed.opts, result.stderr),
+			code: 0,
+			failed: false,
+			killed: false,
+			signal: null,
+			cmd: joinedCmd,
+			timedOut: false
+		};
+	}), destroy);
+
+	crossSpawn._enoent.hookChildProcess(spawned, parsed.parsed);
+
+	handleInput(spawned, parsed.opts.input);
+
+	spawned.then = (onfulfilled, onrejected) => handlePromise().then(onfulfilled, onrejected);
+	spawned.catch = onrejected => handlePromise().catch(onrejected);
+
+	return spawned;
+};
+
+// TODO: set `stderr: 'ignore'` when that option is implemented
+module.exports.stdout = (...args) => module.exports(...args).then(x => x.stdout);
+
+// TODO: set `stdout: 'ignore'` when that option is implemented
+module.exports.stderr = (...args) => module.exports(...args).then(x => x.stderr);
+
+module.exports.shell = (cmd, opts) => handleShell(module.exports, cmd, opts);
+
+module.exports.sync = (cmd, args, opts) => {
+	const parsed = handleArgs(cmd, args, opts);
+	const joinedCmd = joinCmd(cmd, args);
+
+	if (isStream(parsed.opts.input)) {
+		throw new TypeError('The `input` option cannot be a stream in sync mode');
+	}
+
+	const result = childProcess.spawnSync(parsed.cmd, parsed.args, parsed.opts);
+	result.code = result.status;
+
+	if (result.error || result.status !== 0 || result.signal !== null) {
+		const err = makeError(result, {
+			joinedCmd,
+			parsed
+		});
+
+		if (!parsed.opts.reject) {
+			return err;
+		}
+
+		throw err;
+	}
+
+	return {
+		stdout: handleOutput(parsed.opts, result.stdout),
+		stderr: handleOutput(parsed.opts, result.stderr),
+		code: 0,
+		failed: false,
+		signal: null,
+		cmd: joinedCmd,
+		timedOut: false
+	};
+};
+
+module.exports.shellSync = (cmd, opts) => handleShell(module.exports.sync, cmd, opts);
 
 
 /***/ }),
@@ -17985,45 +18791,17 @@ module.exports = function isPlainObject(o) {
 /***/ 961:
 /***/ (function(module) {
 
-module.exports = registerEndpoints
-
-function registerEndpoints (octokit, routes) {
-  Object.keys(routes).forEach(namespaceName => {
-    if (!octokit[namespaceName]) {
-      octokit[namespaceName] = {}
-    }
-
-    Object.keys(routes[namespaceName]).forEach(apiName => {
-      let apiOptions = routes[namespaceName][apiName]
-
-      const endpointDefaults = ['method', 'url', 'headers'].reduce((map, key) => {
-        if (typeof apiOptions[key] !== 'undefined') {
-          map[key] = apiOptions[key]
-        }
-
-        return map
-      }, {})
-
-      endpointDefaults.request = {
-        validate: apiOptions.params
-      }
-
-      const request = octokit.request.defaults(endpointDefaults)
-
-      if (apiOptions.deprecated) {
-        octokit[namespaceName][apiName] = function () {
-          octokit.log.warn(apiOptions.deprecated)
-          octokit[namespaceName][apiName] = request
-          return request.apply(null, arguments)
-        }
-
-        return
-      }
-
-      octokit[namespaceName][apiName] = request
-    })
-  })
-}
+module.exports = function(colors) {
+  var available = ['underline', 'inverse', 'grey', 'yellow', 'red', 'green',
+    'blue', 'white', 'cyan', 'magenta', 'brightYellow', 'brightRed',
+    'brightGreen', 'brightBlue', 'brightWhite', 'brightCyan', 'brightMagenta'];
+  return function(letter, i, exploded) {
+    return letter === ' ' ? letter :
+      colors[
+          available[Math.round(Math.random() * (available.length - 2))]
+      ](letter);
+  };
+};
 
 
 /***/ }),
@@ -18685,20 +19463,6 @@ module.exports = getBufferResponse
 
 function getBufferResponse (response) {
   return response.buffer()
-}
-
-
-/***/ }),
-
-/***/ 980:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-module.exports = registerPlugin
-
-const factory = __webpack_require__(47)
-
-function registerPlugin (plugins, pluginFunction) {
-  return factory(plugins.includes(pluginFunction) ? plugins : plugins.concat(pluginFunction))
 }
 
 

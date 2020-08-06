@@ -43,5 +43,26 @@ jobs:
         uses: ./
         with:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
-          checks: "lint:.lint-report.json|test:.test-report.json"
+          checks: '[
+              {
+                "name": "lint",
+                "fileName": ".lint-report.json",
+                "prChangesOnly": true
+              },
+              {
+                "name": "test",
+                "fileName": ".test-report.json",
+                "prChangesOnly": false
+              }
+            ]'
+          # checks: lint:.lint-report.json|test:.test-report.json
+          # checks:
+          #   - name: lint
+          #     file: .lint-report.json
+          #     prChangesOnly: true
+          #   - name: test
+          #     file: .test-report.json
+          #     prChangesOnly: false
+
+
 
