@@ -6919,10 +6919,8 @@ function run() {
                             core.info(batchMessage);
                             yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'in_progress', output: { title, summary: batchMessage, annotations: annotationBatch } }));
                         }
-                        if (annotationBatches.length > 0) {
-                            core.info(`Processing last batch of "${title}" check`);
-                            yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
-                        }
+                        core.info(`Posting annotations completions for "${title}" check`);
+                        yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
                         /*if (push) {
                             core.info(`Processing last batch of "${title}" check`)
                             await postCheckAsync({

@@ -219,16 +219,15 @@ async function run(): Promise<void> {
 							output: { title, summary: batchMessage, annotations: annotationBatch }
 						})
 					}
-					if (annotationBatches.length > 0) {
-						core.info(`Processing last batch of "${title}" check`)
-						await postCheckAsync({
-							...getBaseInfo({ checkId }),
-							status: 'completed',
-							conclusion,
-							completed_at: new Date().toISOString(),
-							output: { title, summary, text, annotations: last(annotationBatches) }
-						})
-					}
+
+					core.info(`Posting annotations completions for "${title}" check`)
+					await postCheckAsync({
+						...getBaseInfo({ checkId }),
+						status: 'completed',
+						conclusion,
+						completed_at: new Date().toISOString(),
+						output: { title, summary, text, annotations: last(annotationBatches) }
+					})
 
 					/*if (push) {
 						core.info(`Processing last batch of "${title}" check`)
