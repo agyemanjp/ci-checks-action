@@ -70,7 +70,13 @@ function parse(generalCheckJSON: string, changedFiles: string[] | undefined, che
 		conclusion: counts.failure > 0 ? 'failure' : 'success' as GitHubAnnotation.Conclusion,
 		text: "",
 		annotations: flatten(Object.entries(byFile)
-			.filter(kv => changedFiles === undefined || changedFiles.some(f => kv[0].endsWith(f)))
+			.filter(kv => {
+				const fileName = kv[0]
+				console.log(`parsed file name: ${fileName}`)
+				console.log(`changed file names: ${changedFiles}`)
+
+				return changedFiles === undefined || changedFiles.some(f => fileName.endsWith(f))
+			})
 			.map(kv => {
 				const filePath = kv[0]
 				// console.log(`Processing ${checkName} check file "${filePath}"`)
