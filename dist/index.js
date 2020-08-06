@@ -448,13 +448,13 @@ function* take(iterable, n) {
         console.warn(`Warning: Negative value ${n} passed to argument <n> of take()`);
         return;
     }
-    if (n > 0) {
-        for (const element of iterable) {
-            yield element;
-            if (--n <= 0)
-                break;
-        }
+    //if (n > 0) {
+    for (const element of iterable) {
+        yield element;
+        if (--n <= 0)
+            break;
     }
+    //}
 }
 exports.take = take;
 function* skip(iterable, n) {
