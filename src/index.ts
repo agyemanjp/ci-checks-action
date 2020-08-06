@@ -61,7 +61,7 @@ function parse(generalCheckJSON: string, changedFiles: string[] | undefined, che
 	*/
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { byFile, summary, name, description, counts } = result
+	const { byFile, summary, name, description, counts } = result;
 	//core.info(`Check results by file: ${JSON.stringify(byFile)}`) 
 
 	return {
