@@ -194,7 +194,7 @@ async function run(): Promise<void> {
 						annotations: annotationsIterable
 					} = parse(file, changedFiles, check.name)
 					const annotations = [...annotationsIterable]
-					// console.log(`${title} check annotations length: ${annotations.length}`)
+					console.log(`${title} check annotations length: ${annotations.length}`)
 
 					if (conclusion !== "success") {
 						core.setFailed(`"${title}" check reported failures.`)
@@ -208,7 +208,8 @@ async function run(): Promise<void> {
 					//console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
 
 					const numBatches = annotationBatches.length
-					// console.log(`${check.name} check: number of batches = ${numBatches}`)
+					console.log(`${check.name} check: number of batches = ${numBatches}`)
+
 					let batchIndex = 1
 					for (const annotationBatch of take(annotationBatches, numBatches - 1)) {
 						const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`
@@ -229,6 +230,18 @@ async function run(): Promise<void> {
 						})
 					}
 
+					/*if (push) {
+						core.info(`Processing last batch of "${title}" check`)
+						await postCheckAsync({
+							...getBaseInfo({ name: check.name }),
+							...getBaseInfo({ checkId }),
+							status: 'completed',
+							conclusion,
+							completed_at: new Date().toISOString(),
+							output: { title, summary, text }
+							output: { title, summary, text, annotations: last(annotationBatches) }
+						})
+					}*/
 				}
 			}
 			catch (e) {

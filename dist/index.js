@@ -6902,7 +6902,7 @@ function run() {
                         const file = fs.readFileSync(check.outputFileName, 'utf8');
                         const { title, summary, conclusion, text, annotations: annotationsIterable } = parse(file, changedFiles, check.name);
                         const annotations = [...annotationsIterable];
-                        // console.log(`${title} check annotations length: ${annotations.length}`)
+                        console.log(`${title} check annotations length: ${annotations.length}`);
                         if (conclusion !== "success") {
                             core.setFailed(`"${title}" check reported failures.`);
                         }
@@ -6912,7 +6912,7 @@ function run() {
                         const annotationBatches = [...utility_1.chunk(annotations, BATCH_SIZE)];
                         //console.log(`\nAnnotation Batches: ${JSON.stringify([...annotationBatches])}`)
                         const numBatches = annotationBatches.length;
-                        // console.log(`${check.name} check: number of batches = ${numBatches}`)
+                        console.log(`${check.name} check: number of batches = ${numBatches}`);
                         let batchIndex = 1;
                         for (const annotationBatch of utility_1.take(annotationBatches, numBatches - 1)) {
                             const batchMessage = `Processing annotations batch ${batchIndex++} of "${title}" check`;
@@ -6923,6 +6923,18 @@ function run() {
                             core.info(`Processing last batch of "${title}" check`);
                             yield postCheckAsync(Object.assign(Object.assign({}, getBaseInfo({ checkId })), { status: 'completed', conclusion, completed_at: new Date().toISOString(), output: { title, summary, text, annotations: utility_1.last(annotationBatches) } }));
                         }
+                        /*if (push) {
+                            core.info(`Processing last batch of "${title}" check`)
+                            await postCheckAsync({
+                                ...getBaseInfo({ name: check.name }),
+                                ...getBaseInfo({ checkId }),
+                                status: 'completed',
+                                conclusion,
+                                completed_at: new Date().toISOString(),
+                                output: { title, summary, text }
+                                output: { title, summary, text, annotations: last(annotationBatches) }
+                            })
+                        }*/
                     }
                 }
                 catch (e) {
