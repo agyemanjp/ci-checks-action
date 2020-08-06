@@ -5,7 +5,7 @@ inputs:
     description: "Token used to interact with the Github API."
     required: true
   checks:
-    description: "Paths for JSON file for each check, separated by semi-colons"
+    description: "JSON array of metadata for each check to annotate"
     required: true
 runs:
   using: "node12"

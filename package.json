@@ -29,12 +29,13 @@
 		"setup": "rm -rf ./node_modules package-lock.json && npm install",
 		"clean": "rm -rf dist .eslintcache *-report.json src/check-general.ts ",
 		"schema": "json2ts ./src/check-general.schema.json ./src/check-general.ts",
-		"lint": "eslint --ext ts --output-file .lint-report.json --format json-standard --cache src/*",
+		"lint": "eslint --ext ts --cache src/*",
+		"lint-report": "eslint --ext ts --output-file .lint-report.json --format json-standard --cache src/*",
 		"build": "npm run schema && tsc && flatten dist && cp src/check-general.schema.json dist && rm -rf dist/*.test.js.map dist/*.test.d.ts",
-		"postbuild": "ncc build dist/index.js",
-		"test": "mocha dist/*.test.js --reporter mocha-reporter-json-standard >| .test-report.json",
-		"test2": "mocha dist/*.test.js",
-		"ci": "npm run clean && npm run lint && npm run build && npm run test"
+		"postbuild": "ncc build dist/index.js --quiet",
+		"test-report": "mocha dist/*.test.js --reporter mocha-reporter-json-standard >| .test-report.json",
+		"test": "mocha dist/*.test.js",
+		"ci": "npm run clean && npm run build && npm run test; npm run lint"
 	},
 	"devDependencies": {
 		"@hutsoninc/flatten-dir-cli": "^1.0.2",
@@ -60,6 +61,7 @@
 		"@actions/core": "1.2.0",
 		"@actions/github": "1.1.0",
 		"@octokit/graphql": "2.0.1",
-		"@octokit/rest": "16.15.0"
+		"@octokit/rest": "16.15.0",
+		"colors": "^1.4.0"
 	}
 }
