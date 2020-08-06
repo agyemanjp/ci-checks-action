@@ -55,5 +55,16 @@ jobs:
         uses: agyemanjp/ci-checks-action@1.0.2
         with:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
-          checks: "lint:.lint-report.json|test:.test-report.json"
+          checks: '[
+              {
+                "name": "lint",
+                "fileName": ".lint-report.json",
+                "prChangesOnly": true
+              },
+              {
+                "name": "test",
+                "fileName": ".test-report.json",
+                "prChangesOnly": false
+              }
+            ]'
 ```

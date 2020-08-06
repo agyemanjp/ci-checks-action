@@ -10,7 +10,7 @@ import Octokit from '@octokit/rest'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import Ajv from 'ajv'
-import colors from 'colors/safe'
+// import colors from 'colors/safe'
 
 import { flatten, take, last, chunk } from "./utility"
 import { GithubCheckInfo, GitHubAnnotation } from "./check-github"
@@ -57,7 +57,7 @@ export function parse(generalCheckJSON: string, changedFiles: string[] | undefin
 	*/
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { byFile, summary, name, description, counts } = result;
+	const { byFile, summary, name, description, counts } = result
 	//console.info(`\nCheck results by file: ${JSON.stringify(byFile)}`)
 
 	return {
