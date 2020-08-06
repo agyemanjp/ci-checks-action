@@ -34,6 +34,7 @@ function getChecksToReport() {
 }
 function parse(generalCheckJSON: string, changedFiles: string[] | undefined, checkName: string | undefined) {
 	// console.log(`Parsing check JSON: "${generalCheckJSON}"`)
+	// console.log(`changed files: ${changedFiles}`)
 
 	const toValidate = JSON.parse(generalCheckJSON)
 	const valid = new Ajv().validate(generalCheckSchema, toValidate)
@@ -172,7 +173,9 @@ async function run(): Promise<void> {
 
 	try {
 		const changedFiles = pullRequest ? await getChangedFilesAsync(pullRequest.number) : undefined
+		console.log(`changed files: ${changedFiles}`)
 		core.info(`changed files: ${changedFiles}`)
+
 		for (const check of getChecksToReport()) {
 			try {
 				if (check && check.name && check.outputFileName) {
