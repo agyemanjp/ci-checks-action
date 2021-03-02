@@ -16,16 +16,16 @@ describe('parse()', function () {
 		},
 		"byFile": {
 			"/Users/prmph/Code/ci-checks-action/src/check-general.schema.json": {
-			"counts": {
-				"failure": 0,
-				"warning": 1
-			},
-			"details": [
-				{
-				"message": "File ignored because of a matching ignore pattern. Use --no-ignore to override.",
-				"category": "warning"
-				}
-			]
+				"counts": {
+					"failure": 0,
+					"warning": 1
+				},
+				"details": [
+					{
+					"message": "File ignored because of a matching ignore pattern. Use --no-ignore to override.",
+					"category": "warning"
+					}
+				]
 			},
 			"/Users/prmph/Code/ci-checks-action/src/check-general.ts": {
 			"counts": {
@@ -42,20 +42,20 @@ describe('parse()', function () {
 			"details": []
 			},
 			"/Users/prmph/Code/ci-checks-action/src/index.ts": {
-			"counts": {
-				"failure": 1,
-				"warning": 0
-			},
-			"details": [
-				{
-				"message": "Extra semicolon.",
-				"category": "failure",
-				"startLine": 64,
-				"endLine": 64,
-				"startColumn": 63,
-				"endColumn": 64
-				}
-			]
+				"counts": {
+					"failure": 1,
+					"warning": 0
+				},
+				"details": [
+					{
+						"message": "Extra semicolon.",
+						"category": "failure",
+						"startLine": 64,
+						"endLine": 64,
+						"startColumn": 63,
+						"endColumn": 64
+					}
+				]
 			},
 			"/Users/prmph/Code/ci-checks-action/src/utility.ts": {
 			"counts": {
@@ -63,6 +63,22 @@ describe('parse()', function () {
 				"warning": 0
 			},
 			"details": []
+			},
+			"/Users/prmph/Code/ci-checks-action/src/check-general.test.json": {
+				"counts": {
+					"failure": 0,
+					"warning": 1
+				},
+				"details": [
+					{
+				"message": "Extra semicolon.",
+				"category": "failure",
+				"startLine": 65,
+				"endLine": 70,
+				"startColumn": 63,
+				"endColumn": 64
+				}
+				]
 			}
 		}
 	}`
@@ -244,7 +260,8 @@ describe('parse()', function () {
 		const annotations = [...parse(lintReport, undefined, "lint").annotations]
 		assert.deepEqual(annotations.map(a => a.path), [
 			`/Users/prmph/Code/ci-checks-action/src/check-general.schema.json`,
-			`/Users/prmph/Code/ci-checks-action/src/index.ts`]
+			`/Users/prmph/Code/ci-checks-action/src/index.ts`,
+			"/Users/prmph/Code/ci-checks-action/src/check-general.test.json"]
 		)
 	})
 
@@ -256,6 +273,20 @@ describe('parse()', function () {
 	it('should not repeat annotations', function () {
 		const annotations = [...parse(testReport, changedFiles, "lint").annotations]
 		assert.deepEqual(annotations.length, new Set(annotations).size)
+	})
+
+	it('should include endColumn and startColumn in the annotation when the startLine and endLine are the same', function () {
+		const annotations = [...parse(lintReport, ["/Users/prmph/Code/ci-checks-action/src/index.ts"], "lint").annotations]
+		
+		assert.equal(Object.keys(annotations[0]).includes("start_column"), true)
+		assert.equal(Object.keys(annotations[0]).includes("end_column"), true)
+	})
+
+	it('should omit endColumn and startColumn in the annotation when the startLine and endLine are different', function () {
+		const annotations = [...parse(lintReport, ["/Users/prmph/Code/ci-checks-action/src/check-general.test.json"], "lint").annotations]
+
+		assert.equal(Object.keys(annotations[0]).includes("start_column"), false)
+		assert.equal(Object.keys(annotations[0]).includes("end_column"), false)
 	})
 })
 
