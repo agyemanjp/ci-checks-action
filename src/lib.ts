@@ -194,13 +194,15 @@ export async function run(): Promise<void> {
 					}
 
 					core.info(`Posting annotations completions for "${title}" check`)
-					await postCheckAsync({
+					const checkObj = {
 						...getBaseInfo({ checkId }),
-						status: 'completed',
+						status: 'completed' as const,
 						conclusion,
-						completed_at: new Date().toISOString(),
+						completed_at: new Date().toISOString() as string,
 						output: { title, summary, text, annotations: last(annotationBatches) }
-					})
+					}
+					console.log(`test: `, checkObj)
+					await postCheckAsync(checkObj)
 
 					/*if (push) {
 						core.info(`Processing last batch of "${title}" check`)
