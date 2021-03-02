@@ -78,15 +78,18 @@ export function parse(generalCheckJSON: string, changedFiles: string[] | undefin
 				const fileResult = kv[1]
 				return fileResult.details.map(detail => {
 					// console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
+					const startLine = detail.startLine ?? 0
+					const endLine = detail.endLine ?? 0
 
 					return {
 						path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
 						title: detail.title,
 						message: detail.message,
-						start_line: detail.startLine ?? 0,
-						start_column: detail.startColumn,
-						end_line: detail.endLine ?? 0,
-						end_column: detail.endColumn,
+						start_line: startLine,
+						end_line: endLine,
+						...startLine === endLine
+							? { start_column: detail.startColumn, end_column: detail.endColumn }
+							: {},
 						annotation_level: detail.category as GitHubAnnotation.Level
 					} as GitHubAnnotation
 				})
