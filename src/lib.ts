@@ -32,7 +32,20 @@ export function parse(generalCheckJSON: string, changedFiles: string[] | undefin
 	// console.log(`Parsing check JSON: "${generalCheckJSON}"`)
 	// console.log(`changed files: ${changedFiles}`)
 
-	const toValidate = JSON.parse(generalCheckJSON)
+	let toValidate
+	try {
+		toValidate = JSON.parse(generalCheckJSON)
+	}
+	catch (err) {
+		return {
+			title: "Could not parse the output file",
+			summary: err,
+			conclusion: 'failure' as GitHubAnnotation.Conclusion,
+			text: generalCheckJSON,
+			annotations: []
+		}
+	}
+
 	const valid = new Ajv().validate(generalCheckSchema, toValidate)
 	if (valid === false) {
 		throw new Error(`Error parsing check script output`)
