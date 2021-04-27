@@ -6122,7 +6122,7 @@ function parse(generalCheckJSON, changedFiles, checkName) {
     catch (err) {
         return {
             title: "Could not parse the output file",
-            summary: err,
+            summary: err.message,
             conclusion: 'failure',
             text: generalCheckJSON,
             annotations: []
