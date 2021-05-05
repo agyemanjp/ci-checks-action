@@ -32,6 +32,7 @@ export function parse(generalCheckJSON: string, changedFiles: string[] | undefin
 	// console.log(`Parsing check JSON: "${generalCheckJSON}"`)
 	// console.log(`changed files: ${changedFiles}`)
 
+	// eslint-disable-next-line init-declarations
 	let toValidate
 	try {
 		toValidate = JSON.parse(generalCheckJSON)
