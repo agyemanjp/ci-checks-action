@@ -83,6 +83,11 @@ describe('parse()', function () {
 		}
 	}`
 
+	const wrongFormatReport = `{
+		"description": "ES Lint results",
+		"counts": [object Object]
+	}`
+
 	const testReport = `{
 		"name": "Mocha unit tests",
 		"description": "Mocha unit tests",
@@ -253,12 +258,12 @@ describe('parse()', function () {
 
 		const annotations = [...parse(lintReport, [], undefined).annotations]
 
-		assert.deepEqual(annotations, [])
+		assert.deepStrictEqual(annotations, [])
 	})
 
 	it('should return all annotations, if changed files is undefined', function () {
 		const annotations = [...parse(lintReport, undefined, "lint").annotations]
-		assert.deepEqual(annotations.map(a => a.path), [
+		assert.deepStrictEqual(annotations.map(a => a.path), [
 			`/Users/prmph/Code/ci-checks-action/src/check-general.schema.json`,
 			`/Users/prmph/Code/ci-checks-action/src/index.ts`,
 			"/Users/prmph/Code/ci-checks-action/src/check-general.test.json"]
@@ -267,26 +272,31 @@ describe('parse()', function () {
 
 	it('should return annotations for changed files only, if changed files is a non-empty array', function () {
 		const annotations = [...parse(lintReport, changedFiles, "lint").annotations]
-		assert.deepEqual(annotations.map(a => a.path), [`/Users/prmph/Code/ci-checks-action/src/index.ts`])
+		assert.deepStrictEqual(annotations.map(a => a.path), [`/Users/prmph/Code/ci-checks-action/src/index.ts`])
 	})
 
 	it('should not repeat annotations', function () {
 		const annotations = [...parse(testReport, changedFiles, "lint").annotations]
-		assert.deepEqual(annotations.length, new Set(annotations).size)
+		assert.deepStrictEqual(annotations.length, new Set(annotations).size)
 	})
 
 	it('should include endColumn and startColumn in the annotation when the startLine and endLine are the same', function () {
 		const annotations = [...parse(lintReport, ["/Users/prmph/Code/ci-checks-action/src/index.ts"], "lint").annotations]
-		
-		assert.equal(Object.keys(annotations[0]).includes("start_column"), true)
-		assert.equal(Object.keys(annotations[0]).includes("end_column"), true)
+
+		assert.strictEqual(Object.keys(annotations[0]).includes("start_column"), true)
+		assert.strictEqual(Object.keys(annotations[0]).includes("end_column"), true)
 	})
 
 	it('should omit endColumn and startColumn in the annotation when the startLine and endLine are different', function () {
 		const annotations = [...parse(lintReport, ["/Users/prmph/Code/ci-checks-action/src/check-general.test.json"], "lint").annotations]
 
-		assert.equal(Object.keys(annotations[0]).includes("start_column"), false)
-		assert.equal(Object.keys(annotations[0]).includes("end_column"), false)
+		assert.strictEqual(Object.keys(annotations[0]).includes("start_column"), false)
+		assert.strictEqual(Object.keys(annotations[0]).includes("end_column"), false)
+	})
+
+	it('should return information about a wrongly formatted file instead of throwing an error', function () {
+		const report = parse(wrongFormatReport, [], "lint")
+
+		assert.strictEqual(report.title, "Could not parse the output file")
 	})
 })
-
