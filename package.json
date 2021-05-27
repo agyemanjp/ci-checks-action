@@ -58,7 +58,7 @@
 		"typescript": "3.7.2"
 	},
 	"dependencies": {
-		"@actions/core": "1.2.0",
+		"@actions/core": "1.2.6",
 		"@actions/github": "1.1.0",
 		"@octokit/graphql": "2.0.1",
 		"@octokit/rest": "16.15.0",
