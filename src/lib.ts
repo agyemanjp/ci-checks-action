@@ -29,76 +29,69 @@ export function getChecksToReport() {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function parse(generalCheckJSON: string, changedFiles: string[] | undefined, checkName: string | undefined) {
-	// console.log(`Parsing check JSON: "${generalCheckJSON}"`)
-	// console.log(`changed files: ${changedFiles}`)
+	try {
+		// eslint-disable-next-line init-declarations
+		const toValidate = JSON.parse(generalCheckJSON)
 
-	const toValidate = JSON.parse(generalCheckJSON)
-	const valid = new Ajv().validate(generalCheckSchema, toValidate)
-	if (valid === false) {
-		throw new Error(`Error parsing check script output`)
-	}
-	const result = toValidate as CheckGeneralSchema
-
-	// User-friendly markdown message text for the error/warning
-	/*const link = `https://github.com/${OWNER}/${REPO}/blob/${SHA}/${filePathTrimmed}#L${line}:L${endLine}`
-		let messageText = '### [`' + filePathTrimmed + '` line `' + line + '`](' + link + ')\n';
-		messageText += '- Start Line: `' + line + '`\n';
-		messageText += '- End Line: `' + endLine + '`\n';
-		messageText += '- Message: ' + message + '\n';
-		messageText += '  - From: [`' + ruleId + '`]\n';
-
-		// Add the markdown text to the appropriate placeholder
-		if (isWarning) {
-			warningText += messageText
-		} 
-		else {
-			errorText += messageText
+		const valid = new Ajv().validate(generalCheckSchema, toValidate)
+		if (valid === false) {
+			throw new Error(`Error parsing check script output`)
 		}
-	*/
+		const result = toValidate as CheckGeneralSchema
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { byFile, summary, name, description, counts } = result
-	//console.info(`\nCheck results by file: ${JSON.stringify(byFile)}`)
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { byFile, summary, name, counts } = result
 
-	return {
-		title: checkName ?? name ?? "",
-		summary: summary ?? `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`,
-		conclusion: counts.failure > 0 ? 'failure' : 'success' as GitHubAnnotation.Conclusion,
-		text: "",
-		annotations: flatten(Object.entries(byFile)
-			.filter(kv => {
-				const fileName = kv[0]
-				//console.log(`\nParsed file name: ${fileName}`)
-				return changedFiles === undefined || changedFiles.includes(fileName)
-			})
-			.map(kv => {
-				const filePath = kv[0]
-				// console.log(`Processing ${checkName} check file "${filePath}"`)
-
-				const fileResult = kv[1]
-				return fileResult.details.map(detail => {
-					// console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
-					const startLine = detail.startLine ?? 0
-					const endLine = detail.endLine ?? 0
-
-					return {
-						path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
-						title: detail.title,
-						message: detail.message,
-						start_line: startLine,
-						end_line: endLine,
-						...startLine === endLine
-							? { start_column: detail.startColumn, end_column: detail.endColumn }
-							: {},
-						annotation_level: detail.category as GitHubAnnotation.Level
-					} as GitHubAnnotation
+		return {
+			title: checkName ?? name ?? "",
+			summary: summary ?? `${counts.failure} failure(s) and ${counts.warning} warning(s) reported`,
+			conclusion: counts.failure > 0 ? 'failure' : 'success' as GitHubAnnotation.Conclusion,
+			text: "",
+			annotations: flatten(Object.entries(byFile)
+				.filter(kv => {
+					const fileName = kv[0]
+					//console.log(`\nParsed file name: ${fileName}`)
+					return changedFiles === undefined || changedFiles.includes(fileName)
 				})
-			})
-		),
-		// errorText: '',
-		// warningText: '',
-		// markdownText: ''
+				.map(kv => {
+					const filePath = kv[0]
+					// console.log(`Processing ${checkName} check file "${filePath}"`)
+
+					const fileResult = kv[1]
+					return fileResult.details.map(detail => {
+						// console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
+						const startLine = detail.startLine ?? 0
+						const endLine = detail.endLine ?? 0
+
+						return {
+							path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''),
+							title: detail.title,
+							message: detail.message,
+							start_line: startLine,
+							end_line: endLine,
+							...startLine === endLine
+								? { start_column: detail.startColumn, end_column: detail.endColumn }
+								: {},
+							annotation_level: detail.category as GitHubAnnotation.Level
+						} as GitHubAnnotation
+					})
+				})
+			),
+			// errorText: '',
+			// warningText: '',
+			// markdownText: ''
+		}
 	}
+	catch (err) {
+		return {
+			title: "Could not parse the output file",
+			summary: err,
+			conclusion: 'failure' as GitHubAnnotation.Conclusion,
+			text: generalCheckJSON,
+			annotations: []
+		}
+	}
+
 }
 
 export async function run(): Promise<void> {
