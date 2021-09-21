@@ -79,6 +79,7 @@ export interface CheckGeneralSchema {
         startColumn?: number;
         endLine?: number;
         endColumn?: number;
+        rawDetails?: string;
       }[];
     };
   };
