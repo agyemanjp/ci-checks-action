@@ -41,13 +41,13 @@ jobs:
         run: npm ci --no-audit --prefer-offline 
 
       - name: Build
-        run: npm run build --if-present
+        run: npm run compile --if-present
 
-      - name: Run Lint Check
+      - name: Lint
         run: npm run lint
         continue-on-error: true
         
-      - name: Run Test Check
+      - name: Test
         run: npm run test
         continue-on-error: true
         
@@ -58,12 +58,12 @@ jobs:
           checks: '[
               {
                 "name": "lint",
-                "fileName": ".lint-report.json",
+                "fileName": ".lint.run.json",
                 "prChangesOnly": true
               },
               {
                 "name": "test",
-                "fileName": ".test-report.json",
+                "fileName": ".test.run.json",
                 "prChangesOnly": false
               }
             ]'
