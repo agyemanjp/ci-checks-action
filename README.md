@@ -41,29 +41,29 @@ jobs:
         run: npm ci --no-audit --prefer-offline 
 
       - name: Build
-        run: npm run build --if-present
+        run: npm run compile --if-present
 
-      - name: Run Lint Check
+      - name: Lint
         run: npm run lint
         continue-on-error: true
         
-      - name: Run Test Check
+      - name: Test
         run: npm run test
         continue-on-error: true
         
       - name: Annotate Checks
-        uses: agyemanjp/ci-checks-action@2.0.4
+        uses: agyemanjp/ci-checks-action@2.0.5
         with:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
           checks: '[
               {
                 "name": "lint",
-                "fileName": ".lint-report.json",
+                "fileName": ".lint.run.json",
                 "prChangesOnly": true
               },
               {
                 "name": "test",
-                "fileName": ".test-report.json",
+                "fileName": ".test.run.json",
                 "prChangesOnly": false
               }
             ]'

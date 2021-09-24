@@ -3,7 +3,7 @@
 /* eslint-disable fp/no-loops */
 
 import * as assert from "assert"
-import { parse, getChecksToReport } from "./lib"
+import { parse, getChecksToReport } from "../dist/lib"
 // import { GitHubAnnotation, GithubCheckInfo } from "./check-github"
 
 describe('parse()', function () {
