@@ -1082,7 +1082,7 @@ exports.deleteAsync = deleteAsync;
 /* 41 */
 /***/ (function(module) {
 
-module.exports = {"_from":"@octokit/request@2.3.0","_id":"@octokit/request@2.3.0","_inBundle":false,"_integrity":"sha512-5YRqYNZOAaL7+nt7w3Scp6Sz4P2g7wKFP9npx1xdExMomk8/M/ICXVLYVam2wzxeY0cIc6wcKpjC5KI4jiNbGw==","_location":"/@octokit/rest/@octokit/request","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@octokit/request@2.3.0","name":"@octokit/request","escapedName":"@octokit%2frequest","scope":"@octokit","rawSpec":"2.3.0","saveSpec":null,"fetchSpec":"2.3.0"},"_requiredBy":["/@octokit/rest"],"_resolved":"https://registry.npmjs.org/@octokit/request/-/request-2.3.0.tgz","_shasum":"da2672308bcf0b9376ef66f51bddbe5eb87cc00a","_spec":"@octokit/request@2.3.0","_where":"/Users/prmph/Code/ci-checks-action/node_modules/@octokit/rest","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"browser":{"./lib/get-request-agent.js":false,"./lib/request/get-buffer-response.js":"./lib/request/get-buffer-response-browser.js"},"bugs":{"url":"https://github.com/octokit/request.js/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/octokit-request.min.js.gz","maxSize":"5KB"}],"dependencies":{"@octokit/endpoint":"^3.1.1","is-plain-object":"^2.0.4","node-fetch":"^2.3.0","universal-user-agent":"^2.0.1"},"deprecated":false,"description":"Send parameterized requests to GitHub’s APIs with sensible defaults in browsers and Node","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","fetch-mock":"^7.2.0","mkdirp":"^0.5.1","mocha":"^5.2.0","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.10.5","simple-mock":"^0.8.0","standard":"^12.0.1","webpack":"^4.22.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"files":["lib"],"homepage":"https://github.com/octokit/request.js#readme","keywords":["octokit","github","api","request"],"license":"MIT","main":"index.js","name":"@octokit/request","publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/request.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-request.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-request.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard","semantic-release":"semantic-release","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"2.3.0"};
+module.exports = {"_args":[["@octokit/request@2.3.0","/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action"]],"_from":"@octokit/request@2.3.0","_id":"@octokit/request@2.3.0","_inBundle":false,"_integrity":"sha512-5YRqYNZOAaL7+nt7w3Scp6Sz4P2g7wKFP9npx1xdExMomk8/M/ICXVLYVam2wzxeY0cIc6wcKpjC5KI4jiNbGw==","_location":"/@octokit/rest/@octokit/request","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@octokit/request@2.3.0","name":"@octokit/request","escapedName":"@octokit%2frequest","scope":"@octokit","rawSpec":"2.3.0","saveSpec":null,"fetchSpec":"2.3.0"},"_requiredBy":["/@octokit/rest"],"_resolved":"https://registry.npmjs.org/@octokit/request/-/request-2.3.0.tgz","_spec":"2.3.0","_where":"/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"browser":{"./lib/get-request-agent.js":false,"./lib/request/get-buffer-response.js":"./lib/request/get-buffer-response-browser.js"},"bugs":{"url":"https://github.com/octokit/request.js/issues"},"bundlesize":[{"path":"./dist/octokit-request.min.js.gz","maxSize":"5KB"}],"dependencies":{"@octokit/endpoint":"^3.1.1","is-plain-object":"^2.0.4","node-fetch":"^2.3.0","universal-user-agent":"^2.0.1"},"description":"Send parameterized requests to GitHub’s APIs with sensible defaults in browsers and Node","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","fetch-mock":"^7.2.0","mkdirp":"^0.5.1","mocha":"^5.2.0","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.10.5","simple-mock":"^0.8.0","standard":"^12.0.1","webpack":"^4.22.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"files":["lib"],"homepage":"https://github.com/octokit/request.js#readme","keywords":["octokit","github","api","request"],"license":"MIT","main":"index.js","name":"@octokit/request","publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/request.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-request.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-request.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard","semantic-release":"semantic-release","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"2.3.0"};
 
 /***/ }),
 /* 42 */,
@@ -2311,7 +2311,31 @@ function write(key, options) {
 /* 79 */,
 /* 80 */,
 /* 81 */,
-/* 82 */,
+/* 82 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+// We use any as a valid input type
+/* eslint-disable @typescript-eslint/no-explicit-any */
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Sanitizes an input into a string so it can be passed into issueCommand safely
+ * @param input input to sanitize into a string
+ */
+function toCommandValue(input) {
+    if (input === null || input === undefined) {
+        return '';
+    }
+    else if (typeof input === 'string' || input instanceof String) {
+        return input;
+    }
+    return JSON.stringify(input);
+}
+exports.toCommandValue = toCommandValue;
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
 /* 83 */,
 /* 84 */,
 /* 85 */
@@ -2622,7 +2646,41 @@ module.exports = {
 /* 99 */,
 /* 100 */,
 /* 101 */,
-/* 102 */,
+/* 102 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+// For internal use, subject to change.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// We use any as a valid input type
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const fs = __importStar(__webpack_require__(747));
+const os = __importStar(__webpack_require__(87));
+const utils_1 = __webpack_require__(82);
+function issueCommand(command, message) {
+    const filePath = process.env[`GITHUB_${command}`];
+    if (!filePath) {
+        throw new Error(`Unable to find environment variable for file command ${command}`);
+    }
+    if (!fs.existsSync(filePath)) {
+        throw new Error(`Missing file at path: ${filePath}`);
+    }
+    fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+        encoding: 'utf8'
+    });
+}
+exports.issueCommand = issueCommand;
+//# sourceMappingURL=file-command.js.map
+
+/***/ }),
 /* 103 */,
 /* 104 */,
 /* 105 */,
@@ -4196,7 +4254,7 @@ module.exports.MaxBufferError = MaxBufferError;
 /* 146 */
 /***/ (function(module) {
 
-module.exports = {"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"name":{"type":"string","description":"Name of code check"},"description":{"type":"string","description":"Description of code check"},"summary":{"type":"string","description":"Summary of results of code check"},"counts":{"description":"Overall counts of different categories of messages","type":"object","properties":{"notice":{"type":"number","description":"Number of notice/successful messages"},"warning":{"type":"number","description":"Number of warning messages"},"failure":{"type":"number","description":"Number of failure message"}},"additionalProperties":false,"required":["failure"]},"byFile":{"type":"object","description":"Check results per each code file","additionalProperties":{"type":"object","required":["counts","details"],"properties":{"summary":{"type":"string"},"counts":{"properties":{"notice":{"type":"number","description":"Number of notice/successful messages"},"warning":{"type":"number","description":"Number of warning messages"},"failure":{"type":"number","description":"Number of failure message"}},"additionalProperties":false,"required":["failure"],"type":"object","description":"Counts of different categories of messages for a specific code file"},"details":{"type":"array","items":{"type":"object","properties":{"Id":{"type":"string","description":"Id of message"},"title":{"type":"string","description":"Title of message"},"message":{"type":"string","description":"Message content"},"category":{"type":"string","description":"Message category","enum":["notice","warning","failure"]},"startLine":{"type":"integer"},"startColumn":{"type":"integer"},"endLine":{"type":"integer"},"endColumn":{"type":"integer"}},"additionalProperties":false,"required":["message","category"]}}},"additionalProperties":false}}},"additionalProperties":false,"required":["byFile","counts"]};
+module.exports = {"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"name":{"type":"string","description":"Name of code check"},"description":{"type":"string","description":"Description of code check"},"summary":{"type":"string","description":"Summary of results of code check"},"counts":{"description":"Overall counts of different categories of messages","type":"object","properties":{"notice":{"type":"number","description":"Number of notice/successful messages"},"warning":{"type":"number","description":"Number of warning messages"},"failure":{"type":"number","description":"Number of failure message"}},"additionalProperties":false,"required":["failure"]},"byFile":{"type":"object","description":"Check results per each code file","additionalProperties":{"type":"object","required":["counts","details"],"properties":{"summary":{"type":"string"},"counts":{"properties":{"notice":{"type":"number","description":"Number of notice/successful messages"},"warning":{"type":"number","description":"Number of warning messages"},"failure":{"type":"number","description":"Number of failure message"}},"additionalProperties":false,"required":["failure"],"type":"object","description":"Counts of different categories of messages for a specific code file"},"details":{"type":"array","items":{"type":"object","properties":{"Id":{"type":"string","description":"Id of message"},"title":{"type":"string","description":"Title of message"},"message":{"type":"string","description":"Message content"},"category":{"type":"string","description":"Message category","enum":["notice","warning","failure"]},"startLine":{"type":"integer"},"startColumn":{"type":"integer"},"endLine":{"type":"integer"},"endColumn":{"type":"integer"},"rawDetails":{"type":"string"}},"additionalProperties":false,"required":["message","category"]}}},"additionalProperties":false}}},"additionalProperties":false,"required":["byFile","counts"]};
 
 /***/ }),
 /* 147 */
@@ -7574,7 +7632,7 @@ module.exports = require("punycode");
 /* 215 */
 /***/ (function(module) {
 
-module.exports = {"_from":"@octokit/rest@16.15.0","_id":"@octokit/rest@16.15.0","_inBundle":false,"_integrity":"sha512-Un+e7rgh38RtPOTe453pT/KPM/p2KZICimBmuZCd2wEo8PacDa4h6RqTPZs+f2DPazTTqdM7QU4LKlUjgiBwWw==","_location":"/@octokit/rest","_phantomChildren":{"@octokit/endpoint":"3.2.3","is-plain-object":"2.0.4","node-fetch":"2.6.0","universal-user-agent":"2.1.0"},"_requested":{"type":"version","registry":true,"raw":"@octokit/rest@16.15.0","name":"@octokit/rest","escapedName":"@octokit%2frest","scope":"@octokit","rawSpec":"16.15.0","saveSpec":null,"fetchSpec":"16.15.0"},"_requiredBy":["/","/@actions/github"],"_resolved":"https://registry.npmjs.org/@octokit/rest/-/rest-16.15.0.tgz","_shasum":"648a88d5de055bcf38976709c5b2bdf1227b926f","_spec":"@octokit/rest@16.15.0","_where":"/Users/prmph/Code/ci-checks-action","apidoc":{"template":{"withCompare":false}},"author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/rest.js/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/octokit-rest.min.js.gz","maxSize":"33 kB"}],"contributors":[{"name":"Mike de Boer","email":"info@mikedeboer.nl"},{"name":"Fabian Jakobs","email":"fabian@c9.io"},{"name":"Joe Gallo","email":"joe@brassafrax.com"},{"name":"Gregor Martynus","url":"https://github.com/gr2m"}],"dependencies":{"@octokit/request":"2.3.0","before-after-hook":"^1.2.0","btoa-lite":"^1.0.0","lodash.get":"^4.4.2","lodash.set":"^4.3.2","lodash.uniq":"^4.5.0","octokit-pagination-methods":"^1.1.0","universal-user-agent":"^2.0.0","url-template":"^2.0.8"},"deprecated":false,"description":"GitHub REST API client for Node.js","devDependencies":{"@gimenete/type-writer":"^0.1.3","@octokit/fixtures-server":"^5.0.1","@octokit/routes":"18.4.0","@types/node":"^10.1.2","apidoc":"^0.17.6","bundlesize":"^0.17.0","chai":"^4.1.2","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.0","dotenv":"^6.0.0","gh-pages-with-token":"^1.0.0","glob":"^7.1.2","http-proxy-agent":"^2.1.0","lodash.camelcase":"^4.3.0","lodash.merge":"^4.6.1","lodash.upperfirst":"^4.3.1","mkdirp":"^0.5.1","mocha":"^5.0.0","mustache":"^3.0.0","nock":"^10.0.0","npm-run-all":"^4.1.2","nyc":"^12.0.1","prettier":"^1.14.2","proxy":"^0.2.4","semantic-release":"^15.0.0","sinon":"^6.0.0","sinon-chai":"^3.0.0","sort-keys":"^2.0.0","standard":"^12.0.0","string-to-arraybuffer":"^1.0.0","typescript":"^3.3.1","webpack":"^4.0.0","webpack-bundle-analyzer":"^3.0.0","webpack-cli":"^3.0.0"},"files":["index.js","index.d.ts","lib","plugins"],"homepage":"https://github.com/octokit/rest.js#readme","keywords":["octokit","github","rest","api-client"],"license":"MIT","name":"@octokit/rest","nyc":{"ignore":["test"]},"publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/rest.js.git"},"scripts":{"build":"npm-run-all build:*","build:browser":"npm-run-all build:browser:*","build:browser:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-rest.js --profile --json > dist/bundle-stats.json","build:browser:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-rest.min.js --devtool source-map","build:docs":"node scripts/generate-api-docs","build:ts":"node scripts/generate-types","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","deploy-docs":"gh-pages-with-token -d doc","generate-bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","generate-routes":"node scripts/generate-routes","postbuild:docs":"apidoc -i doc/ -o doc/","postvalidate:ts":"tsc --noEmit --target es6 test/typescript-validate.ts","prebuild:browser":"mkdirp dist/","prebuild:docs":"mkdirp doc/","pretest":"standard","prevalidate:ts":"npm run -s build:ts","semantic-release":"semantic-release","start-fixtures-server":"octokit-fixtures-server","test":"nyc mocha test/mocha-node-setup.js \"test/*/**/*-test.js\"","test:browser":"cypress run --browser chrome","test:memory":"mocha test/memory-test","validate:ts":"tsc --target es6 --noImplicitAny index.d.ts"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect","cy"]},"types":"index.d.ts","version":"16.15.0"};
+module.exports = {"_args":[["@octokit/rest@16.15.0","/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action"]],"_from":"@octokit/rest@16.15.0","_id":"@octokit/rest@16.15.0","_inBundle":false,"_integrity":"sha512-Un+e7rgh38RtPOTe453pT/KPM/p2KZICimBmuZCd2wEo8PacDa4h6RqTPZs+f2DPazTTqdM7QU4LKlUjgiBwWw==","_location":"/@octokit/rest","_phantomChildren":{"@octokit/endpoint":"3.2.3","is-plain-object":"2.0.4","node-fetch":"2.6.0","universal-user-agent":"2.1.0"},"_requested":{"type":"version","registry":true,"raw":"@octokit/rest@16.15.0","name":"@octokit/rest","escapedName":"@octokit%2frest","scope":"@octokit","rawSpec":"16.15.0","saveSpec":null,"fetchSpec":"16.15.0"},"_requiredBy":["/","/@actions/github"],"_resolved":"https://registry.npmjs.org/@octokit/rest/-/rest-16.15.0.tgz","_spec":"16.15.0","_where":"/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action","apidoc":{"template":{"withCompare":false}},"author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/rest.js/issues"},"bundlesize":[{"path":"./dist/octokit-rest.min.js.gz","maxSize":"33 kB"}],"contributors":[{"name":"Mike de Boer","email":"info@mikedeboer.nl"},{"name":"Fabian Jakobs","email":"fabian@c9.io"},{"name":"Joe Gallo","email":"joe@brassafrax.com"},{"name":"Gregor Martynus","url":"https://github.com/gr2m"}],"dependencies":{"@octokit/request":"2.3.0","before-after-hook":"^1.2.0","btoa-lite":"^1.0.0","lodash.get":"^4.4.2","lodash.set":"^4.3.2","lodash.uniq":"^4.5.0","octokit-pagination-methods":"^1.1.0","universal-user-agent":"^2.0.0","url-template":"^2.0.8"},"description":"GitHub REST API client for Node.js","devDependencies":{"@gimenete/type-writer":"^0.1.3","@octokit/fixtures-server":"^5.0.1","@octokit/routes":"18.4.0","@types/node":"^10.1.2","apidoc":"^0.17.6","bundlesize":"^0.17.0","chai":"^4.1.2","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.0","dotenv":"^6.0.0","gh-pages-with-token":"^1.0.0","glob":"^7.1.2","http-proxy-agent":"^2.1.0","lodash.camelcase":"^4.3.0","lodash.merge":"^4.6.1","lodash.upperfirst":"^4.3.1","mkdirp":"^0.5.1","mocha":"^5.0.0","mustache":"^3.0.0","nock":"^10.0.0","npm-run-all":"^4.1.2","nyc":"^12.0.1","prettier":"^1.14.2","proxy":"^0.2.4","semantic-release":"^15.0.0","sinon":"^6.0.0","sinon-chai":"^3.0.0","sort-keys":"^2.0.0","standard":"^12.0.0","string-to-arraybuffer":"^1.0.0","typescript":"^3.3.1","webpack":"^4.0.0","webpack-bundle-analyzer":"^3.0.0","webpack-cli":"^3.0.0"},"files":["index.js","index.d.ts","lib","plugins"],"homepage":"https://github.com/octokit/rest.js#readme","keywords":["octokit","github","rest","api-client"],"license":"MIT","name":"@octokit/rest","nyc":{"ignore":["test"]},"publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/rest.js.git"},"scripts":{"build":"npm-run-all build:*","build:browser":"npm-run-all build:browser:*","build:browser:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-rest.js --profile --json > dist/bundle-stats.json","build:browser:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-rest.min.js --devtool source-map","build:docs":"node scripts/generate-api-docs","build:ts":"node scripts/generate-types","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","deploy-docs":"gh-pages-with-token -d doc","generate-bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","generate-routes":"node scripts/generate-routes","postbuild:docs":"apidoc -i doc/ -o doc/","postvalidate:ts":"tsc --noEmit --target es6 test/typescript-validate.ts","prebuild:browser":"mkdirp dist/","prebuild:docs":"mkdirp doc/","pretest":"standard","prevalidate:ts":"npm run -s build:ts","semantic-release":"semantic-release","start-fixtures-server":"octokit-fixtures-server","test":"nyc mocha test/mocha-node-setup.js \"test/*/**/*-test.js\"","test:browser":"cypress run --browser chrome","test:memory":"mocha test/memory-test","validate:ts":"tsc --target es6 --noImplicitAny index.d.ts"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect","cy"]},"types":"index.d.ts","version":"16.15.0"};
 
 /***/ }),
 /* 216 */,
@@ -12060,7 +12118,7 @@ exports.isConsonant = isConsonant;
 /* 314 */
 /***/ (function(module) {
 
-module.exports = {"_from":"@octokit/graphql@2.0.1","_id":"@octokit/graphql@2.0.1","_inBundle":false,"_integrity":"sha512-IBNr05yBYqffy9L37Vv3/5xQMw+swmYFtMsuwqUA5vSEUr+s/POf8DOpCaTtS8f7e9k+cEuKLC5AbOoXkdZZOA==","_location":"/@octokit/graphql","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@octokit/graphql@2.0.1","name":"@octokit/graphql","escapedName":"@octokit%2fgraphql","scope":"@octokit","rawSpec":"2.0.1","saveSpec":null,"fetchSpec":"2.0.1"},"_requiredBy":["/","/@actions/github"],"_resolved":"https://registry.npmjs.org/@octokit/graphql/-/graphql-2.0.1.tgz","_shasum":"0e9d7f41d6ac3305f37767e723183bd0b77af7d2","_spec":"@octokit/graphql@2.0.1","_where":"/Users/prmph/Code/ci-checks-action","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/graphql.js/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/octokit-graphql.min.js.gz","maxSize":"5KB"}],"dependencies":{"@octokit/request":"^2.1.2"},"deprecated":false,"description":"GitHub GraphQL API client for browsers and Node","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","fetch-mock":"^7.2.0","mkdirp":"^0.5.1","mocha":"^5.2.0","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.12.1","simple-mock":"^0.8.0","standard":"^12.0.1","webpack":"^4.22.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"files":["lib"],"homepage":"https://github.com/octokit/graphql.js#readme","keywords":["octokit","github","api","graphql"],"license":"MIT","main":"index.js","name":"@octokit/graphql","publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/graphql.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=octokitGraphql --output=./dist/octokit-graphql.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=octokitGraphql --output-path=./dist --output-filename=octokit-graphql.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"2.0.1"};
+module.exports = {"_args":[["@octokit/graphql@2.0.1","/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action"]],"_from":"@octokit/graphql@2.0.1","_id":"@octokit/graphql@2.0.1","_inBundle":false,"_integrity":"sha512-IBNr05yBYqffy9L37Vv3/5xQMw+swmYFtMsuwqUA5vSEUr+s/POf8DOpCaTtS8f7e9k+cEuKLC5AbOoXkdZZOA==","_location":"/@octokit/graphql","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@octokit/graphql@2.0.1","name":"@octokit/graphql","escapedName":"@octokit%2fgraphql","scope":"@octokit","rawSpec":"2.0.1","saveSpec":null,"fetchSpec":"2.0.1"},"_requiredBy":["/","/@actions/github"],"_resolved":"https://registry.npmjs.org/@octokit/graphql/-/graphql-2.0.1.tgz","_spec":"2.0.1","_where":"/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/graphql.js/issues"},"bundlesize":[{"path":"./dist/octokit-graphql.min.js.gz","maxSize":"5KB"}],"dependencies":{"@octokit/request":"^2.1.2"},"description":"GitHub GraphQL API client for browsers and Node","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","fetch-mock":"^7.2.0","mkdirp":"^0.5.1","mocha":"^5.2.0","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.12.1","simple-mock":"^0.8.0","standard":"^12.0.1","webpack":"^4.22.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"files":["lib"],"homepage":"https://github.com/octokit/graphql.js#readme","keywords":["octokit","github","api","graphql"],"license":"MIT","main":"index.js","name":"@octokit/graphql","publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/graphql.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=octokitGraphql --output=./dist/octokit-graphql.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=octokitGraphql --output-path=./dist --output-filename=octokit-graphql.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"2.0.1"};
 
 /***/ }),
 /* 315 */,
@@ -14511,7 +14569,7 @@ function parse(generalCheckJSON, changedFiles, checkName) {
                     const endLine = (_b = detail.endLine) !== null && _b !== void 0 ? _b : 0;
                     return Object.assign(Object.assign({ path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''), title: detail.title, message: detail.message, start_line: startLine, end_line: endLine }, startLine === endLine
                         ? { start_column: detail.startColumn, end_column: detail.endColumn }
-                        : {}), { annotation_level: detail.category });
+                        : {}), { annotation_level: detail.category, raw_details: detail.rawDetails });
                 });
             })),
             // errorText: '',
@@ -15773,17 +15831,25 @@ function octokitValidate (octokit) {
 
 "use strict";
 
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const os = __webpack_require__(87);
+const os = __importStar(__webpack_require__(87));
+const utils_1 = __webpack_require__(82);
 /**
  * Commands
  *
  * Command Format:
- *   ##[name key=value;key=value]message
+ *   ::name key=value,key=value::message
  *
  * Examples:
- *   ##[warning]This is the user warning message
- *   ##[set-secret name=mypassword]definitelyNotAPassword!
+ *   ::warning::This is the message
+ *   ::set-env name=MY_VAR::some value
  */
 function issueCommand(command, properties, message) {
     const cmd = new Command(command, properties, message);
@@ -15808,34 +15874,39 @@ class Command {
         let cmdStr = CMD_STRING + this.command;
         if (this.properties && Object.keys(this.properties).length > 0) {
             cmdStr += ' ';
+            let first = true;
             for (const key in this.properties) {
                 if (this.properties.hasOwnProperty(key)) {
                     const val = this.properties[key];
                     if (val) {
-                        // safely append the val - avoid blowing up when attempting to
-                        // call .replace() if message is not a string for some reason
-                        cmdStr += `${key}=${escape(`${val || ''}`)},`;
+                        if (first) {
+                            first = false;
+                        }
+                        else {
+                            cmdStr += ',';
+                        }
+                        cmdStr += `${key}=${escapeProperty(val)}`;
                     }
                 }
             }
         }
-        cmdStr += CMD_STRING;
-        // safely append the message - avoid blowing up when attempting to
-        // call .replace() if message is not a string for some reason
-        const message = `${this.message || ''}`;
-        cmdStr += escapeData(message);
+        cmdStr += `${CMD_STRING}${escapeData(this.message)}`;
         return cmdStr;
     }
 }
 function escapeData(s) {
-    return s.replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+    return utils_1.toCommandValue(s)
+        .replace(/%/g, '%25')
+        .replace(/\r/g, '%0D')
+        .replace(/\n/g, '%0A');
 }
-function escape(s) {
-    return s
+function escapeProperty(s) {
+    return utils_1.toCommandValue(s)
+        .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A')
-        .replace(/]/g, '%5D')
-        .replace(/;/g, '%3B');
+        .replace(/:/g, '%3A')
+        .replace(/,/g, '%2C');
 }
 //# sourceMappingURL=command.js.map
 
@@ -17260,6 +17331,12 @@ function convertBody(buffer, headers) {
 	// html4
 	if (!res && str) {
 		res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str);
+		if (!res) {
+			res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str);
+			if (res) {
+				res.pop(); // drop last quote
+			}
+		}
 
 		if (res) {
 			res = /charset=(.*)/i.exec(res.pop());
@@ -18267,7 +18344,7 @@ function fetch(url, opts) {
 				// HTTP fetch step 5.5
 				switch (request.redirect) {
 					case 'error':
-						reject(new FetchError(`redirect mode is set to error: ${request.url}`, 'no-redirect'));
+						reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request.url}`, 'no-redirect'));
 						finalize();
 						return;
 					case 'manual':
@@ -18306,7 +18383,8 @@ function fetch(url, opts) {
 							method: request.method,
 							body: request.body,
 							signal: request.signal,
-							timeout: request.timeout
+							timeout: request.timeout,
+							size: request.size
 						};
 
 						// HTTP-redirect fetch step 9
@@ -18897,10 +18975,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const command_1 = __webpack_require__(431);
-const os = __webpack_require__(87);
-const path = __webpack_require__(622);
+const file_command_1 = __webpack_require__(102);
+const utils_1 = __webpack_require__(82);
+const os = __importStar(__webpack_require__(87));
+const path = __importStar(__webpack_require__(622));
 /**
  * The code to exit an action
  */
@@ -18921,11 +19008,21 @@ var ExitCode;
 /**
  * Sets env variable for this action and future actions in the job
  * @param name the name of the variable to set
- * @param val the value of the variable
+ * @param val the value of the variable. Non-string values will be converted to a string via JSON.stringify
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function exportVariable(name, val) {
-    process.env[name] = val;
-    command_1.issueCommand('set-env', { name }, val);
+    const convertedVal = utils_1.toCommandValue(val);
+    process.env[name] = convertedVal;
+    const filePath = process.env['GITHUB_ENV'] || '';
+    if (filePath) {
+        const delimiter = '_GitHubActionsFileCommandDelimeter_';
+        const commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
+        file_command_1.issueCommand('ENV', commandValue);
+    }
+    else {
+        command_1.issueCommand('set-env', { name }, convertedVal);
+    }
 }
 exports.exportVariable = exportVariable;
 /**
@@ -18941,7 +19038,13 @@ exports.setSecret = setSecret;
  * @param inputPath
  */
 function addPath(inputPath) {
-    command_1.issueCommand('add-path', {}, inputPath);
+    const filePath = process.env['GITHUB_PATH'] || '';
+    if (filePath) {
+        file_command_1.issueCommand('PATH', inputPath);
+    }
+    else {
+        command_1.issueCommand('add-path', {}, inputPath);
+    }
     process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
 }
 exports.addPath = addPath;
@@ -18964,12 +19067,22 @@ exports.getInput = getInput;
  * Sets the value of an output.
  *
  * @param     name     name of the output to set
- * @param     value    value to store
+ * @param     value    value to store. Non-string values will be converted to a string via JSON.stringify
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setOutput(name, value) {
     command_1.issueCommand('set-output', { name }, value);
 }
 exports.setOutput = setOutput;
+/**
+ * Enables or disables the echoing of commands into stdout for the rest of the step.
+ * Echoing is disabled by default if ACTIONS_STEP_DEBUG is not set.
+ *
+ */
+function setCommandEcho(enabled) {
+    command_1.issue('echo', enabled ? 'on' : 'off');
+}
+exports.setCommandEcho = setCommandEcho;
 //-----------------------------------------------------------------------
 // Results
 //-----------------------------------------------------------------------
@@ -18987,6 +19100,13 @@ exports.setFailed = setFailed;
 // Logging Commands
 //-----------------------------------------------------------------------
 /**
+ * Gets whether Actions Step Debug is on or not
+ */
+function isDebug() {
+    return process.env['RUNNER_DEBUG'] === '1';
+}
+exports.isDebug = isDebug;
+/**
  * Writes debug message to user log
  * @param message debug message
  */
@@ -18996,18 +19116,18 @@ function debug(message) {
 exports.debug = debug;
 /**
  * Adds an error issue
- * @param message error issue message
+ * @param message error issue message. Errors will be converted to string via toString()
  */
 function error(message) {
-    command_1.issue('error', message);
+    command_1.issue('error', message instanceof Error ? message.toString() : message);
 }
 exports.error = error;
 /**
  * Adds an warning issue
- * @param message warning issue message
+ * @param message warning issue message. Errors will be converted to string via toString()
  */
 function warning(message) {
-    command_1.issue('warning', message);
+    command_1.issue('warning', message instanceof Error ? message.toString() : message);
 }
 exports.warning = warning;
 /**
@@ -19065,8 +19185,9 @@ exports.group = group;
  * Saves state for current action, the state can only be retrieved by this action's post job execution.
  *
  * @param     name     name of the state to store
- * @param     value    value to store
+ * @param     value    value to store. Non-string values will be converted to a string via JSON.stringify
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function saveState(name, value) {
     command_1.issueCommand('save-state', { name }, value);
 }
@@ -21360,7 +21481,7 @@ function defer(fn)
 /* 509 */
 /***/ (function(module) {
 
-module.exports = {"_from":"@octokit/request@^2.1.2","_id":"@octokit/request@2.4.2","_inBundle":false,"_integrity":"sha512-lxVlYYvwGbKSHXfbPk5vxEA8w4zHOH1wobado4a9EfsyD3Cbhuhus1w0Ye9Ro0eMubGO8kNy5d+xNFisM3Tvaw==","_location":"/@octokit/request","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"@octokit/request@^2.1.2","name":"@octokit/request","escapedName":"@octokit%2frequest","scope":"@octokit","rawSpec":"^2.1.2","saveSpec":null,"fetchSpec":"^2.1.2"},"_requiredBy":["/@octokit/graphql"],"_resolved":"https://registry.npmjs.org/@octokit/request/-/request-2.4.2.tgz","_shasum":"87c36e820dd1e43b1629f4f35c95b00cd456320b","_spec":"@octokit/request@^2.1.2","_where":"/Users/prmph/Code/ci-checks-action/node_modules/@octokit/graphql","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"browser":{"./lib/get-request-agent.js":false,"./lib/request/get-buffer-response.js":"./lib/request/get-buffer-response-browser.js"},"bugs":{"url":"https://github.com/octokit/request.js/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/octokit-request.min.js.gz","maxSize":"5KB"}],"dependencies":{"@octokit/endpoint":"^3.2.0","deprecation":"^1.0.1","is-plain-object":"^2.0.4","node-fetch":"^2.3.0","once":"^1.4.0","universal-user-agent":"^2.0.1"},"deprecated":false,"description":"Send parameterized requests to GitHub’s APIs with sensible defaults in browsers and Node","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","fetch-mock":"^7.2.0","mkdirp":"^0.5.1","mocha":"^6.0.0","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.10.5","simple-mock":"^0.8.0","standard":"^12.0.1","webpack":"^4.22.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"files":["lib"],"homepage":"https://github.com/octokit/request.js#readme","keywords":["octokit","github","api","request"],"license":"MIT","main":"index.js","name":"@octokit/request","publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/request.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-request.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-request.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard","semantic-release":"semantic-release","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"2.4.2"};
+module.exports = {"_args":[["@octokit/request@2.4.2","/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action"]],"_from":"@octokit/request@2.4.2","_id":"@octokit/request@2.4.2","_inBundle":false,"_integrity":"sha512-lxVlYYvwGbKSHXfbPk5vxEA8w4zHOH1wobado4a9EfsyD3Cbhuhus1w0Ye9Ro0eMubGO8kNy5d+xNFisM3Tvaw==","_location":"/@octokit/request","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@octokit/request@2.4.2","name":"@octokit/request","escapedName":"@octokit%2frequest","scope":"@octokit","rawSpec":"2.4.2","saveSpec":null,"fetchSpec":"2.4.2"},"_requiredBy":["/@octokit/graphql"],"_resolved":"https://registry.npmjs.org/@octokit/request/-/request-2.4.2.tgz","_spec":"2.4.2","_where":"/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"browser":{"./lib/get-request-agent.js":false,"./lib/request/get-buffer-response.js":"./lib/request/get-buffer-response-browser.js"},"bugs":{"url":"https://github.com/octokit/request.js/issues"},"bundlesize":[{"path":"./dist/octokit-request.min.js.gz","maxSize":"5KB"}],"dependencies":{"@octokit/endpoint":"^3.2.0","deprecation":"^1.0.1","is-plain-object":"^2.0.4","node-fetch":"^2.3.0","once":"^1.4.0","universal-user-agent":"^2.0.1"},"description":"Send parameterized requests to GitHub’s APIs with sensible defaults in browsers and Node","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","fetch-mock":"^7.2.0","mkdirp":"^0.5.1","mocha":"^6.0.0","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.10.5","simple-mock":"^0.8.0","standard":"^12.0.1","webpack":"^4.22.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"files":["lib"],"homepage":"https://github.com/octokit/request.js#readme","keywords":["octokit","github","api","request"],"license":"MIT","main":"index.js","name":"@octokit/request","publishConfig":{"access":"public"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/request.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-request.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-request.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard","semantic-release":"semantic-release","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"2.4.2"};
 
 /***/ }),
 /* 510 */
@@ -26071,49 +26192,6 @@ module.exports = function (metaSchema, keywordsJsonPointers) {
         };
       }
     }
-    if (typeof $additionalItems == 'object' && (it.opts.strictKeywords ? (typeof $additionalItems == 'object' && Object.keys($additionalItems).length > 0) || $additionalItems === false : it.util.schemaHasRules($additionalItems, it.RULES.all))) {
-      $it.schema = $additionalItems;
-      $it.schemaPath = it.schemaPath + '.additionalItems';
-      $it.errSchemaPath = it.errSchemaPath + '/additionalItems';
-      out += ' ' + ($nextValid) + ' = true; if (' + ($data) + '.length > ' + ($schema.length) + ') {  for (var ' + ($idx) + ' = ' + ($schema.length) + '; ' + ($idx) + ' < ' + ($data) + '.length; ' + ($idx) + '++) { ';
-      $it.errorPath = it.util.getPathExpr(it.errorPath, $idx, it.opts.jsonPointers, true);
-      var $passData = $data + '[' + $idx + ']';
-      $it.dataPathArr[$dataNxt] = $idx;
-      var $code = it.validate($it);
-      $it.baseId = $currentBaseId;
-      if (it.util.varOccurences($code, $nextData) < 2) {
-        out += ' ' + (it.util.varReplace($code, $nextData, $passData)) + ' ';
-      } else {
-        out += ' var ' + ($nextData) + ' = ' + ($passData) + '; ' + ($code) + ' ';
-      }
-      if ($breakOnError) {
-        out += ' if (!' + ($nextValid) + ') break; ';
-      }
-      out += ' } }  ';
-      if ($breakOnError) {
-        out += ' if (' + ($nextValid) + ') { ';
-        $closingBraces += '}';
-      }
-    }
-  } else if ((it.opts.strictKeywords ? (typeof $schema == 'object' && Object.keys($schema).length > 0) || $schema === false : it.util.schemaHasRules($schema, it.RULES.all))) {
-    $it.schema = $schema;
-    $it.schemaPath = $schemaPath;
-    $it.errSchemaPath = $errSchemaPath;
-    out += '  for (var ' + ($idx) + ' = ' + (0) + '; ' + ($idx) + ' < ' + ($data) + '.length; ' + ($idx) + '++) { ';
-    $it.errorPath = it.util.getPathExpr(it.errorPath, $idx, it.opts.jsonPointers, true);
-    var $passData = $data + '[' + $idx + ']';
-    $it.dataPathArr[$dataNxt] = $idx;
-    var $code = it.validate($it);
-    $it.baseId = $currentBaseId;
-    if (it.util.varOccurences($code, $nextData) < 2) {
-      out += ' ' + (it.util.varReplace($code, $nextData, $passData)) + ' ';
-    } else {
-      out += ' var ' + ($nextData) + ' = ' + ($passData) + '; ' + ($code) + ' ';
-    }
-    if ($breakOnError) {
-      out += ' if (!' + ($nextValid) + ') break; ';
-    }
-    out += ' }';
   }
 
   return metaSchema;
@@ -26346,41 +26424,7 @@ function regex(str) {
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
-/*!
- * Copyright (c) 2015, Salesforce.com, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- * this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Salesforce.com nor the names of its contributors may
- * be used to endorse or promote products derived from this software without
- * specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
 
-var Store = __webpack_require__(627).Store;
-var permuteDomain = __webpack_require__(258).permuteDomain;
-var pathMatch = __webpack_require__(54).pathMatch;
-var util = __webpack_require__(669);
 
 var crypto_hash_sha512 = __webpack_require__(196).lowlevel.crypto_hash;
 
@@ -27947,36 +27991,6 @@ module.exports = require("util");
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 "use strict";
-/*!
- * Copyright (c) 2015, Salesforce.com, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- * this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Salesforce.com nor the names of its contributors may
- * be used to endorse or promote products derived from this software without
- * specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
 
 
 module.exports = {
@@ -28097,16 +28111,6 @@ module.exports = function generate_not(it, $keyword, $ruleType) {
   return out;
 }
 
-var MONTH_TO_NUM = {
-  jan:0, feb:1, mar:2, apr:3, may:4, jun:5,
-  jul:6, aug:7, sep:8, oct:9, nov:10, dec:11
-};
-var NUM_TO_MONTH = [
-  'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'
-];
-var NUM_TO_DAY = [
-  'Sun','Mon','Tue','Wed','Thu','Fri','Sat'
-];
 
 /***/ }),
 /* 674 */
@@ -28149,13 +28153,6 @@ function authenticate (state, options) {
   state.auth = options
 }
 
-/*
- * RFC6265 S5.1.1 date parser (see RFC for full grammar)
- */
-function parseDate(str) {
-  if (!str) {
-    return;
-  }
 
 /***/ }),
 /* 675 */
@@ -28274,7 +28271,7 @@ function write(cert, options) {
 /* 687 */
 /***/ (function(module) {
 
-  /* "All of the following [three] conditions hold:" (order adjusted from the RFC) */
+"use strict";
 
 module.exports = function generate_format(it, $keyword, $ruleType) {
   var out = ' ';
@@ -31657,7 +31654,7 @@ module.exports = bytesToUuid;
 /* 724 */
 /***/ (function(module) {
 
-module.exports = {"_from":"@octokit/endpoint@^3.2.0","_id":"@octokit/endpoint@3.2.3","_inBundle":false,"_integrity":"sha512-yUPCt4vMIOclox13CUxzuKiPJIFo46b/6GhUnUTw5QySczN1L0DtSxgmIZrZV4SAb9EyAqrceoyrWoYVnfF2AA==","_location":"/@octokit/endpoint","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"@octokit/endpoint@^3.2.0","name":"@octokit/endpoint","escapedName":"@octokit%2fendpoint","scope":"@octokit","rawSpec":"^3.2.0","saveSpec":null,"fetchSpec":"^3.2.0"},"_requiredBy":["/@octokit/request","/@octokit/rest/@octokit/request"],"_resolved":"https://registry.npmjs.org/@octokit/endpoint/-/endpoint-3.2.3.tgz","_shasum":"bd9aea60cd94ce336656b57a5c9cb7f10be8f4f3","_spec":"@octokit/endpoint@^3.2.0","_where":"/Users/prmph/Code/ci-checks-action/node_modules/@octokit/request","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/endpoint.js/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/octokit-endpoint.min.js.gz","maxSize":"3.5KB"}],"dependencies":{"deepmerge":"3.2.0","is-plain-object":"^2.0.4","universal-user-agent":"^2.0.1","url-template":"^2.0.8"},"deprecated":false,"description":"Turns REST API endpoints into generic request options","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","mkdirp":"^0.5.1","mocha":"^6.0.2","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.10.3","sinon-chai":"^3.2.0","standard":"^12.0.1","standard-markdown":"^5.0.1","webpack":"^4.21.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"directories":{"test":"test"},"files":["lib","with-defaults.js"],"homepage":"https://github.com/octokit/endpoint.js#readme","keywords":["octokit","github","api","rest"],"license":"MIT","main":"index.js","name":"@octokit/endpoint","publishConfig":{"access":"public","tag":"latest"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/endpoint.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=octokitEndpoint --output=./dist/octokit-endpoint.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=octokitEndpoint --output-path=./dist --output-filename=octokit-endpoint.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard && standard-markdown *.md","semantic-release":"semantic-release","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"3.2.3"};
+module.exports = {"_args":[["@octokit/endpoint@3.2.3","/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action"]],"_from":"@octokit/endpoint@3.2.3","_id":"@octokit/endpoint@3.2.3","_inBundle":false,"_integrity":"sha512-yUPCt4vMIOclox13CUxzuKiPJIFo46b/6GhUnUTw5QySczN1L0DtSxgmIZrZV4SAb9EyAqrceoyrWoYVnfF2AA==","_location":"/@octokit/endpoint","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"@octokit/endpoint@3.2.3","name":"@octokit/endpoint","escapedName":"@octokit%2fendpoint","scope":"@octokit","rawSpec":"3.2.3","saveSpec":null,"fetchSpec":"3.2.3"},"_requiredBy":["/@octokit/request","/@octokit/rest/@octokit/request"],"_resolved":"https://registry.npmjs.org/@octokit/endpoint/-/endpoint-3.2.3.tgz","_spec":"3.2.3","_where":"/home/eltharim/Dropbox/ArthurP+Hypothesize/Repositories/ci-checks-action","author":{"name":"Gregor Martynus","url":"https://github.com/gr2m"},"bugs":{"url":"https://github.com/octokit/endpoint.js/issues"},"bundlesize":[{"path":"./dist/octokit-endpoint.min.js.gz","maxSize":"3.5KB"}],"dependencies":{"deepmerge":"3.2.0","is-plain-object":"^2.0.4","universal-user-agent":"^2.0.1","url-template":"^2.0.8"},"description":"Turns REST API endpoints into generic request options","devDependencies":{"chai":"^4.2.0","compression-webpack-plugin":"^2.0.0","coveralls":"^3.0.2","cypress":"^3.1.0","mkdirp":"^0.5.1","mocha":"^6.0.2","npm-run-all":"^4.1.3","nyc":"^13.1.0","semantic-release":"^15.10.3","sinon-chai":"^3.2.0","standard":"^12.0.1","standard-markdown":"^5.0.1","webpack":"^4.21.0","webpack-bundle-analyzer":"^3.0.3","webpack-cli":"^3.1.2"},"directories":{"test":"test"},"files":["lib","with-defaults.js"],"homepage":"https://github.com/octokit/endpoint.js#readme","keywords":["octokit","github","api","rest"],"license":"MIT","main":"index.js","name":"@octokit/endpoint","publishConfig":{"access":"public","tag":"latest"},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"repository":{"type":"git","url":"git+https://github.com/octokit/endpoint.js.git"},"scripts":{"build":"npm-run-all build:*","build:development":"webpack --mode development --entry . --output-library=octokitEndpoint --output=./dist/octokit-endpoint.js --profile --json > dist/bundle-stats.json","build:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=octokitEndpoint --output-path=./dist --output-filename=octokit-endpoint.min.js --devtool source-map","bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","coverage":"nyc report --reporter=html && open coverage/index.html","coverage:upload":"nyc report --reporter=text-lcov | coveralls","prebuild":"mkdirp dist/","pretest":"standard && standard-markdown *.md","semantic-release":"semantic-release","test":"nyc mocha test/*-test.js","test:browser":"cypress run --browser chrome"},"standard":{"globals":["describe","before","beforeEach","afterEach","after","it","expect"]},"version":"3.2.3"};
 
 /***/ }),
 /* 725 */,
