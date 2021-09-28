@@ -1,7 +1,7 @@
 {
 	"name": "ci-checks-action",
-	"version": "2.0.4",
-	"description": "Create Github annotated checks from script output files",
+	"version": "2.0.5",
+	"description": "Create Github annotated checks from tooling scripts output",
 	"main": "dist/index.js",
 	"files": [
 		"/dist/index.js",
@@ -15,7 +15,7 @@
 		"ci",
 		"continuous-integration",
 		"github",
-		"github-action",
+		"github-actions",
 		"check",
 		"annotation"
 	],
@@ -26,42 +26,40 @@
 	},
 	"homepage": "https://github.com/agyemanjp/ci-checks-action#readme",
 	"scripts": {
-		"setup": "rm -rf ./node_modules package-lock.json && npm install",
-		"clean": "rm -rf dist .eslintcache *-report.json src/check-general.ts ",
+		"deps": "rm -rf ./node_modules package-lock.json && npm install",
+		"clean": "rm -rf dist .eslintcache *.run.json src/check-general.ts ",
 		"schema": "json2ts ./src/check-general.schema.json ./src/check-general.ts",
-		"lint": "eslint --ext ts --cache src/*",
-		"lint-report": "eslint --ext ts --output-file .lint-report.json --format json-standard --cache src/*",
-		"build": "npm run schema && tsc && flatten dist && cp src/check-general.schema.json dist && rm -rf dist/*.test.js.map dist/*.test.d.ts",
-		"postbuild": "ncc build dist/index.js --quiet",
-		"test-report": "mocha dist/*.test.js --reporter mocha-reporter-json-standard >| .test-report.json",
-		"test": "mocha dist/*.test.js",
-		"ci": "npm run clean && npm run build && npm run test; npm run lint"
+		"lint": "eslint --ext ts --cache 'src/**'",
+		"lintci": "eslint --ext ts --output-file .lint.run.json --format json-standard --cache 'src/**'",
+		"compile": "npm run schema && tsc && cp src/check-general.schema.json dist",
+		"test": "mocha --require ts-node/register test/*.test.*",
+		"testci": "mocha --require ts-node/register test/*.test.* --reporter mocha-reporter-json-standard >| .test.run.json",
+		"build": "npm run lint && npm run compile && npm run test && ncc build dist/index.js --quiet"
 	},
 	"devDependencies": {
-		"@hutsoninc/flatten-dir-cli": "^1.0.2",
 		"@types/eslint": "^7.2.0",
 		"@types/mocha": "7.0.2",
 		"@types/node": "14.0.13",
-		"@types/shelljs": "0.8.8",
 		"@types/source-map-support": "^0.5.1",
 		"@typescript-eslint/eslint-plugin": "3.4.0",
 		"@typescript-eslint/parser": "3.4.0",
 		"@zeit/ncc": "^0.22.3",
-		"eslint": "^7.3.1",
+		"eslint": "^7.32.0",
 		"eslint-formatter-json-standard": "^0.1.0",
 		"eslint-plugin-fp": "2.3.0",
 		"json-schema-to-typescript": "^9.1.0",
-		"mocha": "8.0.1",
+		"mocha": "^9.1.1",
 		"mocha-reporter-json-standard": "^0.1.1",
 		"source-map-support": "^0.5.19",
 		"ts-node": "^8.10.2",
-		"typescript": "3.7.2"
+		"typescript": "^4.4.3"
 	},
 	"dependencies": {
 		"@actions/core": "1.2.6",
 		"@actions/github": "1.1.0",
 		"@octokit/graphql": "2.0.1",
 		"@octokit/rest": "16.15.0",
+		"@sparkwave/standard": "^2.30.0",
 		"colors": "^1.4.0"
 	}
 }

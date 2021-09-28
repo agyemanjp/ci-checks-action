@@ -12,7 +12,7 @@ import * as github from '@actions/github'
 import Ajv from 'ajv'
 // import colors from 'colors/safe'
 
-import { flatten, take, last, chunk } from "./utility"
+import { flatten, take, last, chunk } from "@sparkwave/standard"
 import { GithubCheckInfo, GitHubAnnotation } from "./check-github"
 import { CheckGeneralSchema } from "./check-general"
 import * as generalCheckSchema from "./check-general.schema.json"
@@ -83,7 +83,7 @@ export function parse(generalCheckJSON: string, changedFiles: string[] | undefin
 			// markdownText: ''
 		}
 	}
-	catch (err) {
+	catch (err: any) {
 		return {
 			title: "Could not parse the output file",
 			summary: err,
@@ -213,14 +213,14 @@ export async function run(): Promise<void> {
 					}*/
 				}
 			}
-			catch (e) {
+			catch (e: any) {
 				const msg = `Error processing requested check "${check.name}"\n\t${'stack' in e ? e.stack : 'message' in e ? e.message : String(e)}\n`
 				core.error(msg)
 				core.setFailed(msg)
 			}
 		}
 	}
-	catch (err) {
+	catch (err: any) {
 		core.setFailed(err.message ? err.message : 'Error creating checks')
 	}
 }
