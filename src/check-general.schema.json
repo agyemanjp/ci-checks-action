@@ -108,6 +108,9 @@
 								},
 								"endColumn": {
 									"type": "integer"
+								},
+								"rawDetails": {
+									"type": "string"
 								}
 							},
 							"additionalProperties": false,
