@@ -14567,9 +14567,11 @@ function parse(generalCheckJSON, changedFiles, checkName) {
                     // console.log(`Processing "${checkName}" check\n\tfile "${filePath}"\n\tdetail "${JSON.stringify(detail)}"`)
                     const startLine = (_a = detail.startLine) !== null && _a !== void 0 ? _a : 0;
                     const endLine = (_b = detail.endLine) !== null && _b !== void 0 ? _b : 0;
-                    return Object.assign(Object.assign({ path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''), title: detail.title, message: detail.message, start_line: startLine, end_line: endLine }, startLine === endLine
+                    return Object.assign(Object.assign(Object.assign({ path: filePath.replace(`${process.env.GITHUB_WORKSPACE}/`, ''), title: detail.title, message: detail.message, start_line: startLine, end_line: endLine }, startLine === endLine
                         ? { start_column: detail.startColumn, end_column: detail.endColumn }
-                        : {}), { annotation_level: detail.category, raw_details: detail.rawDetails });
+                        : {}), { annotation_level: detail.category }), detail.rawDetails
+                        ? { raw_details: detail.rawDetails }
+                        : {});
                 });
             })),
             // errorText: '',

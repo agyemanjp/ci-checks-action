@@ -64,6 +64,19 @@ describe('parse()', function () {
 			},
 			"details": []
 			},
+			"/Users/prmph/Code/ci-checks-action/src/parser.ts": {
+			"counts": {
+				"failure": 0,
+				"warning": 0
+			},
+			"details": [
+				{
+					"message": "Extra semicolon.",
+					"category": "notice",
+					"rawDetails": "Additional text"
+				}
+			]
+			},
 			"/Users/prmph/Code/ci-checks-action/src/check-general.test.json": {
 				"counts": {
 					"failure": 0,
@@ -266,6 +279,7 @@ describe('parse()', function () {
 		assert.deepStrictEqual(annotations.map(a => a.path), [
 			`/Users/prmph/Code/ci-checks-action/src/check-general.schema.json`,
 			`/Users/prmph/Code/ci-checks-action/src/index.ts`,
+			"/Users/prmph/Code/ci-checks-action/src/parser.ts",
 			"/Users/prmph/Code/ci-checks-action/src/check-general.test.json"]
 		)
 	})
@@ -282,7 +296,6 @@ describe('parse()', function () {
 
 	it('should include endColumn and startColumn in the annotation when the startLine and endLine are the same', function () {
 		const annotations = [...parse(lintReport, ["/Users/prmph/Code/ci-checks-action/src/index.ts"], "lint").annotations]
-
 		assert.strictEqual(Object.keys(annotations[0]).includes("start_column"), true)
 		assert.strictEqual(Object.keys(annotations[0]).includes("end_column"), true)
 	})
@@ -292,6 +305,18 @@ describe('parse()', function () {
 
 		assert.strictEqual(Object.keys(annotations[0]).includes("start_column"), false)
 		assert.strictEqual(Object.keys(annotations[0]).includes("end_column"), false)
+	})
+
+	it('should include raw details in the annotation when the property is set', function () {
+		const annotations = [...parse(lintReport, ["/Users/prmph/Code/ci-checks-action/src/parser.ts"], "lint").annotations]
+
+		assert.strictEqual(Object.keys(annotations[0]).includes("raw_details"), true)
+	})
+
+	it('should omit raw details in the annotation when the property is not set', function () {
+		const annotations = [...parse(lintReport, ["/Users/prmph/Code/ci-checks-action/src/check-general.test.json"], "lint").annotations]
+
+		assert.strictEqual(Object.keys(annotations[0]).includes("raw_details"), false)
 	})
 
 	it('should return information about a wrongly formatted file instead of throwing an error', function () {

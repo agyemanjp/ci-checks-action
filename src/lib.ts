@@ -73,7 +73,9 @@ export function parse(generalCheckJSON: string, changedFiles: string[] | undefin
 								? { start_column: detail.startColumn, end_column: detail.endColumn }
 								: {},
 							annotation_level: detail.category as GitHubAnnotation.Level,
-							raw_details: detail.rawDetails
+							...detail.rawDetails
+								? { raw_details: detail.rawDetails }
+								: {}
 						} as GitHubAnnotation
 					})
 				})
