@@ -49,7 +49,7 @@ jobs:
         continue-on-error: true
         
       - name: Annotate Checks
-        uses: agyemanjp/ci-checks-action@2.0.5
+        uses: agyemanjp/ci-checks-action@2.1.1
         with:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
           checks: '[
