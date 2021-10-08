@@ -1,16 +1,13 @@
-# Create Github annotated checks from script output files
+# ci-checks-action
+Create Github annotated checks from script output files
 
 ## Description
-
-Create Github checks (with annotations for pull request diffs) from the output (in a standard JSON format) of custom code check scripts. The annotations include a summary of errors and warnings, including links to the line numbers of any errors or warnings. It works on both pull requests (only on changed files) and pushes.
-
+Create Github checks (with annotations for pull request diffs) from the output (in a [standardized JSON format](https://gist.githubusercontent.com/agyemanjp/0f43de0639a7ec872e9ebcbe6166d5d9/raw/ccb90a9298561f2ba7c07ba6843b2b25244f9cf7/code-check-general.schema.json)) of custom code check scripts. The annotations include a summary of errors and warnings, including links to the line numbers of any errors or warnings. It works on both pull requests (only on changed files) and pushes.
 
 ## Rationale
-
 This action allows for more flexibility in implementing code checks. Instead on bundling specific checks, it allows you to use any custom script, as long as it outputs its results to a local JSON file in the proper format.
 
 ## Usage Example
-
 In `.github/workflows/nodejs.yml`:
 
 ```yml
